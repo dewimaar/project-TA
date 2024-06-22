@@ -1,0 +1,245 @@
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView, FlatList } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Picker } from '@react-native-picker/picker';
+
+const HomeScreen = ({ navigation }) => {
+    const [selectedNavItem, setSelectedNavItem] = useState('home');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedStore, setSelectedStore] = useState('clothing');
+
+    const handleNavItemClick = (itemName) => {
+        setSelectedNavItem(itemName);
+    };
+
+    const handleSearchInputChange = (query) => {
+        setSearchQuery(query);
+        // Handle search logic here if needed
+    };
+
+    const carouselData = [
+        { id: '1', imageUrl: 'https://via.placeholder.com/300', title: 'Promo 1' },
+        { id: '2', imageUrl: 'https://via.placeholder.com/300', title: 'Promo 2' },
+        { id: '3', imageUrl: 'https://via.placeholder.com/300', title: 'Promo 3' },
+    ];
+
+    const productsData = [
+        { id: '1', imageUrl: 'https://via.placeholder.com/150', title: 'Product 1', price: '$50' },
+        { id: '2', imageUrl: 'https://via.placeholder.com/150', title: 'Product 2', price: '$80' },
+        { id: '3', imageUrl: 'https://via.placeholder.com/150', title: 'Product 3', price: '$120' },
+        { id: '4', imageUrl: 'https://via.placeholder.com/150', title: 'Product 4', price: '$90' },
+        { id: '5', imageUrl: 'https://via.placeholder.com/150', title: 'Product 5', price: '$60' },
+        { id: '6', imageUrl: 'https://via.placeholder.com/150', title: 'Product 6', price: '$100' },
+        { id: '7', imageUrl: 'https://via.placeholder.com/150', title: 'Product 6', price: '$100' },
+        { id: '8', imageUrl: 'https://via.placeholder.com/150', title: 'Product 6', price: '$100' },
+        { id: '9', imageUrl: 'https://via.placeholder.com/150', title: 'Product 6', price: '$100' },
+    ];
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.topBar}>
+                <Icon name="search-outline" size={24} color="#888" style={styles.searchIcon} />
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="Search..."
+                    placeholderTextColor="#888"
+                    value={searchQuery}
+                    onChangeText={handleSearchInputChange}
+                />
+                <TouchableOpacity onPress={() => console.log('Notification icon pressed')}>
+                    <Icon name="notifications-outline" size={30} color="#333" style={styles.notificationIcon} />
+                </TouchableOpacity>
+            </View>
+
+            <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={styles.carouselContainer}>
+                {carouselData.map((item) => (
+                    <View key={item.id} style={styles.carouselItem}>
+                        <Image source={{ uri: item.imageUrl }} style={styles.carouselImage} />
+                        {/* <Text style={styles.carouselText}>{item.title}</Text> */}
+                    </View>
+                ))}
+            </ScrollView>
+
+            <Picker
+                selectedValue={selectedStore}
+                onValueChange={(itemValue, itemIndex) => setSelectedStore(itemValue)}
+                style={styles.picker}
+            >
+                <Picker.Item label="Clothing Store" value="clothing" />
+                <Picker.Item label="Electronic Store" value="electronics" />
+                <Picker.Item label="Hardware Store" value="hardware" />
+            </Picker>
+
+            <FlatList
+                data={productsData}
+                numColumns={3}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <TouchableOpacity style={styles.productItem} onPress={() => console.log('Product detail pressed')}>
+                        <View style={styles.productContainer}>
+                            <Image source={{ uri: item.imageUrl }} style={[styles.productImage, styles.productImageBorder]} />
+                            <Text style={styles.productTitle}>{item.title}</Text>
+                            <Text style={styles.productPrice}>{item.price}</Text>
+                            <TouchableOpacity style={styles.productButton} onPress={() => console.log('Detail button pressed')}>
+                                <Text style={styles.productButtonText}>Detail</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </TouchableOpacity>
+                )}
+            />
+
+            <View style={styles.bottomBar}>
+                <TouchableOpacity
+                    style={[styles.bottomBarItem, selectedNavItem === 'cart' && styles.selectedNavItem]}
+                    onPress={() => handleNavItemClick('cart')}
+                >
+                    <Icon name="cart-outline" size={24} color={selectedNavItem === 'cart' ? '#0AD127' : '#333'} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.bottomBarItem, selectedNavItem === 'settings' && styles.selectedNavItem]}
+                    onPress={() => handleNavItemClick('settings')}
+                >
+                    <Icon name="settings-outline" size={24} color={selectedNavItem === 'settings' ? '#0AD127' : '#333'} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.bottomBarItem, selectedNavItem === 'home' && styles.selectedNavItem]}
+                    onPress={() => handleNavItemClick('home')}
+                >
+                    <Icon name="home-outline" size={24} color={selectedNavItem === 'home' ? '#0AD127' : '#333'} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.bottomBarItem, selectedNavItem === 'market' && styles.selectedNavItem]}
+                    onPress={() => handleNavItemClick('market')}
+                >
+                    <Icon name="storefront-outline" size={24} color={selectedNavItem === 'market' ? '#0AD127' : '#333'} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.bottomBarItem, selectedNavItem === 'profile' && styles.selectedNavItem]}
+                    onPress={() => handleNavItemClick('profile')}
+                >
+                    <Icon name="person-outline" size={24} color={selectedNavItem === 'profile' ? '#0AD127' : '#333'} />
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#f8f9fa',
+        justifyContent: 'space-between', // Space between top and bottom bars
+    },
+    topBar: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+        padding: 8,
+    },
+    searchIcon: {
+        marginRight: 8,
+    },
+    searchInput: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        fontSize: 16,
+    },
+    notificationIcon: {
+        marginLeft: 8,
+    },
+    carouselContainer: {
+        height: 280, // Adjusted height for carousel
+        marginBottom: 16,
+        padding: 2,
+    },
+    carouselItem: {
+        width: 390, // Adjusted width for 2 items per row
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 8, // Adjusted margin for spacing between items
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        elevation: 3,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+    },
+    carouselImage: {
+        width: 370, // Adjusted width for image inside carousel item
+        height: 170, // Adjusted height for image inside carousel item
+        borderRadius: 8,
+    },
+    carouselText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginVertical: 8,
+    },
+    picker: {
+        marginBottom: 16,
+    },
+    productItem: {
+        alignItems: 'center',
+        margin: 5,
+        marginBottom: 0,
+    },
+    productContainer: {
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: '#0AD127',
+        borderRadius: 8,
+        padding: 8,
+        marginBottom: 8,
+    },
+    productImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 8,
+        marginBottom: 8,
+    },
+    productTitle: {
+        fontSize: 16,
+        marginBottom: 4,
+    },
+    productPrice: {
+        fontSize: 14,
+        color: '#888',
+        marginBottom: 8,
+    },
+    productButton: {
+        backgroundColor: '#007bff',
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+    },
+    productButtonText: {
+        color: '#fff',
+        fontSize: 14,
+    },
+    bottomBar: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        borderTopWidth: 1,
+        borderTopColor: '#ddd',
+        backgroundColor: '#fff',
+        paddingVertical: 8,
+        paddingBottom: 20, // Ensure bottom padding to prevent overlap with bottom content
+    },
+    bottomBarItem: {
+        flex: 1,
+        alignItems: 'center',
+        padding: 10,
+    },
+    selectedNavItem: {
+        backgroundColor: '#EDEFF3',
+    },
+});
+
+export default HomeScreen;
+
