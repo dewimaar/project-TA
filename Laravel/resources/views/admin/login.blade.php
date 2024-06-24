@@ -8,7 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #e8f5e9;
+            background-color: #224230; /* Hijau */
             font-family: 'Segoe UI', sans-serif;
         }
         .container {
@@ -19,75 +19,83 @@
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            background: linear-gradient(to right, #7CB342, #388E3C);
-            color: #fff;
+            background: #e6e6fa; /* Ungu pastel */
+            color: #4b0082; /* Warna teks yang kontras */
         }
         .left-section {
-            background: url('https://example.com/marketplace-inventory.jpg') no-repeat center center;
+            background: url('/img/images.jpg') no-repeat center center;
             background-size: cover;
             border-radius: 15px 0 0 15px;
+            transition: transform 0.5s ease;
+        }
+        .left-section:hover {
+            transform: scale(1.05); /* Zoom effect on hover */
         }
         .right-section {
             padding: 20px;
         }
         .card-header {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background-color: rgba(75, 0, 130, 0.2);
+            color: #4b0082;
             text-align: center;
             padding: 20px;
             border-radius: 15px 15px 0 0;
         }
         .form-control {
             border-radius: 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            border-bottom: 1px solid rgba(75, 0, 130, 0.5);
             box-shadow: none;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background-color: rgba(75, 0, 130, 0.1);
+            color: #4b0082;
         }
         .form-control:focus {
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 0 0.15rem rgba(255, 255, 255, 0.25);
+            border-color: rgba(75, 0, 130, 0.5);
+            box-shadow: 0 0 0 0.15rem rgba(75, 0, 130, 0.25);
         }
         .btn-primary {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(75, 0, 130, 0.1);
             border: none;
             border-radius: 4px;
             width: 100%;
-            color: #fff;
+            color: #4b0082;
+            transition: background-color 0.3s ease;
         }
         .btn-primary:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(75, 0, 130, 0.3);
         }
         .form-check-input {
-            margin-top: 5px;
+            margin-top: 8px;
+            margin-right: 5px;
         }
         .form-check-label {
-            margin-left: 5px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(75, 0, 130, 0.9);
         }
         .forgot-password {
             text-align: right;
             margin-top: 10px;
         }
         .forgot-password a {
-            color: #fff;
-            text-decoration: none;
+            color: #4b0082;
+            text-decoration: underline;
+            transition: color 0.3s ease;
         }
         .forgot-password a:hover {
-            text-decoration: underline;
+            color: #ccc;
         }
         .card-footer {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(75, 0, 130, 0.1);
             border-radius: 0 0 15px 15px;
             padding: 10px 20px;
             text-align: center;
         }
         .card-footer a {
-            color: #fff;
+            color: #4b0082;
             text-decoration: none;
+            transition: color 0.3s ease;
         }
         .card-footer a:hover {
             text-decoration: underline;
+            color: #ccc;
         }
         .input-group {
             position: relative;
@@ -100,7 +108,7 @@
             border: none;
             background: transparent;
             z-index: 10;
-            color: #fff;
+            color: #4b0082;
         }
     </style>
 </head>
@@ -139,14 +147,14 @@
                                     <div class="mb-3">
                                         <button type="submit" class="btn btn-primary">Login</button>
                                     </div>
-                                    {{-- <div class="forgot-password">
-                                        <a href="#">Lupa sandi</a>
-                                    </div> --}}
+                                    <div class="forgot-password">
+                                        <a href="#">Lupa kata sandi?</a>
+                                    </div>
                                 </form>
                             </div>
-                            {{-- <div class="card-footer">
-                                <p>Tidak punya akun? <a href="#" class="text-decoration-none">Register</a></p>
-                            </div> --}}
+                            <div class="card-footer">
+                                <p>Belum punya akun? <a href="#" class="text-decoration-none">Daftar</a></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -201,4 +209,3 @@
     </script>    
 </body>
 </html>
-
