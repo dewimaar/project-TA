@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
+import ProfileScreen from './ProfileScreen';
+import BottomNavbar from './BottomNavbar';
 
 const HomeScreen = ({ navigation }) => {
     const [selectedNavItem, setSelectedNavItem] = useState('home');
@@ -10,6 +12,13 @@ const HomeScreen = ({ navigation }) => {
 
     const handleNavItemClick = (itemName) => {
         setSelectedNavItem(itemName);
+        if (itemName === 'profile') {
+            navigation.navigate('Profile');
+        } else if (itemName === 'home') {
+            navigation.navigate('Home');
+        } else if (itemName === 'market') {
+            navigation.navigate('Market'); // Jangan lupa sesuaikan dengan navigasi yang benar
+        }
     };
 
     const handleSearchInputChange = (query) => {
@@ -87,39 +96,7 @@ const HomeScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 )}
             />
-
-            <View style={styles.bottomBar}>
-                <TouchableOpacity
-                    style={[styles.bottomBarItem, selectedNavItem === 'cart' && styles.selectedNavItem]}
-                    onPress={() => handleNavItemClick('cart')}
-                >
-                    <Icon name="cart-outline" size={24} color={selectedNavItem === 'cart' ? '#0AD127' : '#333'} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.bottomBarItem, selectedNavItem === 'settings' && styles.selectedNavItem]}
-                    onPress={() => handleNavItemClick('settings')}
-                >
-                    <Icon name="settings-outline" size={24} color={selectedNavItem === 'settings' ? '#0AD127' : '#333'} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.bottomBarItem, selectedNavItem === 'home' && styles.selectedNavItem]}
-                    onPress={() => handleNavItemClick('home')}
-                >
-                    <Icon name="home-outline" size={24} color={selectedNavItem === 'home' ? '#0AD127' : '#333'} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.bottomBarItem, selectedNavItem === 'market' && styles.selectedNavItem]}
-                    onPress={() => handleNavItemClick('market')}
-                >
-                    <Icon name="storefront-outline" size={24} color={selectedNavItem === 'market' ? '#0AD127' : '#333'} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.bottomBarItem, selectedNavItem === 'profile' && styles.selectedNavItem]}
-                    onPress={() => handleNavItemClick('profile')}
-                >
-                    <Icon name="person-outline" size={24} color={selectedNavItem === 'profile' ? '#0AD127' : '#333'} />
-                </TouchableOpacity>
-            </View>
+            <BottomNavbar navigation={navigation} selectedNavItem={'home'} handleNavItemClick={handleNavItemClick} />
         </View>
     );
 };
@@ -221,25 +198,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 14,
     },
-    bottomBar: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        borderTopWidth: 1,
-        borderTopColor: '#ddd',
-        backgroundColor: '#fff',
-        paddingVertical: 8,
-        paddingBottom: 20, // Ensure bottom padding to prevent overlap with bottom content
-    },
-    bottomBarItem: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 10,
-    },
-    selectedNavItem: {
-        backgroundColor: '#EDEFF3',
-    },
 });
 
 export default HomeScreen;
-
