@@ -66,7 +66,7 @@ const RegisterScreen = ({ navigation }) => {
                 placeholder="Phone Number"
                 value={noTelp}
                 onChangeText={setNoTelp}
-                keyboardType="phone-pad" // Gunakan keyboardType="phone-pad" untuk input nomor telepon
+                keyboardType="phone-pad" 
             />
             <TextInput
                 style={styles.input}

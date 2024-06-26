@@ -11,23 +11,22 @@ const ProfileScreen = ({ navigation }) => {
     const handleLogout = async () => {
         try {
             // Lakukan proses logout di sini, misalnya dengan menghapus token dari AsyncStorage
-            await AsyncStorage.removeItem('auth_token'); // Ganti 'auth_token' dengan key yang Anda gunakan untuk menyimpan token
+            await AsyncStorage.removeItem('auth_token'); 
 
             // Navigasi kembali ke layar login
-            navigation.replace('Login'); // Pastikan 'Login' sesuai dengan nama layar login yang sebenarnya
+            navigation.replace('Login');
         } catch (e) {
             console.error('Failed to logout:', e);
-            // Handle error (misalnya, tampilkan pesan kesalahan)
         }
     };
 
     const handleNavItemClick = (itemName) => {
         if (itemName === 'home') {
-            navigation.navigate('Home'); // Pastikan ini sesuai dengan nama yang Anda gunakan di navigasi Anda
+            navigation.navigate('Home'); 
         } else if (itemName === 'profile') {
-            navigation.navigate('Profile'); // Di sini navigasi ke Profile, namun perlu disesuaikan dengan logika navigasi Anda
+            navigation.navigate('Profile');
         } else if (itemName === 'market') {
-            navigation.navigate('Market'); // Jangan lupa sesuaikan dengan navigasi yang benar
+            navigation.navigate('Market'); 
         }
     };
 
@@ -35,8 +34,8 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.container}>
             <View style={styles.header}>
                 <Image style={styles.profileImage} source={{ uri: 'https://via.placeholder.com/150' }} />
-                <Text style={styles.name}>Montu Yadav</Text>
-                <Text style={styles.email}>mmontuyadav.331@gmail.com</Text>
+                <Text style={styles.name}>Ardiani Dewi</Text>
+                <Text style={styles.email}>ardianidewi@gmail.com</Text>
             </View>
             <View style={styles.tabs}>
                 <TouchableOpacity style={styles.tab}>
@@ -73,7 +72,7 @@ const ProfileScreen = ({ navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuItem}>
                     <Text style={styles.menuText}>Jenis Kelamin</Text>
-                    <Text style={styles.menuDetail}>Laki-laki</Text>
+                    <Text style={styles.menuDetail}>Perempuan</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuItem}>
                     <Text style={styles.menuText}>Bantuan/Dukungan</Text>
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5',
     },
     header: {
-        backgroundColor: '#b33992',
+        backgroundColor: '#013B0A',
         paddingVertical: 30,
         alignItems: 'center',
     },

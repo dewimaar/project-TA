@@ -8,7 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #224230; /* Hijau */
+            background-color: #ecf5f0; /* Hijau */
             font-family: 'Segoe UI', sans-serif;
         }
         .container {

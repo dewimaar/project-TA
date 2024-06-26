@@ -14,7 +14,7 @@ const LoginScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post('http://192.168.248.23:8000/api/login', {
+            const response = await axios.post('http://192.168.215.23:8000/api/login', {
                 email,
                 password,
             });

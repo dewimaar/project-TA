@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import BottomNavbar from './BottomNavbar'; // Sesuaikan dengan lokasi BottomNavbar Anda
-import { Ionicons } from '@expo/vector-icons'; // Pastikan Anda mengganti sesuai dengan library yang Anda gunakan
+import BottomNavbar from './BottomNavbar'; 
+import { Ionicons } from '@expo/vector-icons'; 
 
 const MarketScreen = ({ navigation }) => {
     const handleNavItemClick = (itemName) => {
@@ -13,7 +13,7 @@ const MarketScreen = ({ navigation }) => {
         } else if (itemName === 'profile') {
             navigation.navigate('Profile');
         } else if (itemName === 'market') {
-            navigation.navigate('Market'); // Jangan lupa sesuaikan dengan navigasi yang benar
+            navigation.navigate('Market'); 
         }
     };
 
