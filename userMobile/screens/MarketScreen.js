@@ -14,6 +14,10 @@ const MarketScreen = ({ navigation }) => {
             navigation.navigate('Profile');
         } else if (itemName === 'market') {
             navigation.navigate('Market'); 
+        } else if (itemName === 'settings') {
+            navigation.navigate('Settings');
+        } else if (itemName === 'cart') {
+            navigation.navigate('Cart');
         }
     };
 

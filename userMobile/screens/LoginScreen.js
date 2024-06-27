@@ -21,12 +21,12 @@ const LoginScreen = ({ navigation }) => {
             console.log(response.data);
            if (response.data.token) {
 ToastAndroid.show(
-              'Berhasil Login',
+              'Salah username atau password',
               ToastAndroid.LONG,
             )
 } else {
 ToastAndroid.show(
-              'Salah username atau password.',
+              'Berhasil Login',
               ToastAndroid.LONG,
             )}
             navigation.navigate('Home'); // Navigate to HomeScreen

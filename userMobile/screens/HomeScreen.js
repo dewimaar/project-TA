@@ -17,7 +17,11 @@ const HomeScreen = ({ navigation }) => {
         } else if (itemName === 'home') {
             navigation.navigate('Home');
         } else if (itemName === 'market') {
-            navigation.navigate('Market'); // Jangan lupa sesuaikan dengan navigasi yang benar
+            navigation.navigate('Market'); 
+        }  else if (itemName === 'settings') {
+            navigation.navigate('Settings');
+        } else if (itemName === 'cart') {
+            navigation.navigate('Cart');
         }
     };
 
@@ -77,6 +81,7 @@ const HomeScreen = ({ navigation }) => {
                 <Picker.Item label="Clothing Store" value="clothing" />
                 <Picker.Item label="Electronic Store" value="electronics" />
                 <Picker.Item label="Hardware Store" value="hardware" />
+                <Picker.Item label="Building Materials Store" value="materials" /> 
             </Picker>
 
             <FlatList
@@ -105,7 +110,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f8f9fa',
-        justifyContent: 'space-between', // Space between top and bottom bars
+        justifyContent: 'space-between', 
     },
     topBar: {
         flexDirection: 'row',
@@ -130,15 +135,15 @@ const styles = StyleSheet.create({
         marginLeft: 8,
     },
     carouselContainer: {
-        height: 280, // Adjusted height for carousel
+        height: 280, 
         marginBottom: 16,
         padding: 2,
     },
     carouselItem: {
-        width: 390, // Adjusted width for 2 items per row
+        width: 390, 
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 8, // Adjusted margin for spacing between items
+        marginRight: 8, 
         backgroundColor: '#fff',
         borderRadius: 8,
         elevation: 3,
@@ -148,8 +153,8 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
     },
     carouselImage: {
-        width: 370, // Adjusted width for image inside carousel item
-        height: 170, // Adjusted height for image inside carousel item
+        width: 370, 
+        height: 170, 
         borderRadius: 8,
     },
     carouselText: {
