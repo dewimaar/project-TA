@@ -1,13 +1,37 @@
-// MarketScreen.js
-
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, Button, Alert } from 'react-native';
 import BottomNavbar from './BottomNavbar'; 
-import { Ionicons } from '@expo/vector-icons'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MarketScreen = ({ navigation }) => {
+    const [store, setStore] = useState(null);
+
+    useEffect(() => {
+        const fetchStore = async () => {
+            try {
+                // Ambil ID pengguna dari AsyncStorage
+                const userId = await AsyncStorage.getItem('userId');
+                
+                if (userId) {
+                    // Panggil API untuk mendapatkan data toko berdasarkan ID pengguna
+                    const response = await fetch(`http://192.168.215.23:8000/api/user/${userId}/store`);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        setStore(data);
+                    } else {
+                        Alert.alert('Error', 'Gagal mengambil data toko');
+                    }
+                }
+            } catch (error) {
+                Alert.alert('Error', 'Gagal mengambil data toko');
+            }
+        };
+
+        fetchStore();
+    }, []);
+
     const handleNavItemClick = (itemName) => {
-        // Handle navigation logic here, if needed
         if (itemName === 'home') {
             navigation.navigate('Home');
         } else if (itemName === 'profile') {
@@ -21,19 +45,32 @@ const MarketScreen = ({ navigation }) => {
         }
     };
 
+    const handleRegisterStore = () => {
+        navigation.navigate('StoreRegistration');
+    };
+
+    const handleAddProduct = () => {
+        navigation.navigate('AddProduct');
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <Text style={styles.title}>Market Screen</Text>
-                {/* Tambahkan konten Market Screen sesuai kebutuhan */}
-                <TouchableOpacity style={styles.itemContainer} onPress={() => console.log('Item pressed')}>
-                    <Image source={{ uri: 'https://via.placeholder.com/150' }} style={styles.itemImage} />
-                    <View style={styles.itemDetails}>
-                        <Text style={styles.itemTitle}>Product 1</Text>
-                        <Text style={styles.itemPrice}>$50</Text>
+                {store ? (
+                    <View style={styles.storeContainer}>
+                        <Text style={styles.storeTitle}>Nama Toko: {store.name}</Text>
+                        <Text style={styles.storeCategory}>Kategori: {store.category}</Text>
+                        <Text style={styles.storeAddress}>Alamat: {store.address}</Text>
+                        <Text style={styles.storeDescription}>Deskripsi: {store.description}</Text>
+                        <Button title="Tambah Produk" onPress={handleAddProduct} />
                     </View>
-                </TouchableOpacity>
-                {/* Tambahkan item-item lainnya sesuai kebutuhan */}
+                ) : (
+                    <>
+                        <Text style={styles.noStoreText}>Anda belum memiliki toko</Text>
+                        <Button title="Daftarkan Sekarang" onPress={handleRegisterStore} />
+                    </>
+                )}
             </ScrollView>
             <BottomNavbar navigation={navigation} selectedNavItem={'market'} handleNavItemClick={handleNavItemClick} />
         </View>
@@ -46,6 +83,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#f8f9fa',
     },
     contentContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         paddingVertical: 20,
         paddingHorizontal: 10,
     },
@@ -55,11 +95,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 20,
     },
-    itemContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 15,
-        padding: 10,
+    noStoreText: {
+        fontSize: 18,
+        marginBottom: 10,
+    },
+    storeContainer: {
+        padding: 20,
         backgroundColor: '#fff',
         borderRadius: 8,
         shadowColor: '#000',
@@ -67,21 +108,23 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 2,
         elevation: 3,
+        marginBottom: 20,
+        width: '100%',
     },
-    itemImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 8,
-        marginRight: 10,
-    },
-    itemDetails: {
-        flex: 1,
-    },
-    itemTitle: {
-        fontSize: 18,
+    storeTitle: {
+        fontSize: 24,
         fontWeight: 'bold',
+        marginBottom: 10,
     },
-    itemPrice: {
+    storeCategory: {
+        fontSize: 18,
+        marginBottom: 5,
+    },
+    storeAddress: {
+        fontSize: 16,
+        marginBottom: 5,
+    },
+    storeDescription: {
         fontSize: 16,
         color: '#888',
     },
