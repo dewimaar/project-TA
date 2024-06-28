@@ -8,26 +8,21 @@ const MarketScreen = ({ navigation }) => {
 
     useEffect(() => {
         const fetchStore = async () => {
-            try {
-                // Ambil ID pengguna dari AsyncStorage
-                const userId = await AsyncStorage.getItem('userId');
-                
-                if (userId) {
-                    // Panggil API untuk mendapatkan data toko berdasarkan ID pengguna
-                    const response = await fetch(`http://192.168.215.23:8000/api/user/${userId}/store`);
-                    
+            const storeId = await AsyncStorage.getItem('storeId');
+            if (storeId) {
+                try {
+                    const response = await fetch(`http://192.168.118.23:8000/api/stores/${storeId}`);
                     if (response.ok) {
                         const data = await response.json();
                         setStore(data);
                     } else {
-                        Alert.alert('Error', 'Gagal mengambil data toko');
+                        Alert.alert('Error', 'Failed to fetch store data');
                     }
+                } catch (error) {
+                    Alert.alert('Error', 'Failed to fetch store data');
                 }
-            } catch (error) {
-                Alert.alert('Error', 'Gagal mengambil data toko');
             }
         };
-
         fetchStore();
     }, []);
 

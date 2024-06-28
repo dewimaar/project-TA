@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Store;
-use Illuminate\Support\Facades\Storage;
 
 class StoreController extends Controller
 {
@@ -15,14 +14,7 @@ class StoreController extends Controller
             'category' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
-        if ($request->hasFile('photo')) {
-            $imageName = time() . '.' . $request->photo->extension();
-            $request->photo->move(public_path('img'), $imageName);
-            $validated['photo'] = $imageName;
-        }
 
         $store = Store::create($validated);
 
@@ -40,3 +32,5 @@ class StoreController extends Controller
         return response()->json($store);
     }
 }
+
+

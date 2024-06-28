@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, TouchableOpacity, StyleSheet, Alert, ToastAndroid  } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, StyleSheet, Alert, ToastAndroid, Image } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -14,22 +15,19 @@ const LoginScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post('http://192.168.215.23:8000/api/login', {
+            const response = await axios.post('http://192.168.118.23:8000/api/login', {
                 email,
                 password,
             });
             console.log(response.data);
-           if (response.data.token) {
-ToastAndroid.show(
-              'Salah username atau password',
-              ToastAndroid.LONG,
-            )
-} else {
-ToastAndroid.show(
-              'Berhasil Login',
-              ToastAndroid.LONG,
-            )}
-            navigation.navigate('Home'); // Navigate to HomeScreen
+
+            if (response.data.access_token) {
+                await AsyncStorage.setItem('auth_token', response.data.access_token);
+                ToastAndroid.show('Berhasil Login', ToastAndroid.LONG);
+                navigation.navigate('Home'); // Navigate to HomeScreen
+            } else {
+                ToastAndroid.show('Salah username atau password', ToastAndroid.LONG);
+            }
         } catch (error) {
             console.error(error);
             setError('Login failed. Please check your credentials.');
@@ -38,6 +36,7 @@ ToastAndroid.show(
 
     return (
         <View style={styles.container}>
+            <Image source={require('../assets/marketplace.png')} style={styles.image} />
             <Text style={styles.title}>Login</Text>
             <TextInput
                 style={styles.input}
@@ -71,6 +70,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 16,
         backgroundColor: '#f5f5f5',
+    },
+    image: {
+        width: 200,
+        height: 200,
+        marginBottom: 32,
     },
     title: {
         fontSize: 32,

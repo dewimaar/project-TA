@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('category');
             $table->string('address');
             $table->text('description')->nullable();
-            $table->string('photo')->nullable();
             $table->timestamps();
         });
     }

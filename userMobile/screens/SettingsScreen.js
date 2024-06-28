@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Switch, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Switch, StyleSheet } from 'react-native';
 import BottomNavbar from './BottomNavbar';
 import { Ionicons } from '@expo/vector-icons'; 
 
@@ -27,7 +27,7 @@ const SettingsScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Text style={styles.title}>Settings</Text>
             <View style={styles.settingItem}>
-                <Text style={styles.settingText}>Enable Notifications</Text>
+                <Text style={styles.settingText}>Notifications for Low Stock</Text>
                 <Switch
                     trackColor={{ false: "#767577", true: "#81b0ff" }}
                     thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -36,9 +36,26 @@ const SettingsScreen = ({ navigation }) => {
                     value={isEnabled}
                 />
             </View>
-            <TouchableOpacity style={styles.button} onPress={() => console.log('Log out pressed')}>
-                <Text style={styles.buttonText}>Log Out</Text>
-            </TouchableOpacity>
+            <View style={styles.settingItem}>
+                <Text style={styles.settingText}>Receive Order Notifications</Text>
+                <Switch
+                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                    thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                />
+            </View>
+            <View style={styles.settingItem}>
+                <Text style={styles.settingText}>Enable Sales Alerts</Text>
+                <Switch
+                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                    thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                />
+            </View>
             <BottomNavbar navigation={navigation} selectedNavItem={'settings'} handleNavItemClick={handleNavItemClick} />
         </View>
     );
@@ -72,17 +89,6 @@ const styles = StyleSheet.create({
     },
     settingText: {
         fontSize: 18,
-    },
-    button: {
-        backgroundColor: '#007bff',
-        padding: 15,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
     },
 });
 

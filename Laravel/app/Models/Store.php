@@ -13,6 +13,5 @@ class Store extends Model
         'category',
         'address',
         'description',
-        'photo',
     ];
 }

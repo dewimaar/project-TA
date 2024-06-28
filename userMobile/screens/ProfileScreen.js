@@ -1,19 +1,38 @@
-// ProfileScreen.js
-
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import BottomNavbar from './BottomNavbar';
 
 const ProfileScreen = ({ navigation }) => {
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = await AsyncStorage.getItem('auth_token');
+                console.log('Retrieved Token:', token);
+
+                const response = await axios.get('http://192.168.118.23:8000/api/user', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setUserData(response.data);
+            } catch (error) {
+                console.error('Failed to fetch user data:', error);
+                Alert.alert('Error', 'Failed to fetch user data.');
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const handleLogout = async () => {
         try {
-            // Lakukan proses logout di sini, misalnya dengan menghapus token dari AsyncStorage
-            await AsyncStorage.removeItem('auth_token'); 
-
-            // Navigasi kembali ke layar login
+            await AsyncStorage.removeItem('auth_token');
             navigation.replace('Login');
         } catch (e) {
             console.error('Failed to logout:', e);
@@ -22,11 +41,11 @@ const ProfileScreen = ({ navigation }) => {
 
     const handleNavItemClick = (itemName) => {
         if (itemName === 'home') {
-            navigation.navigate('Home'); 
+            navigation.navigate('Home');
         } else if (itemName === 'profile') {
             navigation.navigate('Profile');
         } else if (itemName === 'market') {
-            navigation.navigate('Market'); 
+            navigation.navigate('Market');
         } else if (itemName === 'settings') {
             navigation.navigate('Settings');
         } else if (itemName === 'cart') {
@@ -34,12 +53,20 @@ const ProfileScreen = ({ navigation }) => {
         }
     };
 
+    if (!userData) {
+        return (
+            <View style={styles.container}>
+                <Text>Loading...</Text>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <Image style={styles.profileImage} source={{ uri: 'https://via.placeholder.com/150' }} />
-                <Text style={styles.name}>Ardiani Dewi</Text>
-                <Text style={styles.email}>ardianidewi@gmail.com</Text>
+                <Text style={styles.name}>{userData.name}</Text>
+                <Text style={styles.email}>{userData.email}</Text>
             </View>
             <View style={styles.tabs}>
                 <TouchableOpacity style={styles.tab}>
@@ -64,7 +91,7 @@ const ProfileScreen = ({ navigation }) => {
             <ScrollView style={styles.menu}>
                 <TouchableOpacity style={styles.menuItem}>
                     <Text style={styles.menuText}>Nomor Telepon</Text>
-                    <Text style={styles.menuDetail}>+62 812-3456-7890</Text>
+                    <Text style={styles.menuDetail}>{userData.noTelp}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuItem}>
                     <Text style={styles.menuText}>Alamat</Text>

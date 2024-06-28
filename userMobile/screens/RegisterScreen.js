@@ -24,24 +24,18 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post('http://192.168.215.23:8000/api/register', {
+            const response = await axios.post('http://192.168.118.23:8000/api/register', {
                 name,
                 email,
                 noTelp,
                 password,
             });
             console.log(response.data);
-            ToastAndroid.show(
-                'Registration Successful',
-                ToastAndroid.LONG,
-            );
+            ToastAndroid.show('Registration Successful', ToastAndroid.LONG);
             navigation.navigate('Login');
         } catch (error) {
             console.error(error);
-            ToastAndroid.show(
-                'Registration failed. Please try again.',
-                ToastAndroid.LONG,
-            );
+            ToastAndroid.show('Registration failed. Please try again.', ToastAndroid.LONG);
         }
     };
 

@@ -15,14 +15,14 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'noTelp' => 'required|string|max:15', // Tambahkan validasi untuk nomor telepon
+            'noTelp' => 'required|string|max:15', 
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'noTelp' => $request->noTelp, // Tambahkan nomor telepon ke dalam array pengguna baru
+            'noTelp' => $request->noTelp, 
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -50,4 +50,9 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
         ]);
     }
+    public function getUserData(Request $request)
+{
+    return response()->json(Auth::user());
+}
+
 }

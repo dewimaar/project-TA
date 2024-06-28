@@ -22,7 +22,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUserData']);
+
 
 // create market user
+// Route::post('/stores', [StoreController::class, 'register']);
+// Route::get('/stores/{id}', [StoreController::class, 'show']); // Tambahkan ini
+
 Route::post('/stores', [StoreController::class, 'register']);
-Route::get('/stores/{id}', [StoreController::class, 'show']); // Tambahkan ini
+Route::get('/stores/{id}', [StoreController::class, 'show']);
