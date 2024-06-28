@@ -110,6 +110,22 @@
             z-index: 10;
             color: #4b0082;
         }
+        .back-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn-secondary {
+            background-color: #4b0082;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #6a0dad;
+        }
     </style>
 </head>
 <body>
@@ -157,6 +173,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="back-button-container">
+                    <a href="/" class="btn btn-secondary">Back</a>
                 </div>
             </div>
         </div>
