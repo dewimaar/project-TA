@@ -9,9 +9,11 @@ class Store extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'user_id',
         'name',
         'category',
         'address',
         'description',
+        'image',
     ];
 }

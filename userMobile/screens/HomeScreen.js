@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     productContainer: {
         alignItems: 'center',
         borderWidth: 2,
-        borderColor: '#0AD127',
+        borderColor: '#00796B',
         borderRadius: 8,
         padding: 8,
         marginBottom: 8,

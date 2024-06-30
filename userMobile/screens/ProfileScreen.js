@@ -14,7 +14,7 @@ const ProfileScreen = ({ navigation }) => {
                 const token = await AsyncStorage.getItem('auth_token');
                 console.log('Retrieved Token:', token);
 
-                const response = await axios.get('http://192.168.118.23:8000/api/user', {
+                const response = await axios.get('http://192.168.100.91:8000/api/user', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -67,27 +67,25 @@ const ProfileScreen = ({ navigation }) => {
                 <Image style={styles.profileImage} source={{ uri: 'https://via.placeholder.com/150' }} />
                 <Text style={styles.name}>{userData.name}</Text>
                 <Text style={styles.email}>{userData.email}</Text>
+                {userData.store ? (
+                    <Text style={styles.status}>Status: Penjual</Text>
+                ) : (
+                    <Text style={styles.status}>Status: Pengguna Biasa</Text>
+                )}
             </View>
-            <View style={styles.tabs}>
-                <TouchableOpacity style={styles.tab}>
-                    <MaterialIcons name="list" size={24} color="black" />
-                    <Text style={styles.tabText}>My Orders</Text>
+            {userData.store ? (
+                <View style={styles.storeInfo}>
+                    <Text style={styles.storeTitle}>Informasi Toko</Text>
+                    <Text style={styles.storeDetail}>Nama Toko: {userData.store.name}</Text>
+                    <Text style={styles.storeDetail}>Kategori: {userData.store.category}</Text>
+                    <Text style={styles.storeDetail}>Alamat: {userData.store.address}</Text>
+                    <Text style={styles.storeDetail}>Deskripsi: {userData.store.description}</Text>
+                </View>
+            ) : (
+                <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('Market')}>
+                    <Text style={styles.registerButtonText}>Daftar Toko</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.tab}>
-                    <MaterialIcons name="favorite" size={24} color="black" />
-                    <Text style={styles.tabText}>Wishlist</Text>
-                    <View style={styles.badge}>
-                        <Text style={styles.badgeText}>3</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tab}>
-                    <MaterialIcons name="notifications" size={24} color="black" />
-                    <Text style={styles.tabText}>Notifications</Text>
-                    <View style={styles.badge}>
-                        <Text style={styles.badgeText}>5</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            )}
             <ScrollView style={styles.menu}>
                 <TouchableOpacity style={styles.menuItem}>
                     <Text style={styles.menuText}>Nomor Telepon</Text>
@@ -144,6 +142,39 @@ const styles = StyleSheet.create({
     },
     email: {
         fontSize: 14,
+        color: '#fff',
+    },
+    status: {
+        fontSize: 14,
+        color: '#fff',
+        marginTop: 5,
+    },
+    storeInfo: {
+        backgroundColor: '#fff',
+        padding: 20,
+        marginTop: 20,
+        marginHorizontal: 10,
+        borderRadius: 10,
+    },
+    storeTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    storeDetail: {
+        fontSize: 16,
+        color: 'grey',
+    },
+    registerButton: {
+        backgroundColor: '#013B0A',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginHorizontal: 10,
+        marginTop: 20,
+    },
+    registerButtonText: {
+        fontSize: 16,
         color: '#fff',
     },
     tabs: {

@@ -9,31 +9,31 @@ const BottomNavbar = ({ navigation, selectedNavItem, handleNavItemClick }) => {
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('home')}
       >
-        <Icon name="home-outline" size={24} color={selectedNavItem === 'home' ? '#0AD127' : '#333'} />
+        <Icon name="home-outline" size={24} color={selectedNavItem === 'home' ? '#098C1C' : '#333'} />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('cart')}
       >
-        <Icon name="cart-outline" size={24} color={selectedNavItem === 'cart' ? '#0AD127' : '#333'} />
+        <Icon name="cart-outline" size={24} color={selectedNavItem === 'cart' ? '#098C1C' : '#333'} />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('market')}
       >
-        <Icon name="storefront-outline" size={24} color={selectedNavItem === 'market' ? '#0AD127' : '#333'} />
+        <Icon name="storefront-outline" size={24} color={selectedNavItem === 'market' ? '#098C1C' : '#333'} />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('settings')}
       >
-        <Icon name="settings-outline" size={24} color={selectedNavItem === 'settings' ? '#0AD127' : '#333'} />
+        <Icon name="settings-outline" size={24} color={selectedNavItem === 'settings' ? '#098C1C' : '#333'} />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('profile')}
       >
-        <Icon name="person-outline" size={24} color={selectedNavItem === 'profile' ? '#0AD127' : '#333'} />
+        <Icon name="person-outline" size={24} color={selectedNavItem === 'profile' ? '#098C1C' : '#333'} />
       </TouchableOpacity>
     </View>
   );

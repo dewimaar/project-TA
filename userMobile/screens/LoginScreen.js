@@ -15,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post('http://192.168.118.23:8000/api/login', {
+            const response = await axios.post('http://192.168.100.91:8000/api/login', {
                 email,
                 password,
             });
@@ -24,7 +24,7 @@ const LoginScreen = ({ navigation }) => {
             if (response.data.access_token) {
                 await AsyncStorage.setItem('auth_token', response.data.access_token);
                 ToastAndroid.show('Berhasil Login', ToastAndroid.LONG);
-                navigation.navigate('Home'); // Navigate to HomeScreen
+                navigation.navigate('Home');
             } else {
                 ToastAndroid.show('Salah username atau password', ToastAndroid.LONG);
             }
@@ -36,8 +36,7 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../assets/marketplace.png')} style={styles.image} />
-            <Text style={styles.title}>Login</Text>
+            <Text style={styles.title}>Welcome Back!</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email"
@@ -69,48 +68,43 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 16,
-        backgroundColor: '#f5f5f5',
-    },
-    image: {
-        width: 200,
-        height: 200,
-        marginBottom: 32,
+        backgroundColor: '#DCD9CD',
     },
     title: {
-        fontSize: 32,
+        fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 32,
-        color: '#333',
+        marginBottom: 20,
+        color: '#00796B',
     },
     input: {
         height: 50,
-        width: '100%',
-        borderColor: '#ccc',
+        width: '90%',
+        borderColor: '#D6E0D7',
         borderWidth: 1,
-        borderRadius: 8,
-        marginBottom: 16,
-        paddingHorizontal: 16,
-        backgroundColor: '#fff',
+        borderRadius: 10,
+        marginBottom: 20,
+        paddingHorizontal: 15,
+        backgroundColor: '#FFFFFF',
     },
     button: {
         height: 50,
-        width: '100%',
-        backgroundColor: '#007BFF',
+        width: '90%',
+        backgroundColor: '#00796B',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
-        marginBottom: 16,
+        borderRadius: 10,
+        marginBottom: 10,
     },
     buttonText: {
-        color: '#fff',
+        color: '#FFFFFF',
         fontSize: 18,
         fontWeight: 'bold',
     },
     link: {
-        marginTop: 16,
+        marginTop: 20,
     },
     linkText: {
-        color: '#007BFF',
+        color: '#00796B',
         fontSize: 16,
     },
     error: {

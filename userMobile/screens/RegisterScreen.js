@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, StyleSheet, Alert, ToastAndroid } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, StyleSheet, Alert, ToastAndroid, Image } from 'react-native';
 import axios from 'axios';
 
 const RegisterScreen = ({ navigation }) => {
@@ -9,10 +9,7 @@ const RegisterScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
 
     const handleRegister = async () => {
-        console.log('Register button pressed'); // Log to verify function is called
-
         let missingFields = [];
-
         if (!name) missingFields.push('Name');
         if (!email) missingFields.push('Email');
         if (!noTelp) missingFields.push('NoTelp');
@@ -24,13 +21,12 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post('http://192.168.118.23:8000/api/register', {
+            const response = await axios.post('http://192.168.100.91:8000/api/register', {
                 name,
                 email,
                 noTelp,
                 password,
             });
-            console.log(response.data);
             ToastAndroid.show('Registration Successful', ToastAndroid.LONG);
             navigation.navigate('Login');
         } catch (error) {
@@ -41,7 +37,7 @@ const RegisterScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Register</Text>
+            <Text style={styles.title}>Create Account</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Name"
@@ -60,7 +56,7 @@ const RegisterScreen = ({ navigation }) => {
                 placeholder="Phone Number"
                 value={noTelp}
                 onChangeText={setNoTelp}
-                keyboardType="phone-pad" 
+                keyboardType="phone-pad"
             />
             <TextInput
                 style={styles.input}
@@ -85,43 +81,43 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 16,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#DCD9CD',
     },
     title: {
-        fontSize: 32,
+        fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 32,
-        color: '#333',
+        marginBottom: 20,
+        color: '#00796B',
     },
     input: {
         height: 50,
-        width: '100%',
-        borderColor: '#ccc',
+        width: '90%',
+        borderColor: '#D6E0D7',
         borderWidth: 1,
-        borderRadius: 8,
-        marginBottom: 16,
-        paddingHorizontal: 16,
-        backgroundColor: '#fff',
+        borderRadius: 10,
+        marginBottom: 20,
+        paddingHorizontal: 15,
+        backgroundColor: '#FFFFFF',
     },
     button: {
         height: 50,
-        width: '100%',
-        backgroundColor: '#007BFF',
+        width: '90%',
+        backgroundColor: '#00796B',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
-        marginBottom: 16,
+        borderRadius: 10,
+        marginBottom: 10,
     },
     buttonText: {
-        color: '#fff',
+        color: '#FFFFFF',
         fontSize: 18,
         fontWeight: 'bold',
     },
     link: {
-        marginTop: 16,
+        marginTop: 20,
     },
     linkText: {
-        color: '#007BFF',
+        color: '#00796B',
         fontSize: 16,
     },
 });
