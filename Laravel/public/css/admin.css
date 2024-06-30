@@ -36,7 +36,7 @@ h1 {
     position: fixed;
     z-index: 2000;
     transition: all .25s ease-in-out;
-    background-color: #0b2c34;
+    background-color: #283618;
     display: flex;
     flex-direction: column;
     height: 100vh;

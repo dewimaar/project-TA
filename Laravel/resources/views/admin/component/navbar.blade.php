@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark" style="background-color:#0C4D5D;">
+<nav class="navbar navbar-dark" style="background-color:#606c38;">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold fs-4" href="#"> {{ $name }} </a>
             <div class="navbar-nav flex-row">
