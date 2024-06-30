@@ -36,5 +36,6 @@ Route::middleware('admin.auth')->prefix('admin')->group(function() {
     Route::get('/notifikasi', [Controller::class, 'notifikasi'])->name('notifikasi');
     Route::get('/riwayatTransaksi', [Controller::class, 'riwayatTransaksi'])->name('riwayatTransaksi');
     Route::get('/pengaturan', [Controller::class, 'pengaturan'])->name('pengaturan');
+    Route::get('/delete', [Controller::class, 'delete'])->name('delete');
     Route::post('logout', [AdminController::class, 'logout'])->name('admin.logout');
 });

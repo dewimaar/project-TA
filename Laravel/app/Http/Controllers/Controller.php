@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -33,9 +33,12 @@ class Controller extends BaseController
     }
     public function mitraUsaha ()
     {
+        $users = User::all(); // Contoh pengambilan data pengguna (pastikan model dan querynya disesuaikan)
+        
         return view('admin.page.mitraUsaha.mitraUsaha',[
             'name' => 'Mitra Usaha',
             'title' => 'Mitra Usaha',
+            'users' => $users,
         ]);
     }
     public function detailMitra ()
@@ -66,11 +69,13 @@ class Controller extends BaseController
             'title' => 'Riwayat Transaksi',
         ]);
     }
-    public function pengaturan ()
-    {
-        return view('admin.page.Pengaturan',[
-            'name' => 'Pengaturan',
-            'title' => 'Pengaturan',
-        ]);
+    public function deleteUser($id)
+{
+    $user = User::find($id);
+    if (!$user) {
+        abort(404); 
     }
+    $user->delete();
+    return redirect()->route('mitraUsaha')->with('success', 'Pengguna berhasil dihapus');
+}
 }

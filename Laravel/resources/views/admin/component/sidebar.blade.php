@@ -1,7 +1,8 @@
 <aside id="sidebar">
+
     <div class="d-flex">
         <button class="toggle-btn" type="button">
-        <i class="lni lni-cart-full"></i>
+            <i class="lni lni-cart-full"></i>
         </button>
         <div class="sidebar-logo">
             <a href="#">Marketplace</a>
@@ -32,22 +33,16 @@
                 <span>Rekap Penghasilan</span>
             </a>
         </li>
-        <li class="sidebar-item {{ Request::path() == 'admin/notifikasi' ? 'active' : '' }}">
-            <a href="/admin/notifikasi" class="sidebar-link">
-                <i class="bi bi-bell"></i>
-                <span>Notifikasi</span>
-            </a>
-        </li>
         <li class="sidebar-item {{ Request::path() == 'admin/riwayatTransaksi' ? 'active' : '' }}">
             <a href="/admin/riwayatTransaksi" class="sidebar-link">
                 <i class="bi bi-clock-history"></i>
                 <span>Riwayat Transaksi</span>
             </a>
         </li>
-        <li class="sidebar-item {{ Request::path() == 'admin/pengaturan' ? 'active' : '' }}">
-            <a href="/admin/pengaturan" class="sidebar-link">
-                <i class="bi bi-gear"></i>
-                <span>Pengaturan</span>
+        <li class="sidebar-item {{ Request::path() == 'admin/Delete' ? 'active' : '' }}">
+            <a href="/admin/Delete" class="sidebar-link">
+                <i class="bi bi-clock-history"></i>
+                <span>Delete User</span>
             </a>
         </li>
     </ul>
@@ -60,5 +55,4 @@
             <span>Logout</span>
         </a>
     </div>
-    
 </aside>

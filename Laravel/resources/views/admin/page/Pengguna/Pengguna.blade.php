@@ -89,7 +89,7 @@
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="card card-custom">
                 <div class="card-header d-flex justify-content-between align-items-center card-header-custom">
                     <div class="halaman">
