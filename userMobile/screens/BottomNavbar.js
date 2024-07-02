@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const BottomNavbar = ({ navigation, selectedNavItem, handleNavItemClick }) => {
@@ -39,7 +39,7 @@ const BottomNavbar = ({ navigation, selectedNavItem, handleNavItemClick }) => {
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   bottomBar: {
     position: 'absolute',
     bottom: 0,
@@ -58,6 +58,6 @@ const styles = {
     alignItems: 'center',
     padding: 10,
   },
-};
+});
 
 export default BottomNavbar;

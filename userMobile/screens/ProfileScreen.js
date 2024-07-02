@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import BottomNavbar from './BottomNavbar';
@@ -14,7 +13,7 @@ const ProfileScreen = ({ navigation }) => {
                 const token = await AsyncStorage.getItem('auth_token');
                 console.log('Retrieved Token:', token);
 
-                const response = await axios.get('http://192.168.100.91:8000/api/user', {
+                const response = await axios.get('http://192.168.118.23:8000/api/user', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -63,55 +62,48 @@ const ProfileScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Image style={styles.profileImage} source={{ uri: 'https://via.placeholder.com/150' }} />
-                <Text style={styles.name}>{userData.name}</Text>
-                <Text style={styles.email}>{userData.email}</Text>
-                {userData.store ? (
-                    <Text style={styles.status}>Status: Penjual</Text>
-                ) : (
-                    <Text style={styles.status}>Status: Pengguna Biasa</Text>
-                )}
-            </View>
-            {userData.store ? (
-                <View style={styles.storeInfo}>
-                    <Text style={styles.storeTitle}>Informasi Toko</Text>
-                    <Text style={styles.storeDetail}>Nama Toko: {userData.store.name}</Text>
-                    <Text style={styles.storeDetail}>Kategori: {userData.store.category}</Text>
-                    <Text style={styles.storeDetail}>Alamat: {userData.store.address}</Text>
-                    <Text style={styles.storeDetail}>Deskripsi: {userData.store.description}</Text>
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
+                <View style={styles.header}>
+                    <Image style={styles.profileImage} source={{ uri: 'https://via.placeholder.com/150' }} />
+                    <Text style={styles.name}>{userData.name}</Text>
+                    <Text style={styles.email}>{userData.email}</Text>
                 </View>
-            ) : (
-                <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('Market')}>
-                    <Text style={styles.registerButtonText}>Daftar Toko</Text>
-                </TouchableOpacity>
-            )}
-            <ScrollView style={styles.menu}>
-                <TouchableOpacity style={styles.menuItem}>
-                    <Text style={styles.menuText}>Nomor Telepon</Text>
-                    <Text style={styles.menuDetail}>{userData.noTelp}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
-                    <Text style={styles.menuText}>Alamat</Text>
-                    <Text style={styles.menuDetail}>Jl. Kebon Jeruk No. 27</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
-                    <Text style={styles.menuText}>Tanggal Lahir</Text>
-                    <Text style={styles.menuDetail}>01 Januari 1990</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
-                    <Text style={styles.menuText}>Jenis Kelamin</Text>
-                    <Text style={styles.menuDetail}>Perempuan</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
-                    <Text style={styles.menuText}>Bantuan/Dukungan</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
-                    <Text style={styles.menuText}>Tentang Aplikasi</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
-                    <Text style={[styles.menuText, { color: 'red' }]}>Logout</Text>
-                </TouchableOpacity>
+                {userData.store && (
+                    <View style={styles.storeInfo}>
+                        <Text style={styles.storeTitle}>Informasi Toko</Text>
+                        <Text style={styles.storeDetail}>Nama Toko: {userData.store.name}</Text>
+                        <Text style={styles.storeDetail}>Kategori: {userData.store.category}</Text>
+                        <Text style={styles.storeDetail}>Alamat: {userData.store.address}</Text>
+                        <Text style={styles.storeDetail}>Deskripsi: {userData.store.description}</Text>
+                    </View>
+                )}
+                <View style={styles.menu}>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Text style={styles.menuText}>Nomor Telepon</Text>
+                        <Text style={styles.menuDetail}>{userData.noTelp}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Text style={styles.menuText}>Alamat</Text>
+                        <Text style={styles.menuDetail}>Jl. Kebon Jeruk No. 27</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Text style={styles.menuText}>Tanggal Lahir</Text>
+                        <Text style={styles.menuDetail}>01 Januari 1990</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Text style={styles.menuText}>Jenis Kelamin</Text>
+                        <Text style={styles.menuDetail}>Perempuan</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Text style={styles.menuText}>Bantuan/Dukungan</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Text style={styles.menuText}>Tentang Aplikasi</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.menuItem, styles.logoutButton]} onPress={handleLogout}>
+                        <Text style={[styles.menuText, styles.logoutText]}>Logout</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
             <BottomNavbar navigation={navigation} selectedNavItem={'profile'} handleNavItemClick={handleNavItemClick} />
         </View>
@@ -122,6 +114,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f5f5f5',
+    },
+    scrollContainer: {
+        flex: 1,
+    },
+    scrollContent: {
+        paddingBottom: 80, // Added padding to ensure content is not hidden behind the BottomNavbar
     },
     header: {
         backgroundColor: '#013B0A',
@@ -144,11 +142,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#fff',
     },
-    status: {
-        fontSize: 14,
-        color: '#fff',
-        marginTop: 5,
-    },
     storeInfo: {
         backgroundColor: '#fff',
         padding: 20,
@@ -164,46 +157,6 @@ const styles = StyleSheet.create({
     storeDetail: {
         fontSize: 16,
         color: 'grey',
-    },
-    registerButton: {
-        backgroundColor: '#013B0A',
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginHorizontal: 10,
-        marginTop: 20,
-    },
-    registerButtonText: {
-        fontSize: 16,
-        color: '#fff',
-    },
-    tabs: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        backgroundColor: '#fff',
-        paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
-    },
-    tab: {
-        alignItems: 'center',
-    },
-    tabText: {
-        marginTop: 5,
-        fontSize: 14,
-    },
-    badge: {
-        position: 'absolute',
-        top: -5,
-        right: -10,
-        backgroundColor: 'red',
-        borderRadius: 10,
-        paddingHorizontal: 5,
-        paddingVertical: 2,
-    },
-    badgeText: {
-        color: '#fff',
-        fontSize: 12,
     },
     menu: {
         marginTop: 20,
@@ -224,6 +177,20 @@ const styles = StyleSheet.create({
     menuDetail: {
         fontSize: 16,
         color: 'grey',
+    },
+    logoutButton: {
+        backgroundColor: '#ff0000',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginHorizontal: 10,
+        marginTop: 20,
+    },
+    logoutText: {
+        fontSize: 16,
+        color: '#fff',
+        textAlign: 'center',
+        width: '100%',
     },
 });
 

@@ -16,6 +16,8 @@ import SettingsScreen from './screens/SettingsScreen';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import StoreRegistration from './screens/StoreRegistration';
+import AddProductScreen from './screens/AddProductScreen';
+import MyProductsScreen from './screens/MyProductsScreen';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +35,8 @@ const App = () => {
         <Stack.Screen name="Cart" component={CartScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="StoreRegistration" component={StoreRegistration} />
+        <Stack.Screen name="AddProduct" component={AddProductScreen} />
+        <Stack.Screen name="MyProducts" component={MyProductsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

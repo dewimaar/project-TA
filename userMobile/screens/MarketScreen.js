@@ -1,13 +1,7 @@
+// MarketScreen.js
+
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Button,
-  Alert,
-} from "react-native";
+import { View, Image, Text, StyleSheet, ScrollView, Button, Alert } from "react-native";
 import BottomNavbar from "./BottomNavbar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -21,7 +15,7 @@ const MarketScreen = ({ navigation }) => {
       const token = await AsyncStorage.getItem("auth_token");
       console.log("Retrieved Token:", token);
 
-      const response = await axios.get("http://192.168.100.91:8000/api/user", {
+      const response = await axios.get("http://192.168.118.23:8000/api/user", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -33,11 +27,10 @@ const MarketScreen = ({ navigation }) => {
       Alert.alert("Error", "Failed to fetch user data.");
     }
   };
+
   const fetchStore = async () => {
     try {
-      const response = await fetch(
-        `http://192.168.100.91:8000/api/stores/${userData.id}`
-      );
+      const response = await fetch(`http://192.168.118.23:8000/api/stores/${userData.id}`);
       if (response.ok) {
         const data = await response.json();
         setStore(data);
@@ -84,6 +77,10 @@ const MarketScreen = ({ navigation }) => {
     navigation.navigate("AddProduct");
   };
 
+  const handleMyProducts = () => {
+    navigation.navigate("MyProducts");
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -103,7 +100,7 @@ const MarketScreen = ({ navigation }) => {
                   borderRadius: 4,
                 }}
                 source={{
-                  uri: `http://192.168.100.91:8000/storage/${store.image}`,
+                  uri: `http://192.168.118.23:8000/storage/${store.image}`,
                 }}
                 resizeMode="contain"
               />
@@ -115,6 +112,7 @@ const MarketScreen = ({ navigation }) => {
               Deskripsi: {store.description}
             </Text>
             <Button title="Tambah Produk" onPress={handleAddProduct} />
+            <Button title="Produk Saya" onPress={handleMyProducts} />
           </View>
         ) : (
           <>

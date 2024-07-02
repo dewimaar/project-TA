@@ -1,0 +1,238 @@
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from "react-native";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import UploadImages from "../components/UploadImages";
+
+const AddProductScreen = ({ navigation }) => {
+  const { control, handleSubmit, watch } = useForm({
+    defaultValues: {
+      name: "",
+      description: "",
+      images: [],
+      variations: [{ name: "", price: "", stock: "", image: [] }],
+    },
+  });
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('auth_token');
+        console.log('Retrieved Token:', token);
+
+        const response = await axios.get('http://192.168.118.23:8000/api/user', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+        Alert.alert('Error', 'Failed to fetch user data.');
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "variations",
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      if (!userData) {
+        Alert.alert("Error", "User data is not available.");
+        return;
+      }
+
+      const token = await AsyncStorage.getItem("auth_token");
+      const formData = new FormData();
+      formData.append('user_id', String(userData.id));
+      formData.append("name", data.name);
+      formData.append("description", data.description);
+
+      data.images.forEach((image, index) => {
+        formData.append(`images[${index}]`, {
+          uri: image.uri,
+          name: image.fileName || `image_${Date.now()}.jpg`,
+          type: image.type || "image/jpeg",
+        });
+      });
+
+      data.variations.forEach((variation, index) => {
+        formData.append(`variations[${index}][name]`, variation.name);
+        formData.append(`variations[${index}][price]`, variation.price);
+        formData.append(`variations[${index}][stock]`, variation.stock);
+
+        if (variation.image.length === 0) {
+          throw new Error(`Variation ${index + 1} does not have an image.`);
+        }
+
+        variation.image.forEach((image, imgIndex) => {
+          formData.append(`variations[${index}][image]`, {
+            uri: image.uri,
+            name: image.fileName || `variation_${index}_${imgIndex}_${Date.now()}.jpg`,
+            type: image.type || "image/jpeg",
+          });
+        });
+      });
+
+      const response = await axios.post(
+        "http://192.168.118.23:8000/api/products",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        Alert.alert("Success", "Product added successfully");
+        navigation.navigate("Market");
+      } else {
+        Alert.alert("Error", "Something went wrong");
+      }
+    } catch (error) {
+      console.error("Failed to add product:", error);
+      if (error.response) {
+        console.error("Server Error Data:", error.response.data);
+      }
+      Alert.alert("Error", "Failed to add product.");
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Add Product</Text>
+      <Controller
+        control={control}
+        name="name"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="Product Name"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="description"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="Description"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+      />
+      <UploadImages
+        name="images"
+        control={control}
+        label="Product Images"
+        reqText="Required"
+        error={watch("images") && watch("images").length === 0}
+      />
+      {fields.map((item, index) => (
+        <View key={item.id} style={styles.variationContainer}>
+          <Controller
+            control={control}
+            name={`variations[${index}].name`}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Variation Name"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name={`variations[${index}].price`}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Price"
+                keyboardType="numeric"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name={`variations[${index}].stock`}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Stock"
+                keyboardType="numeric"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          <UploadImages
+            name={`variations[${index}].image`}
+            control={control}
+            label="Variation Images"
+            reqText="Required"
+            error={watch(`variations[${index}].image`) && watch(`variations[${index}].image`).length === 0}
+          />
+          <Button title="Remove Variation" onPress={() => remove(index)} />
+        </View>
+      ))}
+      <Button title="Add Variation" onPress={() => append({ name: "", price: "", stock: "", image: [] })} />
+      <Button title="Add Product" onPress={handleSubmit(onSubmit)} />
+    </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    backgroundColor: "#f8f9fa",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  variationContainer: {
+    marginBottom: 20,
+  },
+});
+
+export default AddProductScreen;
