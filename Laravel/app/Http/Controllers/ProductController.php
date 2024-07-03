@@ -56,6 +56,7 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'Product created successfully'], 201);
     }
+
     public function getProductsByUser($userId)
     {
         $products = Product::where('user_id', $userId)->get();
@@ -65,5 +66,12 @@ class ProductController extends Controller
         }
 
         return response()->json($products, 200);
+    }
+
+    // Tambahkan fungsi show untuk menampilkan detail produk berdasarkan ID
+    public function show($id)
+    {
+        $product = Product::with('variations')->findOrFail($id);
+        return response()->json($product);
     }
 }

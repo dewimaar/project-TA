@@ -1,10 +1,10 @@
-// MarketScreen.js
-
 import React, { useState, useEffect } from "react";
-import { View, Image, Text, StyleSheet, ScrollView, Button, Alert } from "react-native";
+import { View, Image, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
 import BottomNavbar from "./BottomNavbar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const MarketScreen = ({ navigation }) => {
   const [store, setStore] = useState(null);
@@ -84,21 +84,12 @@ const MarketScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Text style={styles.title}>Market Screen</Text>
+        <Text style={styles.title}>Toko Saya</Text>
         {store ? (
           <View style={styles.storeContainer}>
-            <View
-              style={{
-                width: "100%",
-                height: 180,
-                borderRadius: 4,
-              }}
-            >
+            <View style={styles.imageContainer}>
               <Image
-                style={{
-                  flex: 1,
-                  borderRadius: 4,
-                }}
+                style={styles.image}
                 source={{
                   uri: `http://192.168.118.23:8000/storage/${store.image}`,
                 }}
@@ -108,16 +99,27 @@ const MarketScreen = ({ navigation }) => {
             <Text style={styles.storeTitle}>Nama Toko: {store.name}</Text>
             <Text style={styles.storeCategory}>Kategori: {store.category}</Text>
             <Text style={styles.storeAddress}>Alamat: {store.address}</Text>
-            <Text style={styles.storeDescription}>
-              Deskripsi: {store.description}
-            </Text>
-            <Button title="Tambah Produk" onPress={handleAddProduct} />
-            <Button title="Produk Saya" onPress={handleMyProducts} />
+            <Text style={styles.storeDescription}>Deskripsi: {store.description}</Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={handleAddProduct}>
+                <Icon name="add-circle-outline" size={20} color="#fff" />
+                <Text style={styles.buttonText}>Tambah Produk</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={handleMyProducts}>
+                <Icon name="albums-outline" size={20} color="#fff" />
+                <Text style={styles.buttonText}>Produk Saya</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         ) : (
           <>
             <Text style={styles.noStoreText}>Anda belum memiliki toko</Text>
-            <Button title="Daftarkan Sekarang" onPress={handleRegisterStore} />
+            <TouchableOpacity style={styles.button} onPress={handleRegisterStore}>
+              <Icon name="create-outline" size={20} color="#fff" />
+              <Text style={styles.buttonText}>Daftarkan Sekarang</Text>
+            </TouchableOpacity>
           </>
         )}
       </ScrollView>
@@ -164,6 +166,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: "100%",
   },
+  imageContainer: {
+    width: "100%",
+    height: 180,
+    borderRadius: 4,
+    marginBottom: 10,
+  },
+  image: {
+    flex: 1,
+    borderRadius: 4,
+  },
   storeTitle: {
     fontSize: 24,
     fontWeight: "bold",
@@ -180,6 +192,27 @@ const styles = StyleSheet.create({
   storeDescription: {
     fontSize: 16,
     color: "#888",
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    width: "100%",
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: "#4CAF50",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 10,
   },
 });
 

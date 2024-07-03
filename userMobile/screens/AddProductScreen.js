@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -202,11 +203,26 @@ const AddProductScreen = ({ navigation }) => {
             reqText="Required"
             error={watch(`variations[${index}].image`) && watch(`variations[${index}].image`).length === 0}
           />
-          <Button title="Remove Variation" onPress={() => remove(index)} />
+          <TouchableOpacity
+            style={[styles.button, styles.removeButton]}
+            onPress={() => remove(index)}
+          >
+            <Text style={styles.buttonText}>Remove Variation</Text>
+          </TouchableOpacity>
         </View>
       ))}
-      <Button title="Add Variation" onPress={() => append({ name: "", price: "", stock: "", image: [] })} />
-      <Button title="Add Product" onPress={handleSubmit(onSubmit)} />
+      <TouchableOpacity
+        style={[styles.button, styles.addButton]}
+        onPress={() => append({ name: "", price: "", stock: "", image: [] })}
+      >
+        <Text style={styles.buttonText}>Add Variation</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, styles.submitButton]}
+        onPress={handleSubmit(onSubmit)}
+      >
+        <Text style={styles.buttonText}>Add Product</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -215,6 +231,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: "#f8f9fa",
+    flexGrow: 1,
   },
   title: {
     fontSize: 24,
@@ -232,6 +249,34 @@ const styles = StyleSheet.create({
   },
   variationContainer: {
     marginBottom: 20,
+    backgroundColor: "#ffffff",
+    padding: 10,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  button: {
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  addButton: {
+    backgroundColor: "#4CAF50",
+  },
+  removeButton: {
+    backgroundColor: "#f44336",
+  },
+  submitButton: {
+    backgroundColor: "#2196F3",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

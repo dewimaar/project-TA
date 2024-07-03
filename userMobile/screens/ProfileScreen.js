@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
         color: 'grey',
     },
     logoutButton: {
-        backgroundColor: '#ff0000',
+        backgroundColor: '#990000',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',

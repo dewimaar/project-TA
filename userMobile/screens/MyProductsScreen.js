@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const MyProductsScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
@@ -48,41 +49,48 @@ const MyProductsScreen = ({ navigation }) => {
     }
   }, [userData]);
 
+  const renderItem = ({ item }) => (
+    <View style={styles.productContainer}>
+      {item.images.map((image, index) => (
+        <Image
+          key={index}
+          style={styles.productImage}
+          source={{ uri: `http://192.168.118.23:8000/storage/${image}` }}
+          resizeMode="contain"
+        />
+      ))}
+      <Text style={styles.productName}>{item.name}</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}
+      >
+        <Icon name="information-circle-outline" size={20} color="#fff" />
+        <Text style={styles.buttonText}>Detail</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {products.length > 0 ? (
-        products.map(product => (
-          <View key={product.id} style={styles.productContainer}>
-            {product.images.map((image, index) => (
-              <Image
-                key={index}
-                style={styles.productImage}
-                source={{ uri: `http://192.168.118.23:8000/storage/${image}` }}
-                resizeMode="contain"
-              />
-            ))}
-            <Text style={styles.productName}>{product.name}</Text>
-            <Button
-              title="Detail"
-              onPress={() => navigation.navigate('ProductDetail', { productId: product.id })}
-            />
-          </View>
-        ))
-      ) : (
-        <Text>No products found</Text>
-      )}
-    </ScrollView>
+    <FlatList
+      contentContainerStyle={styles.container}
+      data={products}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id.toString()}
+      numColumns={2}
+      ListEmptyComponent={<Text>No products found</Text>}
+    />
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: '#f8f9fa',
   },
   productContainer: {
-    marginBottom: 20,
+    flex: 1,
+    margin: 5,
     backgroundColor: '#fff',
     padding: 10,
     borderRadius: 8,
@@ -102,6 +110,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginVertical: 10,
+  },
+  button: {
+    backgroundColor: '#4CAF50',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 10,
   },
 });
 

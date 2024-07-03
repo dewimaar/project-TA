@@ -1,5 +1,3 @@
-// App.js
-
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -18,6 +16,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import StoreRegistration from './screens/StoreRegistration';
 import AddProductScreen from './screens/AddProductScreen';
 import MyProductsScreen from './screens/MyProductsScreen';
+import ProductDetailScreen from './screens/ProductDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +36,7 @@ const App = () => {
         <Stack.Screen name="StoreRegistration" component={StoreRegistration} />
         <Stack.Screen name="AddProduct" component={AddProductScreen} />
         <Stack.Screen name="MyProducts" component={MyProductsScreen} />
+        <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
