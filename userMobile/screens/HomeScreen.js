@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView, FlatList } from 'react-native';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { View, RefreshControl, Text, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfileScreen from './ProfileScreen';
 import BottomNavbar from './BottomNavbar';
 
@@ -9,6 +11,9 @@ const HomeScreen = ({ navigation }) => {
     const [selectedNavItem, setSelectedNavItem] = useState('home');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedStore, setSelectedStore] = useState('clothing');
+    const [products, setProducts] = useState([]);
+    const [userData, setUserData] = useState(null);
+    const [isRefetching, setIsRefetching] = useState(false);
 
     const handleNavItemClick = (itemName) => {
         setSelectedNavItem(itemName);
@@ -36,17 +41,75 @@ const HomeScreen = ({ navigation }) => {
         { id: '3', imageUrl: 'https://via.placeholder.com/300', title: 'Promo 3' },
     ];
 
-    const productsData = [
-        { id: '1', imageUrl: 'https://via.placeholder.com/150', title: 'Product 1', price: '$50' },
-        { id: '2', imageUrl: 'https://via.placeholder.com/150', title: 'Product 2', price: '$80' },
-        { id: '3', imageUrl: 'https://via.placeholder.com/150', title: 'Product 3', price: '$120' },
-        { id: '4', imageUrl: 'https://via.placeholder.com/150', title: 'Product 4', price: '$90' },
-        { id: '5', imageUrl: 'https://via.placeholder.com/150', title: 'Product 5', price: '$60' },
-        { id: '6', imageUrl: 'https://via.placeholder.com/150', title: 'Product 6', price: '$100' },
-        { id: '7', imageUrl: 'https://via.placeholder.com/150', title: 'Product 6', price: '$100' },
-        { id: '8', imageUrl: 'https://via.placeholder.com/150', title: 'Product 6', price: '$100' },
-        { id: '9', imageUrl: 'https://via.placeholder.com/150', title: 'Product 6', price: '$100' },
-    ];
+    const fetchUserData = async () => {
+        try {
+            const token = await AsyncStorage.getItem('auth_token');
+            const response = await axios.get('http://192.168.195.23:8000/api/user', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setUserData(response.data);
+        } catch (error) {
+            console.error('Failed to fetch user data:', error);
+        }
+    };
+
+    const fetchProducts = async () => {
+        try {
+            const token = await AsyncStorage.getItem('auth_token');
+            const response = await axios.get('http://192.168.195.23:8000/api/products');
+            const updatedProducts = response.data.map(product => ({
+                ...product,
+                images: Array.isArray(product.image) ? product.image : [product.image]
+            }));
+            setProducts(updatedProducts);
+        } catch (error) {
+            console.error('Failed to fetch products:', error);
+            // Handle errors as needed
+        }
+    };
+
+    const handlerRefetchData = useCallback(async () => {
+        setIsRefetching(true);
+        try {
+            await fetchProducts();
+            setIsRefetching(false);
+        } catch (error) {
+            setIsRefetching(false);
+        }
+    }, [isRefetching, fetchProducts]);
+
+    const RefreshControlComponent = useMemo(() => {
+        return (
+            <RefreshControl
+                refreshing={isRefetching}
+                onRefresh={handlerRefetchData}
+            />
+        );
+    }, [isRefetching, handlerRefetchData]);
+
+    const addNewProduct = (newProduct) => {
+        setProducts(prevProducts => [...prevProducts, newProduct]);
+    };   
+
+    useEffect(() => {
+        fetchUserData();
+        fetchProducts();
+    }, []);
+
+    const renderItem = ({ item }) => (
+        <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}>
+            <View style={styles.productContainer}>
+                <Image source={{ uri: `http://192.168.195.23:8000/storage/${item.image}` }} style={styles.productImage} />
+                <Text style={styles.productTitle}>{item.name}</Text>
+                <Text style={styles.productPrice}>{item.price}</Text>
+                <TouchableOpacity style={styles.productButton} onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}>
+                    <Text style={styles.productButtonText}>Detail</Text>
+                </TouchableOpacity>
+            </View>
+        </TouchableOpacity>
+    );
 
     return (
         <View style={styles.container}>
@@ -68,7 +131,6 @@ const HomeScreen = ({ navigation }) => {
                 {carouselData.map((item) => (
                     <View key={item.id} style={styles.carouselItem}>
                         <Image source={{ uri: item.imageUrl }} style={styles.carouselImage} />
-                        {/* <Text style={styles.carouselText}>{item.title}</Text> */}
                     </View>
                 ))}
             </ScrollView>
@@ -85,23 +147,16 @@ const HomeScreen = ({ navigation }) => {
             </Picker>
 
             <FlatList
-                data={productsData}
-                numColumns={3}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.productItem} onPress={() => console.log('Product detail pressed')}>
-                        <View style={styles.productContainer}>
-                            <Image source={{ uri: item.imageUrl }} style={[styles.productImage, styles.productImageBorder]} />
-                            <Text style={styles.productTitle}>{item.title}</Text>
-                            <Text style={styles.productPrice}>{item.price}</Text>
-                            <TouchableOpacity style={styles.productButton} onPress={() => console.log('Detail button pressed')}>
-                                <Text style={styles.productButtonText}>Detail</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </TouchableOpacity>
-                )}
+                data={products}
+                numColumns={2}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderItem}
+                ListEmptyComponent={<Text>No products found</Text>}
+                contentContainerStyle={styles.productsList}
+                refreshControl={RefreshControlComponent}
             />
-            <BottomNavbar navigation={navigation} selectedNavItem={'home'} handleNavItemClick={handleNavItemClick} />
+
+            <BottomNavbar navigation={navigation} selectedNavItem={selectedNavItem} handleNavItemClick={handleNavItemClick} />
         </View>
     );
 };
@@ -110,7 +165,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f8f9fa',
-        justifyContent: 'space-between', 
     },
     topBar: {
         flexDirection: 'row',
@@ -137,7 +191,6 @@ const styles = StyleSheet.create({
     carouselContainer: {
         height: 280, 
         marginBottom: 16,
-        padding: 2,
     },
     carouselItem: {
         width: 390, 
@@ -157,41 +210,41 @@ const styles = StyleSheet.create({
         height: 170, 
         borderRadius: 8,
     },
-    carouselText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginVertical: 8,
-    },
     picker: {
         marginBottom: 16,
+        marginHorizontal: 8,
+    },
+    productsList: {
+        paddingHorizontal: 8,
     },
     productItem: {
-        alignItems: 'center',
-        margin: 5,
-        marginBottom: 0,
+        flex: 1,
+        margin: 4,
     },
     productContainer: {
         alignItems: 'center',
-        borderWidth: 2,
-        borderColor: '#00796B',
+        borderWidth: 1,
+        borderColor: '#ddd',
         borderRadius: 8,
         padding: 8,
-        marginBottom: 8,
+        backgroundColor: '#fff',
     },
     productImage: {
-        width: 100,
-        height: 100,
+        width: '100%',
+        height: 150,
         borderRadius: 8,
         marginBottom: 8,
     },
     productTitle: {
         fontSize: 16,
         marginBottom: 4,
+        textAlign: 'center',
     },
     productPrice: {
         fontSize: 14,
         color: '#888',
         marginBottom: 8,
+        textAlign: 'center',
     },
     productButton: {
         backgroundColor: '#007bff',

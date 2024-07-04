@@ -13,7 +13,7 @@ const ProfileScreen = ({ navigation }) => {
                 const token = await AsyncStorage.getItem('auth_token');
                 console.log('Retrieved Token:', token);
 
-                const response = await axios.get('http://192.168.118.23:8000/api/user', {
+                const response = await axios.get('http://192.168.195.23:8000/api/user', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

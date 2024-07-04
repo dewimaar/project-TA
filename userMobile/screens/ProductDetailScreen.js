@@ -1,5 +1,3 @@
-// screens/ProductDetailScreen.js
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import axios from 'axios';
@@ -11,7 +9,7 @@ const ProductDetailScreen = ({ route }) => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`http://192.168.118.23:8000/api/products/detail/${productId}`);
+        const response = await axios.get(`http://192.168.195.23:8000/api/products/detail/${productId}`);
         setProduct(response.data);
       } catch (error) {
         console.error('Failed to fetch product details:', error);
@@ -20,6 +18,14 @@ const ProductDetailScreen = ({ route }) => {
 
     fetchProductDetails();
   }, [productId]);
+
+  const formatPrice = (price) => {
+    if (price === undefined || price === null || isNaN(Number(price))) {
+      return 'Price not available';
+    }
+    const numberPrice = Number(price);
+    return 'Rp ' + numberPrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.').replace('.00', '.00');
+  };
 
   if (!product) {
     return (
@@ -33,7 +39,7 @@ const ProductDetailScreen = ({ route }) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Image
         style={styles.productImage}
-        source={{ uri: `http://192.168.118.23:8000/storage/${product.image}` }}
+        source={{ uri: `http://192.168.195.23:8000/storage/${product.image}` }}
         resizeMode="contain"
       />
       <Text style={styles.productName}>{product.name}</Text>
@@ -42,12 +48,12 @@ const ProductDetailScreen = ({ route }) => {
       {product.variations.map((variation) => (
         <View key={variation.id} style={styles.variationContainer}>
           <Text style={styles.variationName}>{variation.name}</Text>
-          <Text style={styles.variationPrice}>Price: ${variation.price}</Text>
+          <Text style={styles.variationPrice}>Price: {formatPrice(variation.price)}</Text>
           <Text style={styles.variationStock}>Stock: {variation.stock}</Text>
           {variation.image && (
             <Image
               style={styles.variationImage}
-              source={{ uri: `http://192.168.118.23:8000/storage/${variation.image}` }}
+              source={{ uri: `http://192.168.195.23:8000/storage/${variation.image}` }}
               resizeMode="contain"
             />
           )}

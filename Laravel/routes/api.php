@@ -35,3 +35,4 @@ Route::get('/stores/{id}', [StoreController::class, 'show']);
 Route::post('/products', [ProductController::class, 'store']);
 Route::get('/products/{userId}', [ProductController::class, 'getProductsByUser']);
 Route::get('/products/detail/{id}', [ProductController::class, 'show']);
+Route::get('/products', [ProductController::class, 'getAllProducts']);

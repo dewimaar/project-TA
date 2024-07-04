@@ -74,4 +74,10 @@ class ProductController extends Controller
         $product = Product::with('variations')->findOrFail($id);
         return response()->json($product);
     }
+
+    public function getAllProducts()
+    {
+        $products = Product::with('variations')->get();
+        return response()->json($products, 200);
+    }
 }
