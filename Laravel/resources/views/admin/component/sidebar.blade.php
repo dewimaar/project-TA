@@ -27,22 +27,16 @@
                 <span>Mitra Usaha</span>
             </a>
         </li>
-        <li class="sidebar-item {{ Request::path() == 'admin/rekapPenghasilan' ? 'active' : '' }}">
-            <a href="/admin/rekapPenghasilan" class="sidebar-link">
-                <i class="bi bi-file-earmark-bar-graph"></i>
-                <span>Rekap Penghasilan</span>
-            </a>
-        </li>
         <li class="sidebar-item {{ Request::path() == 'admin/riwayatTransaksi' ? 'active' : '' }}">
             <a href="/admin/riwayatTransaksi" class="sidebar-link">
                 <i class="bi bi-clock-history"></i>
                 <span>Riwayat Transaksi</span>
             </a>
         </li>
-        <li class="sidebar-item {{ Request::path() == 'admin/Delete' ? 'active' : '' }}">
-            <a href="/admin/Delete" class="sidebar-link">
-                <i class="bi bi-clock-history"></i>
-                <span>Delete User</span>
+        <li class="sidebar-item {{ Request::path() == 'admin/rekapPenghasilan' ? 'active' : '' }}">
+            <a href="/admin/rekapPenghasilan" class="sidebar-link">
+                <i class="bi bi-file-earmark-bar-graph"></i>
+                <span>Rekap Penghasilan</span>
             </a>
         </li>
     </ul>

@@ -8,37 +8,58 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
-        *{
-            margin:0;
+        * {
+            margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: "Poppins", sans-serif;
         }
 
-        section{
+        header {
+            position: fixed; /* Fix the header at the top */
+            top: 0;
+            width: 100%;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5); /* Optional: Add a semi-transparent background */
+            z-index: 1000; /* Ensure the header stays on top */
+        }
+
+        section {
             position: relative;
             width: 100%;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
+            align-items: left;
+            text-align: left; /* Center align default */
+        }
+
+        .main-section {
             background: url('{{ asset('img/lp.png') }}') no-repeat;
             background-size: cover;
             background-position: center;
+            padding-top: 80px; /* Add padding to account for the fixed header */
+            text-align: left;
         }
 
-        header{
-            position: relative;
-            top: 0;
-            width: 100%;
-            padding: 30px 100px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .section-content {
+            background-color: white;
+            color: rgb(255, 255, 255);
+            font-size: 3em;
+            font-weight: bold;
+            padding: 100px 20px;
+            text-align: left; /* Align center for default sections */
         }
 
-        header .logo{
-            position: relative;
+        #home .section-content {
+            text-align: left; /* Align left for Home section */
+        }
+
+        header .logo {
             color: #ffffff;
             font-size: 30px;
             text-decoration: none;
@@ -47,7 +68,7 @@
             letter-spacing: 1px;  
         }
 
-        header .navigation a{
+        header .navigation a {
             color: #ffffff;
             text-decoration: none;
             font-weight: 500;
@@ -58,21 +79,20 @@
             transition-property: background;
         }
 
-        header .navigation a:not(:last-child){
+        header .navigation a:not(:last-child) {
             margin-right: 30px;
         }
 
-        header .navigation a:hover{
-            background: #000000;
+        header .navigation a:hover {
+            background: #ffffff;
         }
 
-        .content{
+        .content {
             max-width: 650px;
-            margin: 60px 100px;
+            margin: 160px 100px; /* Increase the top margin to move the content down */
         }
 
-        .content .info h2{
-            color: #ffffff;
+        .content .info h2 {
             font-size: 55px;
             text-transform: uppercase;
             font-weight: 800;
@@ -81,19 +101,18 @@
             margin-bottom: 30px;
         }
 
-        .content .info h2 span{
-            color: #000000;
-            font-size: 50px;
-            font-weight: 600;
+        .content .info h2 span {
+            font-size: 55px;
+            font-weight: 800;
         }
 
-        .content .info p{
+        .content .info p {
             font-size: 16px;
             font-weight: 500;
             margin-bottom: 40px;
         }
 
-        .content .info-btn{
+        .content .info-btn {
             color: #000000;
             background: #ffffff;
             text-decoration: none;
@@ -104,62 +123,69 @@
             border-radius: 5px;
             transition: 0.3;
             transition-property: background;
+            display: inline-block; /* Ensure button is inline */
+            margin-top: 20px; /* Add margin to separate from paragraph */
         }
 
-        .content .info-btn:hover{
+        .content .info-btn:hover {
             background: #ffffff;
         }
 
-        .media-icons{
+        .media-icons {
             display: flex;
             justify-content: center;
             align-items: center;
             margin: auto;
         }
 
-        .media-icons a{
+        .media-icons a {
             position: relative;
             color: #ffffff;
             font-size: 25px;
             transition: 0.3s;
             transition-property: transform;
+            top: -80px; /* Ubah angka sesuai dengan seberapa jauh ke atas yang kamu inginkan */
         }
 
-        .media-icons a:not(:last-child){
+        .media-icons a:not(:last-child) {
             margin-right: 60px;
         }
 
-        .media-icons a:hover{
+        .media-icons a:hover {
             transform: scale(1.5);
         }
 
-        label{
+        label {
             display: none;
         }
 
-        #check{
+        #check {
             z-index: 3;
             display: none;
         }
 
-        @media(max-width: 960px){
-            header .navigation{
+        @media (max-width: 960px) {
+            header {
+                padding: 30px 20px; /* Adjust padding for smaller screens */
+            }
+
+            header .navigation {
                 display: none;
             }
-            label{
+            label {
                 display: block;
                 font-size: 25px;
                 cursor: pointer;
                 transition: 0.3s;
                 transition-property: color;
             }
-            label:hover{
-                color: #000000;
+            label:hover {
+                color: #ffffff;
             }
-            label .close-btn{
+            label .close-btn {
                 display: none;
             }
-            #check:checked ~ header .navigation{
+            #check:checked ~ header .navigation {
                 z-index: 2;
                 position: fixed;
                 background: #ffffff;
@@ -172,66 +198,69 @@
                 justify-content: center;
                 align-items: center;
             }
-            #check:checked ~ header .navigation a{
+            #check:checked ~ header .navigation a {
                 font-weight: 700;
                 margin-right: 0;
                 margin-bottom: 50px;
                 letter-spacing: 2px;
             }
-            #check:checked ~ header label .menu-btn{
+            #check:checked ~ header label .menu-btn {
                 display: none;
             }
-            #check:checked ~ header label .close-btn{
+            #check:checked ~ header label .close-btn {
                 z-index: 2;
                 display: block;
                 position: fixed;
             }
-            label .menu-btn{
+            label .menu-btn {
                 position: absolute;
             }
-            header .logo{
+            header .logo {
                 position: absolute;
                 bottom: -6px;
             }
-            .content .info h2{
+            .content .info h2 {
                 font-size: 45px;
                 line-height: 50px;
             }
-            .content .info h2 span{
-                font-size: 40px;
-                font-weight: 600;
+            .content .info h2 span {
+                font-size: 45px;
+                line-height: 50px;
             }
-            .content .info p{
+            .content .info p {
+                font-size: 14px;
+            }
+            .content .info-btn {
+                font-size: 14px; /* Adjust font size for smaller screens */
+            }
+        }
+
+        @media (max-width: 560px) {
+            .content .info h2 {
+                font-size: 35px;
+                line-height: 40px;
+            }
+            .content .info h2 span {
+                font-size: 35px;
+                line-height: 40px;
+            }
+            .content .info p {
                 font-size: 14px;
             }
         }
 
-        @media (max-width: 560px){
-            .content .info h2{
-                font-size: 35px;
-                line-height: 40px;
-            }
-            .content .info h2 span{
-                font-size: 30px;
-                font-weight: 600;
-            }
-            .content .info p{
-                font-size: 14px;
-            }
-        }
     </style>
 </head>
 <body>
-    <section>
+    <section id="home" class="main-section">
         <input type="checkbox" id="check">
         <header>
             <h2><a href="#" class="logo">Logo</a></h2>
             <div class="navigation">
                 <a href="#">Home</a>
-                <a href="#">About</a>
-                <a href="#">Info</a>
-                <a href="#">Service</a>
-                <a href="#">Contact</a>
+                <a href="#about">About</a>
+                <a href="#info">Info</a>
+                <a href="#contact">Contact</a>
             </div>
             <label for="check">
                 <i class="fas fa-bars menu-btn"></i>
@@ -240,8 +269,8 @@
         </header>
         <div class="content">
             <div class="info">
-                <h2>INVENTORY <br><span>INVENTORY</span></h2>
-                <p>Inventory</p>
+                <h2>Mobile App <br><span>Market Place</span></h2>
+                <p>Market Place</p>
                 <a href="{{ url('login/admin') }}" class="info-btn">Get Started</a>
             </div>
         </div>
@@ -251,5 +280,30 @@
             <a href="#"><i class="fab fa-instagram"></i></a>
         </div>
     </section>
+
+    <section id="about" style="padding: 40px 0; background-image: url('/img/bg1.png'); background-size: cover; background-position: center;">
+        <div style="max-width: 800px; margin-left: 0; text-align: left; color: rgb(0, 0, 0); padding-left: 150px;">
+            <h2 style="font-size: 4em;">About Us</h2>
+            <p style="font-size: 1.2em;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis<br>
+                libero et ante fermentum, eget lacinia ligula convallis.</p>
+        </div>
+    </section>    
+
+    <section id="info" style="display: flex; justify-content: center; align-items: center;  padding: 40px 0; background-image: url('/img/bg2.png'); background-size: cover; background-position: center;">
+        <div style="max-width: 800px; text-align: center; color: rgb(255, 255, 255); padding-bottom: 300px;">
+            <h2 style="font-size: 4em;">Info</h2>
+            <p style="font-size: 1.2em;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis<br>
+                libero et ante fermentum, eget lacinia ligula convallis.</p>
+        </div>
+    </section> 
+
+    <section id="contact" style="padding: 40px 0; background-image: url('/img/bg3.png'); background-size: cover; background-position: center;">
+        <div style="max-width: 800px; margin-left: auto; text-align: right; color: rgb(0, 0, 0); padding-right: 150px;">
+            <h2 style="font-size: 4em;">CONTACT</h2>
+            <p style="font-size: 1.2em;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis<br>
+                libero et ante fermentum, eget lacinia ligula convallis.</p>
+        </div>
+    </section>      
+    
 </body>
 </html>
