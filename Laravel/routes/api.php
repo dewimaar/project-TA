@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,7 @@ Route::post('/products', [ProductController::class, 'store']);
 Route::get('/products/{userId}', [ProductController::class, 'getProductsByUser']);
 Route::get('/products/detail/{id}', [ProductController::class, 'show']);
 Route::get('/products', [ProductController::class, 'getAllProducts']);
+
+Route::post('/cart', [CartController::class, 'store']);
+Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'index']);
+    

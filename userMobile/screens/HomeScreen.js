@@ -29,7 +29,7 @@ const HomeScreen = ({ navigation }) => {
             navigation.navigate('Cart');
         }
     };
-
+    
     const handleSearchInputChange = (query) => {
         setSearchQuery(query);
         // Handle search logic here if needed
@@ -59,16 +59,30 @@ const HomeScreen = ({ navigation }) => {
         try {
             const token = await AsyncStorage.getItem('auth_token');
             const response = await axios.get('http://192.168.195.23:8000/api/products');
-            const updatedProducts = response.data.map(product => ({
-                ...product,
-                images: Array.isArray(product.image) ? product.image : [product.image]
-            }));
+            const updatedProducts = response.data.map(product => {
+                const price = product.variations && product.variations.length > 0 
+                    ? product.variations[0].price 
+                    : 'N/A';
+                return {
+                    ...product,
+                    price,
+                    images: Array.isArray(product.image) ? product.image : [product.image]
+                };
+            });
             setProducts(updatedProducts);
         } catch (error) {
             console.error('Failed to fetch products:', error);
             // Handle errors as needed
         }
     };
+
+    const formatPrice = (price) => {
+        if (price === undefined || price === null || isNaN(Number(price))) {
+          return 'Price not available';
+        }
+        const numberPrice = Number(price);
+        return numberPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      };
 
     const handlerRefetchData = useCallback(async () => {
         setIsRefetching(true);
@@ -99,12 +113,12 @@ const HomeScreen = ({ navigation }) => {
     }, []);
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}>
+        <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
             <View style={styles.productContainer}>
                 <Image source={{ uri: `http://192.168.195.23:8000/storage/${item.image}` }} style={styles.productImage} />
                 <Text style={styles.productTitle}>{item.name}</Text>
-                <Text style={styles.productPrice}>{item.price}</Text>
-                <TouchableOpacity style={styles.productButton} onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}>
+                <Text style={styles.productPrice}>Rp{formatPrice(item.price)}</Text>
+                <TouchableOpacity style={styles.productButton} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
                     <Text style={styles.productButtonText}>Detail</Text>
                 </TouchableOpacity>
             </View>
@@ -156,7 +170,7 @@ const HomeScreen = ({ navigation }) => {
                 refreshControl={RefreshControlComponent}
             />
 
-            <BottomNavbar navigation={navigation} selectedNavItem={selectedNavItem} handleNavItemClick={handleNavItemClick} />
+            <BottomNavbar navigation={navigation} selectedNavItem={"home"} handleNavItemClick={handleNavItemClick} />
         </View>
     );
 };
@@ -216,6 +230,7 @@ const styles = StyleSheet.create({
     },
     productsList: {
         paddingHorizontal: 8,
+        paddingBottom: 80,
     },
     productItem: {
         flex: 1,
@@ -228,6 +243,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 8,
         backgroundColor: '#fff',
+        minHeight: 300,
     },
     productImage: {
         width: '100%',
@@ -251,6 +267,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 12,
         borderRadius: 8,
+        marginTop: 'auto',
     },
     productButtonText: {
         color: '#fff',
@@ -259,3 +276,4 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+

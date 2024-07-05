@@ -99,12 +99,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 3,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  imageContainer: {
+    flex: 1,
+    justifyContent: 'center',
   },
   productImage: {
     width: '100%',
     height: 150,
     borderRadius: 8,
     marginBottom: 10,
+  },
+  productInfo: {
+    justifyContent: 'center',
   },
   productName: {
     fontSize: 18,
@@ -117,8 +126,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 20,
     borderRadius: 8,
+    marginTop: 10,
   },
   buttonText: {
     color: '#fff',

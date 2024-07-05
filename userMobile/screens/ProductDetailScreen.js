@@ -24,7 +24,7 @@ const ProductDetailScreen = ({ route }) => {
       return 'Price not available';
     }
     const numberPrice = Number(price);
-    return 'Rp ' + numberPrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.').replace('.00', '.00');
+    return numberPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
   if (!product) {
@@ -48,7 +48,7 @@ const ProductDetailScreen = ({ route }) => {
       {product.variations.map((variation) => (
         <View key={variation.id} style={styles.variationContainer}>
           <Text style={styles.variationName}>{variation.name}</Text>
-          <Text style={styles.variationPrice}>Price: {formatPrice(variation.price)}</Text>
+          <Text style={styles.variationPrice}>Price:Rp{formatPrice(variation.price)}</Text>
           <Text style={styles.variationStock}>Stock: {variation.stock}</Text>
           {variation.image && (
             <Image

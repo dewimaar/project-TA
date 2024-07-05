@@ -1,14 +1,52 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
 import BottomNavbar from './BottomNavbar';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CartScreen = ({ navigation }) => {
-    const cartData = [
-        { id: '1', imageUrl: 'https://via.placeholder.com/150', title: 'Product 1', price: '$50' },
-        { id: '2', imageUrl: 'https://via.placeholder.com/150', title: 'Product 2', price: '$80' },
-        { id: '3', imageUrl: 'https://via.placeholder.com/150', title: 'Product 3', price: '$120' },
-        // Add more items as needed
-    ];
+    const [userId, setUserId] = useState(null);
+    const [cartData, setCartData] = useState([]);
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const token = await AsyncStorage.getItem('auth_token');
+                const response = await axios.get('http://192.168.195.23:8000/api/user', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUserId(response.data.id); // Assuming the API response includes user id
+            } catch (error) {
+                console.error('Failed to fetch user data:', error);
+                Alert.alert('Error', 'Failed to fetch user data.');
+            }
+        };
+
+        fetchUserId();
+    }, []);
+
+    useEffect(() => {
+        const fetchCartData = async () => {
+            if (userId) {
+                try {
+                    const token = await AsyncStorage.getItem('auth_token');
+                    const response = await axios.get(`http://192.168.195.23:8000/api/cart?user_id=${userId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    setCartData(response.data);
+                } catch (error) {
+                    console.error('Error fetching cart data:', error);
+                    Alert.alert('Error', 'Error fetching cart data.');
+                }
+            }
+        };
+
+        fetchCartData();
+    }, [userId]);
 
     const handleNavItemClick = (itemName) => {
         if (itemName === 'home') {
@@ -26,22 +64,30 @@ const CartScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <FlatList
-                data={cartData}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <View style={styles.cartItem}>
-                        <Image source={{ uri: item.imageUrl }} style={styles.itemImage} />
-                        <View style={styles.itemDetails}>
-                            <Text style={styles.itemTitle}>{item.title}</Text>
-                            <Text style={styles.itemPrice}>{item.price}</Text>
-                            <TouchableOpacity style={styles.removeItemButton} onPress={() => console.log('Remove item pressed')}>
-                                <Text style={styles.removeItemButtonText}>Remove</Text>
-                            </TouchableOpacity>
+            {cartData.length === 0 ? (
+                <Text style={styles.emptyCartText}>Anda belum menambahkan produk</Text>
+            ) : (
+                <FlatList
+                    data={cartData}
+                    keyExtractor={(item) => item.id.toString()} // Assuming item.id is unique
+                    renderItem={({ item }) => (
+                        <View style={styles.cartItem}>
+                            <Image
+                                style={styles.itemImage}
+                                source={{ uri: `http://192.168.195.23:8000/storage/${item.variation_image}` }}
+                                resizeMode="contain"
+                            />
+                            <View style={styles.itemDetails}>
+                                <Text style={styles.itemTitle}>{item.variation_name}</Text>
+                                <Text style={styles.itemPrice}>{item.total_price}</Text>
+                                <TouchableOpacity style={styles.removeItemButton} onPress={() => console.log('Remove item pressed')}>
+                                    <Text style={styles.removeItemButtonText}>Remove</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                )}
-            />
+                    )}
+                />
+            )}
             <BottomNavbar navigation={navigation} selectedNavItem={'cart'} handleNavItemClick={handleNavItemClick} />
         </View>
     );
@@ -52,6 +98,11 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         backgroundColor: '#f8f9fa',
+    },
+    emptyCartText: {
+        fontSize: 18,
+        textAlign: 'center',
+        marginTop: 20,
     },
     cartItem: {
         flexDirection: 'row',
