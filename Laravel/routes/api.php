@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\BankDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,4 +41,4 @@ Route::get('/products', [ProductController::class, 'getAllProducts']);
 
 Route::post('/cart', [CartController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'index']);
-    
+Route::middleware('auth:sanctum')->post('/payment-methods', [BankDetailController::class, 'store']);

@@ -81,6 +81,10 @@ const MarketScreen = ({ navigation }) => {
     navigation.navigate("MyProducts");
   };
 
+  const handleTransactions = () => {
+    navigation.navigate("Transactions");
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -110,6 +114,12 @@ const MarketScreen = ({ navigation }) => {
               <TouchableOpacity style={styles.button} onPress={handleMyProducts}>
                 <Icon name="albums-outline" size={20} color="#fff" />
                 <Text style={styles.buttonText}>Produk Saya</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={handleTransactions}>
+                <Icon name="cash-outline" size={20} color="#fff" />
+                <Text style={styles.buttonText}>Transaksi</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -152,7 +162,7 @@ const styles = StyleSheet.create({
   },
   noStoreText: {
     fontSize: 18,
-    marginBottom: 10,
+    marginBottom:  10,
   },
   storeContainer: {
     padding: 20,
