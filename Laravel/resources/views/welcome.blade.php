@@ -84,7 +84,7 @@
         }
 
         header .navigation a:hover {
-            background: #ffffff;
+            background: #000000;
         }
 
         .content {
@@ -102,9 +102,12 @@
         }
 
         .content .info h2 span {
-            font-size: 55px;
-            font-weight: 800;
-        }
+                font-size: 55px;
+                font-weight: 800;
+                background: linear-gradient(to right, rgb(188, 0, 31), purple);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
 
         .content .info p {
             font-size: 16px;
@@ -224,8 +227,11 @@
                 line-height: 50px;
             }
             .content .info h2 span {
-                font-size: 45px;
-                line-height: 50px;
+                font-size: 55px;
+                font-weight: 800;
+                background: linear-gradient(to right, rgb(255, 57, 90), purple);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
             }
             .content .info p {
                 font-size: 14px;
@@ -241,12 +247,25 @@
                 line-height: 40px;
             }
             .content .info h2 span {
-                font-size: 35px;
-                line-height: 40px;
+                font-size: 55px;
+                font-weight: 800;
+                background: linear-gradient(to right, rgb(255, 57, 90), purple);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
             }
             .content .info p {
                 font-size: 14px;
             }
+        }
+        .navigation .gradient-link {
+            background: linear-gradient(to right, red, purple);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 1px;
+            padding: 2px 15px;
+            border-radius: 20px;
+            transition: 0.3s;
+            transition-property: background;
         }
 
     </style>
@@ -259,8 +278,8 @@
             <div class="navigation">
                 <a href="#">Home</a>
                 <a href="#about">About</a>
-                <a href="#info">Info</a>
-                <a href="#contact">Contact</a>
+                <a href="#info">Fitur</a>
+                <a href="#contact" class="gradient-link">DOWNLOAD</a>
             </div>
             <label for="check">
                 <i class="fas fa-bars menu-btn"></i>
@@ -291,7 +310,7 @@
 
     <section id="info" style="display: flex; justify-content: center; align-items: center;  padding: 40px 0; background-image: url('/img/bg2.png'); background-size: cover; background-position: center;">
         <div style="max-width: 800px; text-align: center; color: rgb(255, 255, 255); padding-bottom: 300px;">
-            <h2 style="font-size: 4em;">Info</h2>
+            <h2 style="font-size: 4em;">Fitur</h2>
             <p style="font-size: 1.2em;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis<br>
                 libero et ante fermentum, eget lacinia ligula convallis.</p>
         </div>
@@ -299,7 +318,7 @@
 
     <section id="contact" style="padding: 40px 0; background-image: url('/img/bg3.png'); background-size: cover; background-position: center;">
         <div style="max-width: 800px; margin-left: auto; text-align: right; color: rgb(0, 0, 0); padding-right: 150px;">
-            <h2 style="font-size: 4em;">CONTACT</h2>
+            <h2 style="font-size: 4em;">DOWNLOAD</h2>
             <p style="font-size: 1.2em;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis<br>
                 libero et ante fermentum, eget lacinia ligula convallis.</p>
         </div>
