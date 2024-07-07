@@ -22,7 +22,10 @@ class User extends Authenticatable
         'email',
         'password',
         'noTelp',
-
+        'profile_photo',
+        'address',
+        'birthdate',
+        'gender',
     ];
 
     /**

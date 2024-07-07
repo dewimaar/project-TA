@@ -21,4 +21,14 @@ class BankDetailController extends Controller
 
         return response()->json($BankDetail, 201);
     }
+    public function getPaymentMethodsByStore($storeId)
+    {
+        $paymentMethods = BankDetail::where('store_id', $storeId)->get();
+        
+        if ($paymentMethods->isEmpty()) {
+            return response()->json(['message' => 'No payment methods found for this store.'], 404);
+        }
+
+        return response()->json($paymentMethods);
+    }
 }

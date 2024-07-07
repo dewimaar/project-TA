@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
         color: '#888',
         marginBottom: 8,
         textAlign: 'center',
-    },
+    }, 
     productButton: {
         backgroundColor: '#007bff',
         paddingVertical: 8,

@@ -8,11 +8,12 @@ import Modal from 'react-native-modal';
 
 const CartScreen = ({ navigation }) => {
     const [userId, setUserId] = useState(null);
+    const [storeId, setStoreId] = useState(null);
     const [cartData, setCartData] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => { 
         const fetchUserId = async () => {
             try {
                 const token = await AsyncStorage.getItem('auth_token');
@@ -22,6 +23,12 @@ const CartScreen = ({ navigation }) => {
                     },
                 });
                 setUserId(response.data.id);
+                const storeResponse = await axios.get(`http://192.168.195.23:8000/api/stores/${response.data.id}`, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                });
+                setStoreId(storeResponse.data.id);
             } catch (error) {
                 console.error('Failed to fetch user data:', error);
                 Alert.alert('Error', 'Failed to fetch user data.');
@@ -47,7 +54,7 @@ const CartScreen = ({ navigation }) => {
                     Alert.alert('Error', 'Error fetching cart data.');
                 }
             }
-        };
+        }; 
 
         fetchCartData();
     }, [userId]);
@@ -101,6 +108,11 @@ const CartScreen = ({ navigation }) => {
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
                             <View style={styles.cartItem}>
+                                <CheckBox
+                                    value={selectedItems.some((selectedItem) => selectedItem.id === item.id)}
+                                    onValueChange={() => toggleCheckbox(item)}
+                                    style={styles.checkbox}
+                                />
                                 <Image
                                     style={styles.itemImage}
                                     source={{ uri: `http://192.168.195.23:8000/storage/${item.variation_image}` }}
@@ -109,11 +121,6 @@ const CartScreen = ({ navigation }) => {
                                 <View style={styles.itemDetails}>
                                     <Text style={styles.itemTitle}>{item.variation_name}</Text>
                                     <Text style={styles.itemPrice}>{item.total_price}</Text>
-                                    <CheckBox
-                                        value={selectedItems.some((selectedItem) => selectedItem.id === item.id)}
-                                        onValueChange={() => toggleCheckbox(item)}
-                                        style={styles.checkbox}
-                                    />
                                 </View>
                             </View>
                         )}
@@ -182,6 +189,11 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         elevation: 3,
     },
+    checkbox: {
+        alignSelf: 'flex-start',
+        marginTop: 10,
+        marginRight: 10,
+    },
     itemImage: {
         width: 100,
         height: 100,
@@ -201,18 +213,12 @@ const styles = StyleSheet.create({
         color: '#888',
         marginBottom: 10,
     },
-    checkbox: {
-        alignSelf: 'center',
-    },
     checkoutButton: {
-        position: 'absolute',
-        bottom: 50,
-        left: 10,
-        right: 10,
         backgroundColor: '#007bff',
         paddingVertical: 12,
         borderRadius: 8,
         alignItems: 'center',
+        marginBottom: -10, // To avoid overlap with BottomNavbar
     },
     checkoutButtonText: {
         color: '#fff',

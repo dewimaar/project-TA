@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\Store;
 use App\Models\variations;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,6 +16,7 @@ class CartController extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
+            'store_id' => 'required|exists:stores,id',
             'variation_id' => 'required|exists:variations,id',
             'variation_name' => 'required', // Validasi untuk nama variasi
             'variation_image' => 'nullable', // Validasi untuk gambar variasi (opsional)
@@ -25,6 +27,7 @@ class CartController extends Controller
 
         $cartItem = Cart::create([
             'user_id' => $request->user_id,
+            'store_id' => $request->store_id,
             'variation_id' => $request->variation_id,
             'variation_name' => $request->variation_name, // Menyimpan nama variasi
             'variation_image' => $request->variation_image, // Menyimpan gambar variasi

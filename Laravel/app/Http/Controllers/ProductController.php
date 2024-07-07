@@ -71,7 +71,12 @@ class ProductController extends Controller
     // Tambahkan fungsi show untuk menampilkan detail produk berdasarkan ID
     public function show($id)
     {
-        $product = Product::with('variations')->findOrFail($id);
+        $product = Product::with('variations', 'store')->find($id);
+
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
         return response()->json($product);
     }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\BankDetailController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUserData']);
+Route::middleware('auth:sanctum')->post('/user/update', [ProfileController::class, 'updateUserData']);
 
 
 // create market user
@@ -42,3 +44,4 @@ Route::get('/products', [ProductController::class, 'getAllProducts']);
 Route::post('/cart', [CartController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/payment-methods', [BankDetailController::class, 'store']);
+Route::get('/payment-methods/{storeId}', [BankDetailController::class, 'getPaymentMethodsByStore']);

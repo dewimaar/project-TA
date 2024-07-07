@@ -13,4 +13,9 @@ class product extends Model
     {
         return $this->hasMany(variations::class);
     }
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'user_id', 'user_id'); // Assuming user_id in Product maps to user_id in Store
+    }
 }

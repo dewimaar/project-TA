@@ -1,33 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import BottomNavbar from './BottomNavbar';
 
 const ProfileScreen = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const fetchUserData = async () => {
+        try {
+            const token = await AsyncStorage.getItem('auth_token');
+            console.log('Retrieved Token:', token);
+
+            const response = await axios.get('http://192.168.195.23:8000/api/user', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            setUserData(response.data);
+        } catch (error) {
+            console.error('Failed to fetch user data:', error);
+            Alert.alert('Error', 'Failed to fetch user data.');
+        }
+    };
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const token = await AsyncStorage.getItem('auth_token');
-                console.log('Retrieved Token:', token);
-
-                const response = await axios.get('http://192.168.195.23:8000/api/user', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                setUserData(response.data);
-            } catch (error) {
-                console.error('Failed to fetch user data:', error);
-                Alert.alert('Error', 'Failed to fetch user data.');
-            }
-        };
-
         fetchUserData();
     }, []);
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await fetchUserData();
+        setRefreshing(false);
+    };
 
     const handleLogout = async () => {
         try {
@@ -52,6 +59,10 @@ const ProfileScreen = ({ navigation }) => {
         }
     };
 
+    const navigateToEditProfile = () => {
+        navigation.navigate('EditProfile', { userData });
+    };
+
     if (!userData) {
         return (
             <View style={styles.container}>
@@ -62,9 +73,21 @@ const ProfileScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
+            <ScrollView
+                style={styles.scrollContainer}
+                contentContainerStyle={styles.scrollContent}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+            >
                 <View style={styles.header}>
-                    <Image style={styles.profileImage} source={{ uri: 'https://via.placeholder.com/150' }} />
+                    <View style={styles.imageContainer}>
+                        <Image
+                            style={styles.image}
+                            source={{ uri: userData.profile_photo ? `http://192.168.195.23:8000/storage/${userData.profile_photo}` : 'https://via.placeholder.com/150' }}
+                            resizeMode="contain"
+                        />
+                    </View>
                     <Text style={styles.name}>{userData.name}</Text>
                     <Text style={styles.email}>{userData.email}</Text>
                 </View>
@@ -84,15 +107,15 @@ const ProfileScreen = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem}>
                         <Text style={styles.menuText}>Alamat</Text>
-                        <Text style={styles.menuDetail}>Jl. Kebon Jeruk No. 27</Text>
+                        <Text style={styles.menuDetail}>{userData.address}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem}>
                         <Text style={styles.menuText}>Tanggal Lahir</Text>
-                        <Text style={styles.menuDetail}>01 Januari 1990</Text>
+                        <Text style={styles.menuDetail}>{userData.birthdate}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem}>
                         <Text style={styles.menuText}>Jenis Kelamin</Text>
-                        <Text style={styles.menuDetail}>Perempuan</Text>
+                        <Text style={styles.menuDetail}>{userData.gender}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem}>
                         <Text style={styles.menuText}>Bantuan/Dukungan</Text>
@@ -102,6 +125,9 @@ const ProfileScreen = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.menuItem, styles.logoutButton]} onPress={handleLogout}>
                         <Text style={[styles.menuText, styles.logoutText]}>Logout</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.editProfileButton} onPress={navigateToEditProfile}>
+                        <Text style={styles.editProfileButtonText}>Edit Profil</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -119,18 +145,23 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     scrollContent: {
-        paddingBottom: 80, // Added padding to ensure content is not hidden behind the BottomNavbar
+        paddingBottom: 80,
     },
     header: {
         backgroundColor: '#013B0A',
         paddingVertical: 30,
         alignItems: 'center',
     },
-    profileImage: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: '#fff',
+    imageContainer: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        overflow: 'hidden',
+        marginBottom: 10,
+    },
+    image: {
+        width: '100%',
+        height: '100%',
     },
     name: {
         fontSize: 18,
@@ -187,6 +218,20 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     logoutText: {
+        fontSize: 16,
+        color: '#fff',
+        textAlign: 'center',
+        width: '100%',
+    },
+    editProfileButton: {
+        backgroundColor: '#013B0A',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginHorizontal: 10,
+        marginTop: 20,
+    },
+    editProfileButtonText: {
         fontSize: 16,
         color: '#fff',
         textAlign: 'center',
