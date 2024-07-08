@@ -1,217 +1,197 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useForm, Controller } from 'react-hook-form';
-import UploadImages from '../components/UploadImages';
 
-const EditProfileScreen = ({ navigation, route }) => {
-    const { userData } = route.params;
-    const { control, handleSubmit, setValue } = useForm();
-    const [loading, setLoading] = useState(false);
+const TransactionsPaymentScreen = ({ navigation, route }) => {
+    const { selectedItems } = route.params;
+    const { control, handleSubmit } = useForm(); // Menggunakan useForm dari react-hook-form
 
-    useEffect(() => {
-        if (userData) {
-            setValue('name', userData.name);
-            setValue('email', userData.email);
-            setValue('noTelp', userData.noTelp);
-            setValue('address', userData.address);
-            setValue('birthdate', userData.birthdate);
-            setValue('gender', userData.gender);
-            setValue('profile_photo', userData.profile_photo ? [{ uri: userData.profile_photo }] : []);
-        }
-    }, [userData]);
+    const [fullAddress, setFullAddress] = useState('');
+    const [googleMapsLink, setGoogleMapsLink] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState('');
 
-    const onSubmit = async (data) => {
-        setLoading(true);
+    const handlePayment = async (formData) => {
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            const formData = new FormData();
-            formData.append('name', data.name);
-            formData.append('email', data.email);
-            formData.append('noTelp', data.noTelp);
-            formData.append('address', data.address);
-            formData.append('birthdate', data.birthdate);
-            formData.append('gender', data.gender);
-
-            if (data.profile_photo && data.profile_photo.length > 0) {
-                const image = data.profile_photo[0];
-                const filename = image.uri.split('/').pop();
-                const match = /\.(\w+)$/.exec(filename);
-                const type = match ? `image/${match[1]}` : `image`;
-
-                formData.append('profile_photo', {
-                    uri: image.uri,
-                    name: filename,
-                    type,
-                });
-            }
-
-            console.log('Sending request to server with formData:', formData);
-
-            const response = await axios.post('http://192.168.195.23:8000/api/user/update', formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
+            const response = await axios.post(
+                'http://192.168.173.23:8000/api/transactions',
+                {
+                    user_id: selectedItems[0].user_id,
+                    items: selectedItems.map((item) => ({
+                        variation_id: item.variation_id,
+                        variation_name: item.variation_name,
+                        variation_image: item.variation_image,
+                        quantity: item.quantity,
+                        unit_price: item.unit_price,
+                        total_price: item.total_price,
+                    })),
+                    full_address: formData.fullAddress,
+                    google_maps_link: formData.googleMapsLink,
+                    payment_method: formData.paymentMethod,
+                    payment_proof: formData.payment_proof, // Tambahkan payment_proof dari UploadImages
                 },
-            });
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json', // Gunakan application/json untuk content type
+                    },
+                }
+            );
 
-            console.log('Response from server:', response.data);
-
-            Alert.alert('Success', 'Profile updated successfully');
-            navigation.goBack();
+            console.log('Transaction saved:', response.data);
+            Alert.alert('Success', 'Transaction saved successfully.');
+            navigation.navigate('Home');
         } catch (error) {
-            console.error('Failed to update profile:', error);
-            Alert.alert('Error', 'Failed to update profile: ' + (error.response ? error.response.data.message : error.message));
-        } finally {
-            setLoading(false);
+            console.error('Error saving transaction:', error);
+            Alert.alert('Error', 'Failed to save transaction.');
         }
     };
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.form}>
-                <Text style={styles.label}>Name</Text>
-                <Controller
-                    control={control}
-                    name="name"
-                    defaultValue=""
-                    render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                    )}
-                />
-
-                <Text style={styles.label}>Email</Text>
-                <Controller
-                    control={control}
-                    name="email"
-                    defaultValue=""
-                    render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={onChange}
-                            value={value}
-                            keyboardType="email-address"
-                        />
-                    )}
-                />
-
-                <Text style={styles.label}>No. Telp</Text>
-                <Controller
-                    control={control}
-                    name="noTelp"
-                    defaultValue=""
-                    render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                    )}
-                />
-
-                <Text style={styles.label}>Address</Text>
-                <Controller
-                    control={control}
-                    name="address"
-                    defaultValue=""
-                    render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                    )}
-                />
-
-<Text style={styles.label}>Date of Birth</Text>
-<Controller
-    control={control}
-    name="birthdate"
-    defaultValue=""
-    render={({ field: { onChange, value } }) => (
-        <TextInput
-            style={styles.input}
-            onChangeText={onChange}
-            value={value}
-            placeholder="YYYY-MM-DD"
-            keyboardType="numbers-and-punctuation"
-        />
-    )}
-/>
-
-                <Text style={styles.label}>Gender</Text>
-                <Controller
-                    control={control}
-                    name="gender"
-                    defaultValue=""
-                    render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                    )}
-                />
-
-                <Text style={styles.label}>Profile Photo</Text>
-                <Controller
-                    control={control}
-                    name="profile_photo"
-                    defaultValue={[]}
-                    render={({ field: { onChange, value } }) => (
-                        <UploadImages
-                            name="profile_photo"
-                            control={control}
-                            uploadedImages={value}
-                            onChange={onChange}
-                        />
-                    )}
-                />
-
-                <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)} disabled={loading}>
-                    <Text style={styles.buttonText}>{loading ? 'Updating...' : 'Update Profile'}</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
+        <View style={styles.container}>
+            <Text style={styles.title}>Transaction Details</Text>
+            {selectedItems.map((item, index) => (
+                <View key={index} style={styles.itemContainer}>
+                    <Image
+                        style={styles.itemImage}
+                        source={{ uri: `http://192.168.173.23:8000/storage/${item.variation_image}` }}
+                        resizeMode="contain"
+                    />
+                    <View style={styles.itemDetails}>
+                        <Text style={styles.itemName}>{item.variation_name}</Text>
+                        <Text style={styles.itemPrice}>Price: {item.unit_price}</Text>
+                        <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
+                        <Text style={styles.itemTotalPrice}>Total Price: {item.total_price}</Text>
+                    </View>
+                </View>
+            ))}
+            <Controller
+                control={control}
+                name="fullAddress"
+                defaultValue=""
+                render={({ field: { onChange, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter Full Address"
+                        value={value}
+                        onChangeText={onChange}
+                    />
+                )}
+            />
+            <Controller
+                control={control}
+                name="googleMapsLink"
+                defaultValue=""
+                render={({ field: { onChange, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter Google Maps Link"
+                        value={value}
+                        onChangeText={onChange}
+                    />
+                )}
+            />
+            <Controller
+                control={control}
+                name="paymentMethod"
+                defaultValue=""
+                render={({ field: { onChange, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter Payment Method"
+                        value={value}
+                        onChangeText={onChange}
+                    />
+                )}
+            />
+            <Controller
+                control={control}
+                name="payment_proof" // Sesuaikan dengan nama field
+                defaultValue={[]} // Pastikan default valuenya sesuai dengan kebutuhan
+                render={({ field: { onChange, value } }) => (
+                    <UploadImages
+                        name="payment_proof"
+                        control={control}
+                        uploadedImages={value}
+                        onChange={onChange}
+                    />
+                )}
+            />
+            <TouchableOpacity style={styles.button} onPress={handleSubmit(handlePayment)}>
+                <Text style={styles.buttonText}>Submit Payment</Text>
+            </TouchableOpacity>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
-    },
-    form: {
+        justifyContent: 'center',
+        alignItems: 'center',
         padding: 20,
+        backgroundColor: '#f8f9fa',
     },
-    label: {
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    itemContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    itemImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 8,
+        marginRight: 10,
+    },
+    itemDetails: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    itemName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    itemPrice: {
         fontSize: 16,
-        marginBottom: 8,
+        color: '#888',
+    },
+    itemQuantity: {
+        fontSize: 16,
+        color: '#888',
+    },
+    itemTotalPrice: {
+        fontSize: 16,
+        color: '#888',
     },
     input: {
-        backgroundColor: '#fff',
-        padding: 10,
-        marginBottom: 20,
-        borderRadius: 4,
-        borderColor: '#ccc',
+        width: '100%',
+        height: 50,
         borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        marginBottom: 20,
     },
     button: {
-        backgroundColor: '#013B0A',
-        padding: 15,
-        borderRadius: 4,
+        width: '100%',
+        height: 50,
+        backgroundColor: '#007bff',
+        borderRadius: 8,
+        justifyContent: 'center',
         alignItems: 'center',
     },
     buttonText: {
         color: '#fff',
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
     },
 });
 
-export default EditProfileScreen;
+export default TransactionsPaymentScreen;

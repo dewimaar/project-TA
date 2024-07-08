@@ -34,4 +34,11 @@ class metodeTransaksiController extends Controller
 
         return redirect()->route('metodeTransaksi')->with('success', 'Metode Transaksi berhasil ditambahkan');
     }
+
+    public function metodeTransaksi()
+    {
+        $metodeTransaksis = metodeTransaksi::all();
+
+        return response()->json($metodeTransaksis);
+    }
 }

@@ -44,7 +44,7 @@ const HomeScreen = ({ navigation }) => {
     const fetchUserData = async () => {
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.get('http://192.168.195.23:8000/api/user', {
+            const response = await axios.get('http://192.168.173.23:8000/api/user', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -58,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
     const fetchProducts = async () => {
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.get('http://192.168.195.23:8000/api/products');
+            const response = await axios.get('http://192.168.173.23:8000/api/products');
             const updatedProducts = response.data.map(product => {
                 const price = product.variations && product.variations.length > 0 
                     ? product.variations[0].price 
@@ -115,7 +115,7 @@ const HomeScreen = ({ navigation }) => {
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
             <View style={styles.productContainer}>
-                <Image source={{ uri: `http://192.168.195.23:8000/storage/${item.image}` }} style={styles.productImage} />
+                <Image source={{ uri: `http://192.168.173.23:8000/storage/${item.image}` }} style={styles.productImage} />
                 <Text style={styles.productTitle}>{item.name}</Text>
                 <Text style={styles.productPrice}>Rp{formatPrice(item.price)}</Text>
                 <TouchableOpacity style={styles.productButton} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>

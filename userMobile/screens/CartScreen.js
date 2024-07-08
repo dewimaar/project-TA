@@ -8,7 +8,7 @@ import Modal from 'react-native-modal';
 
 const CartScreen = ({ navigation }) => {
     const [userId, setUserId] = useState(null);
-    const [storeId, setStoreId] = useState(null);
+    // const [storeId, setStoreId] = useState(null);
     const [cartData, setCartData] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
@@ -17,18 +17,18 @@ const CartScreen = ({ navigation }) => {
         const fetchUserId = async () => {
             try {
                 const token = await AsyncStorage.getItem('auth_token');
-                const response = await axios.get('http://192.168.195.23:8000/api/user', {
+                const response = await axios.get('http://192.168.173.23:8000/api/user', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
                 setUserId(response.data.id);
-                const storeResponse = await axios.get(`http://192.168.195.23:8000/api/stores/${response.data.id}`, {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                });
-                setStoreId(storeResponse.data.id);
+                // const storeResponse = await axios.get(`http://192.168.173.23:8000/api/stores/${response.data.id}`, {
+                //     headers: {
+                //       Authorization: `Bearer ${token}`,
+                //     },
+                // });
+                // setStoreId(storeResponse.data.id);
             } catch (error) {
                 console.error('Failed to fetch user data:', error);
                 Alert.alert('Error', 'Failed to fetch user data.');
@@ -43,7 +43,7 @@ const CartScreen = ({ navigation }) => {
             if (userId) {
                 try {
                     const token = await AsyncStorage.getItem('auth_token');
-                    const response = await axios.get(`http://192.168.195.23:8000/api/cart?user_id=${userId}`, {
+                    const response = await axios.get(`http://192.168.173.23:8000/api/cart?user_id=${userId}`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
@@ -92,9 +92,32 @@ const CartScreen = ({ navigation }) => {
         setModalVisible(false);
     };
 
-    const confirmCheckout = () => {
-        setModalVisible(false);
-        navigation.navigate('TransactionsPayment', { selectedItems });
+    const confirmCheckout = async () => {
+        try {
+            const token = await AsyncStorage.getItem('auth_token');
+            const response = await axios.post('http://192.168.173.23:8000/api/transactions', {
+                user_id: userId,
+                // store_id: storeId,
+                items: selectedItems.map(item => ({
+                    variation_id: item.variation_id,
+                    variation_name: item.variation_name,
+                    variation_image: item.variation_image,
+                    quantity: item.quantity,
+                    unit_price: item.unit_price,
+                    total_price: item.total_price,
+                })),
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log('Transaction saved:', response.data);
+            setModalVisible(false);
+            navigation.navigate('TransactionsPayment', { selectedItems });
+        } catch (error) {
+            console.error('Error saving transaction:', error);
+            Alert.alert('Error', 'Failed to save transaction.');
+        }
     };
 
     return (
@@ -115,7 +138,7 @@ const CartScreen = ({ navigation }) => {
                                 />
                                 <Image
                                     style={styles.itemImage}
-                                    source={{ uri: `http://192.168.195.23:8000/storage/${item.variation_image}` }}
+                                    source={{ uri: `http://192.168.173.23:8000/storage/${item.variation_image}` }}
                                     resizeMode="contain"
                                 />
                                 <View style={styles.itemDetails}>
@@ -140,7 +163,7 @@ const CartScreen = ({ navigation }) => {
                             <View key={item.id} style={styles.modalItem}>
                                 <Image
                                     style={styles.modalItemImage}
-                                    source={{ uri: `http://192.168.195.23:8000/storage/${item.variation_image}` }}
+                                    source={{ uri: `http://192.168.173.23:8000/storage/${item.variation_image}` }}
                                     resizeMode="contain"
                                 />
                                 <View style={styles.modalItemDetails}>
@@ -287,3 +310,4 @@ const styles = StyleSheet.create({
 });
 
 export default CartScreen;
+

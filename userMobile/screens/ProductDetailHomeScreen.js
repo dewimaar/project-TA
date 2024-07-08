@@ -30,7 +30,7 @@ const ProductDetailHomeScreen = ({ route }) => {
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.195.23:8000/api/products/detail/${productId}`
+          `http://192.168.173.23:8000/api/products/detail/${productId}`
         );
         setProduct(response.data);
         setStoreId(response.data.store.id); // Set store ID from product details
@@ -47,7 +47,7 @@ const ProductDetailHomeScreen = ({ route }) => {
       try {
         const token = await AsyncStorage.getItem("auth_token");
         const response = await axios.get(
-          "http://192.168.195.23:8000/api/user",
+          "http://192.168.173.23:8000/api/user",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -67,7 +67,7 @@ const ProductDetailHomeScreen = ({ route }) => {
   const fetchStore = async () => {
     try {
       const response = await fetch(
-        `http://192.168.195.23:8000/api/stores/${userId}`
+        `http://192.168.173.23:8000/api/stores/${userId}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -96,7 +96,7 @@ const ProductDetailHomeScreen = ({ route }) => {
 
   const handleAddToCart = async () => {
     try {
-      const response = await axios.post("http://192.168.195.23:8000/api/cart", {
+      const response = await axios.post("http://192.168.173.23:8000/api/cart", {
         user_id: userId,
         store_id: storeId,
         variation_id: selectedVariation.id,
@@ -136,7 +136,7 @@ const ProductDetailHomeScreen = ({ route }) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Image
         style={styles.productImage}
-        source={{ uri: `http://192.168.195.23:8000/storage/${product.image}` }}
+        source={{ uri: `http://192.168.173.23:8000/storage/${product.image}` }}
         resizeMode="contain"
       />
       <Text style={styles.productName}>{product.name}</Text>
@@ -153,7 +153,7 @@ const ProductDetailHomeScreen = ({ route }) => {
             <Image
               style={styles.variationImage}
               source={{
-                uri: `http://192.168.195.23:8000/storage/${variation.image}`,
+                uri: `http://192.168.173.23:8000/storage/${variation.image}`,
               }}
               resizeMode="contain"
             />

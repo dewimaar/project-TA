@@ -8,6 +8,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\BankDetailController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\metodeTransaksiController;
+use App\Http\Controllers\TransactionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -45,3 +48,5 @@ Route::post('/cart', [CartController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/payment-methods', [BankDetailController::class, 'store']);
 Route::get('/payment-methods/{storeId}', [BankDetailController::class, 'getPaymentMethodsByStore']);
+Route::get('/metodeTransaksi', [metodeTransaksiController::class, 'metodeTransaksi']);
+Route::middleware('auth:sanctum')->post('/transactions', [TransactionController::class, 'store']);

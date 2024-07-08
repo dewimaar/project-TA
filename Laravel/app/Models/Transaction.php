@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cart extends Model
+class Transaction extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -17,19 +17,9 @@ class Cart extends Model
         'quantity',
         'unit_price',
         'total_price',
+        'full_address',
+        'google_maps_link',
+        'payment_method',
+        'payment_proof',
     ];
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function variation()
-    {
-        return $this->belongsTo(Variations::class);
-    }
-    // public function store()
-    // {
-    //     return $this->belongsTo(Store::class);
-    // }
 }
