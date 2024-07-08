@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert, Ref
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import BottomNavbar from './BottomNavbar';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const ProfileScreen = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
@@ -85,7 +86,7 @@ const ProfileScreen = ({ navigation }) => {
                         <Image
                             style={styles.image}
                             source={{ uri: userData.profile_photo ? `http://192.168.195.23:8000/storage/${userData.profile_photo}` : 'https://via.placeholder.com/150' }}
-                            resizeMode="contain"
+                            resizeMode="cover"
                         />
                     </View>
                     <Text style={styles.name}>{userData.name}</Text>
@@ -101,35 +102,43 @@ const ProfileScreen = ({ navigation }) => {
                     </View>
                 )}
                 <View style={styles.menu}>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+                        <Icon name="call-outline" size={20} color="#00796B" style={styles.menuIcon} />
                         <Text style={styles.menuText}>Nomor Telepon</Text>
                         <Text style={styles.menuDetail}>{userData.noTelp}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+                        <Icon name="location-outline" size={20} color="#00796B" style={styles.menuIcon} />
                         <Text style={styles.menuText}>Alamat</Text>
                         <Text style={styles.menuDetail}>{userData.address}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+                        <Icon name="calendar-outline" size={20} color="#00796B" style={styles.menuIcon} />
                         <Text style={styles.menuText}>Tanggal Lahir</Text>
                         <Text style={styles.menuDetail}>{userData.birthdate}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+                        <Icon name="female-outline" size={20} color="#00796B" style={styles.menuIcon} />
                         <Text style={styles.menuText}>Jenis Kelamin</Text>
                         <Text style={styles.menuDetail}>{userData.gender}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+                        <Icon name="help-circle-outline" size={20} color="#00796B" style={styles.menuIcon} />
                         <Text style={styles.menuText}>Bantuan/Dukungan</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+                        <Icon name="information-circle-outline" size={20} color="#00796B" style={styles.menuIcon} />
                         <Text style={styles.menuText}>Tentang Aplikasi</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.menuItem, styles.logoutButton]} onPress={handleLogout}>
-                        <Text style={[styles.menuText, styles.logoutText]}>Logout</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity style={styles.editProfileButton} onPress={navigateToEditProfile}>
-                        <Text style={styles.editProfileButtonText}>Edit Profil</Text>
+                        <Icon name="create-outline" size={20} color="#fff" />
+                        <Text style={styles.buttonText}>Edit Profil</Text>
                     </TouchableOpacity>
                 </View>
+                <TouchableOpacity style={[styles.editProfileButton, styles.logoutButton]} onPress={handleLogout}>
+                    <Icon name="log-out-outline" size={20} color="#fff" />
+                    <Text style={styles.buttonText}>Logout</Text>
+                </TouchableOpacity>
             </ScrollView>
             <BottomNavbar navigation={navigation} selectedNavItem={'profile'} handleNavItemClick={handleNavItemClick} />
         </View>
@@ -148,7 +157,7 @@ const styles = StyleSheet.create({
         paddingBottom: 80,
     },
     header: {
-        backgroundColor: '#013B0A',
+        backgroundColor: 'transparent',  // Ganti warna latar belakang menjadi transparan
         paddingVertical: 30,
         alignItems: 'center',
     },
@@ -158,6 +167,8 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         overflow: 'hidden',
         marginBottom: 10,
+        borderWidth: 1,
+        borderColor: '#fff',
     },
     image: {
         width: '100%',
@@ -166,12 +177,12 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#fff',
+        color: '#000000',
         marginTop: 10,
     },
     email: {
         fontSize: 14,
-        color: '#fff',
+        color: '#000000',
     },
     storeInfo: {
         backgroundColor: '#fff',
@@ -190,11 +201,10 @@ const styles = StyleSheet.create({
         color: 'grey',
     },
     menu: {
-        marginTop: 20,
+        marginTop: 2,
     },
     menuItem: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#fff',
         paddingVertical: 15,
@@ -202,41 +212,45 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
     },
+    menuIcon: {
+        marginRight: 10,
+    },
     menuText: {
         fontSize: 16,
+        flex: 1,
     },
     menuDetail: {
         fontSize: 16,
         color: 'grey',
-    },
-    logoutButton: {
-        backgroundColor: '#990000',
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginHorizontal: 10,
-        marginTop: 20,
-    },
-    logoutText: {
-        fontSize: 16,
-        color: '#fff',
-        textAlign: 'center',
-        width: '100%',
+        flex: 1,
+        textAlign: 'right',
     },
     editProfileButton: {
-        backgroundColor: '#013B0A',
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginHorizontal: 10,
-        marginTop: 20,
-    },
-    editProfileButtonText: {
-        fontSize: 16,
-        color: '#fff',
-        textAlign: 'center',
-        width: '100%',
-    },
+    backgroundColor: '#013B0A',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 15,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    marginTop: 20,
+},
+buttonText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
+    marginLeft: 10, 
+},
+logoutButton: {
+    backgroundColor: '#990000',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 15,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    marginTop: 10,
+},
 });
 
 export default ProfileScreen;

@@ -5,7 +5,7 @@ const SplashScreen = ({ navigation }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             navigation.replace('Main');
-        }, 2000);
+        }, 1000);
 
         return () => clearTimeout(timer); // Clear the timer if the component is unmounted
     }, [navigation]);

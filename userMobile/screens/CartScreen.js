@@ -93,8 +93,8 @@ const CartScreen = ({ navigation }) => {
     };
 
     const confirmCheckout = () => {
-        Alert.alert('Confirm', 'Your checkout process will continue.');
         setModalVisible(false);
+        navigation.navigate('TransactionsPayment', { selectedItems });
     };
 
     return (

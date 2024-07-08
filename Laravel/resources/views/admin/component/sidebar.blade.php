@@ -27,6 +27,12 @@
                 <span>Mitra Usaha</span>
             </a>
         </li>
+        <li class="sidebar-item {{ Request::path() == 'admin/metodeTransaksi' ? 'active' : '' }}">
+            <a href="/admin/metodeTransaksi" class="sidebar-link">
+                <i class="bi bi-building"></i>
+                <span>Metode Transaksi</span>
+            </a>
+        </li>
         <li class="sidebar-item {{ Request::path() == 'admin/riwayatTransaksi' ? 'active' : '' }}">
             <a href="/admin/riwayatTransaksi" class="sidebar-link">
                 <i class="bi bi-clock-history"></i>
