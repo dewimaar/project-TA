@@ -6,6 +6,9 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfileScreen from './ProfileScreen';
 import BottomNavbar from './BottomNavbar';
+import place1 from '../assets/place1.jpg';
+import place2 from '../assets/place2.jpg';
+import place3 from '../assets/place3.jpg';
 
 const HomeScreen = ({ navigation }) => {
     const [selectedNavItem, setSelectedNavItem] = useState('home');
@@ -17,28 +20,23 @@ const HomeScreen = ({ navigation }) => {
 
     const handleNavItemClick = (itemName) => {
         setSelectedNavItem(itemName);
-        if (itemName === 'profile') {
-            navigation.navigate('Profile');
-        } else if (itemName === 'home') {
-            navigation.navigate('Home');
-        } else if (itemName === 'market') {
-            navigation.navigate('Market'); 
-        }  else if (itemName === 'settings') {
-            navigation.navigate('Settings');
-        } else if (itemName === 'cart') {
-            navigation.navigate('Cart');
-        }
+        navigation.navigate(itemName.charAt(0).toUpperCase() + itemName.slice(1));
     };
     
     const handleSearchInputChange = (query) => {
         setSearchQuery(query);
-        // Handle search logic here if needed
     };
 
+    const filteredProducts = useMemo(() => {
+        return products.filter(product => 
+            product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [searchQuery, products]);
+
     const carouselData = [
-        { id: '1', imageUrl: 'https://via.placeholder.com/300', title: 'Promo 1' },
-        { id: '2', imageUrl: 'https://via.placeholder.com/300', title: 'Promo 2' },
-        { id: '3', imageUrl: 'https://via.placeholder.com/300', title: 'Promo 3' },
+        { id: '1', imageUrl: place1, title: 'Promo 1' },
+        { id: '2', imageUrl: place2, title: 'Promo 2' },
+        { id: '3', imageUrl: place3, title: 'Promo 3' },
     ];
 
     const fetchUserData = async () => {
@@ -72,17 +70,16 @@ const HomeScreen = ({ navigation }) => {
             setProducts(updatedProducts);
         } catch (error) {
             console.error('Failed to fetch products:', error);
-            // Handle errors as needed
         }
     };
 
     const formatPrice = (price) => {
         if (price === undefined || price === null || isNaN(Number(price))) {
-          return 'Price not available';
+            return 'Price not available';
         }
         const numberPrice = Number(price);
         return numberPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-      };
+    };
 
     const handlerRefetchData = useCallback(async () => {
         setIsRefetching(true);
@@ -105,7 +102,7 @@ const HomeScreen = ({ navigation }) => {
 
     const addNewProduct = (newProduct) => {
         setProducts(prevProducts => [...prevProducts, newProduct]);
-    };   
+    };
 
     useEffect(() => {
         fetchUserData();
@@ -128,14 +125,16 @@ const HomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.topBar}>
-                <Icon name="search-outline" size={24} color="#888" style={styles.searchIcon} />
-                <TextInput
-                    style={styles.searchInput}
-                    placeholder="Search..."
-                    placeholderTextColor="#888"
-                    value={searchQuery}
-                    onChangeText={handleSearchInputChange}
-                />
+                <View style={styles.searchBox}>
+                    <Icon name="search-outline" size={24} color="#888" style={styles.searchIcon} />
+                    <TextInput
+                        style={styles.searchInput}
+                        placeholder="Search..."
+                        placeholderTextColor="#888"
+                        value={searchQuery}
+                        onChangeText={handleSearchInputChange}
+                    />
+                </View>
                 <TouchableOpacity onPress={() => console.log('Notification icon pressed')}>
                     <Icon name="notifications-outline" size={30} color="#333" style={styles.notificationIcon} />
                 </TouchableOpacity>
@@ -144,7 +143,7 @@ const HomeScreen = ({ navigation }) => {
             <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={styles.carouselContainer}>
                 {carouselData.map((item) => (
                     <View key={item.id} style={styles.carouselItem}>
-                        <Image source={{ uri: item.imageUrl }} style={styles.carouselImage} />
+                        <Image source={item.imageUrl} style={styles.carouselImage} />
                     </View>
                 ))}
             </ScrollView>
@@ -161,7 +160,7 @@ const HomeScreen = ({ navigation }) => {
             </Picker>
 
             <FlatList
-                data={products}
+                data={filteredProducts}
                 numColumns={2}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderItem}
@@ -187,30 +186,37 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         padding: 8,
     },
+    searchBox: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+    },
     searchIcon: {
         marginRight: 8,
     },
     searchInput: {
         flex: 1,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 8,
-        paddingHorizontal: 12,
-        paddingVertical: 8,
         fontSize: 16,
     },
     notificationIcon: {
         marginLeft: 8,
     },
     carouselContainer: {
-        height: 280, 
+        height: 280,
         marginBottom: 16,
     },
     carouselItem: {
-        width: 390, 
+        width: 370, 
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 8, 
+        marginRight: 10,
+        marginLeft: 10,
         backgroundColor: '#fff',
         borderRadius: 8,
         elevation: 3,
@@ -220,8 +226,8 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
     },
     carouselImage: {
-        width: 370, 
-        height: 170, 
+        width: 350,
+        height: 170,
         borderRadius: 8,
     },
     picker: {
@@ -261,9 +267,9 @@ const styles = StyleSheet.create({
         color: '#888',
         marginBottom: 8,
         textAlign: 'center',
-    }, 
+    },
     productButton: {
-        backgroundColor: '#007bff',
+        backgroundColor: '#00796B',
         paddingVertical: 8,
         paddingHorizontal: 12,
         borderRadius: 8,
@@ -276,4 +282,3 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
-
