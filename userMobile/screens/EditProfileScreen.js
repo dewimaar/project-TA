@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import UploadImages from '../components/UploadImages';
+import { Picker } from '@react-native-picker/picker';
 
 const EditProfileScreen = ({ navigation, route }) => {
     const { userData } = route.params;
@@ -68,6 +69,18 @@ const EditProfileScreen = ({ navigation, route }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleDateChange = (text) => {
+        let formattedText = text.replace(/[^0-9]/g, '');
+
+        if (formattedText.length >= 4 && formattedText.length < 7) {
+            formattedText = formattedText.substring(0, 4) + '-' + formattedText.substring(4);
+        } else if (formattedText.length >= 7) {
+            formattedText = formattedText.substring(0, 4) + '-' + formattedText.substring(4, 6) + '-' + formattedText.substring(6, 8);
+        }
+
+        return formattedText;
     };
 
     return (
@@ -152,10 +165,11 @@ const EditProfileScreen = ({ navigation, route }) => {
                     render={({ field: { onChange, value } }) => (
                         <TextInput
                             style={styles.input}
-                            onChangeText={onChange}
+                            onChangeText={(text) => onChange(handleDateChange(text))}
                             value={value}
                             placeholder="YYYY-MM-DD"
-                            keyboardType="numbers-and-punctuation"
+                            keyboardType="numeric"
+                            maxLength={10}
                         />
                     )}
                 />
@@ -166,11 +180,14 @@ const EditProfileScreen = ({ navigation, route }) => {
                     name="gender"
                     defaultValue=""
                     render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={onChange}
-                            value={value}
-                        />
+                        <Picker
+                            selectedValue={value}
+                            onValueChange={onChange}
+                            style={styles.picker}
+                        >
+                            <Picker.Item label="Male" value="male" />
+                            <Picker.Item label="Female" value="female" />
+                        </Picker>
                     )}
                 />
 
@@ -216,6 +233,10 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderColor: '#ccc',
         borderWidth: 1,
+    },
+    picker: {
+        backgroundColor: '#fff',
+        marginBottom: 20,
     },
     button: {
         backgroundColor: '#013B0A',
