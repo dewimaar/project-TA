@@ -22,6 +22,8 @@ class TransactionController extends Controller
             'google_maps_link' => 'nullable|string',
             'payment_method' => 'nullable|string',
             'payment_proof.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'username_pengguna' => 'nullable|string', 
+            'no_rekening' => 'nullable|string',
         ]);
 
         $productImagePaths = '';
@@ -45,8 +47,11 @@ class TransactionController extends Controller
                 'google_maps_link' => $request->google_maps_link,
                 'payment_method' => $request->payment_method,
                 'payment_proof' => $productImagePaths,
+                'username_pengguna' => $request->username_pengguna,
+                'no_rekening' => $request->no_rekening,
             ]);
         }
+        
 
         return response()->json(['message' => 'Transactions saved successfully'], 201);
     } catch (\Exception $e) {

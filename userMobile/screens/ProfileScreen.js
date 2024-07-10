@@ -113,6 +113,11 @@ const ProfileScreen = ({ navigation }) => {
                         <Text style={styles.menuDetail}>{userData.address}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+                        <Icon name="location-outline" size={20} color="#00796B" style={styles.menuIcon} />
+                        <Text style={styles.menuText}>Link Alamat</Text>
+                        <Text style={styles.menuDetail}>{userData.google_maps_link}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
                         <Icon name="calendar-outline" size={20} color="#00796B" style={styles.menuIcon} />
                         <Text style={styles.menuText}>Tanggal Lahir</Text>
                         <Text style={styles.menuDetail}>{userData.birthdate}</Text>

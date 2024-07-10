@@ -21,5 +21,7 @@ class Transaction extends Model
         'google_maps_link',
         'payment_method',
         'payment_proof',
+        'username_pengguna',
+        'no_rekening',
     ];
 }

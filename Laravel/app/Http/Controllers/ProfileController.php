@@ -19,6 +19,7 @@ class ProfileController extends Controller
         'name' => 'sometimes|string|max:255',
         'profile_photo' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         'address' => 'sometimes|string|max:255',
+        'google_maps_link' => 'sometimes|url|max:255',
         'birthdate' => 'sometimes|date',
         'gender' => 'sometimes|string|max:10',
     ]);
@@ -33,6 +34,7 @@ class ProfileController extends Controller
 
     $user->name = $request->input('name', $user->name);
     $user->address = $request->input('address', $user->address);
+    $user->google_maps_link = $request->input('google_maps_link', $user->google_maps_link);
     $user->birthdate = $request->input('birthdate', $user->birthdate);
     $user->gender = $request->input('gender', $user->gender);
     $user->save();

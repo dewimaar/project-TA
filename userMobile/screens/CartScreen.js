@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Alert, ScrollView, RefreshControl } from 'react-native';
 import BottomNavbar from './BottomNavbar';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,56 +8,55 @@ import Modal from 'react-native-modal';
 
 const CartScreen = ({ navigation }) => {
     const [userId, setUserId] = useState(null);
-    // const [storeId, setStoreId] = useState(null);
     const [cartData, setCartData] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
-    useEffect(() => { 
-        const fetchUserId = async () => {
+    const fetchUserId = async () => {
+        try {
+            const token = await AsyncStorage.getItem('auth_token');
+            const response = await axios.get('http://192.168.173.23:8000/api/user', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setUserId(response.data.id);
+        } catch (error) {
+            console.error('Failed to fetch user data:', error);
+            Alert.alert('Error', 'Failed to fetch user data.');
+        }
+    };
+
+    const fetchCartData = async () => {
+        if (userId) {
             try {
                 const token = await AsyncStorage.getItem('auth_token');
-                const response = await axios.get('http://192.168.173.23:8000/api/user', {
+                const response = await axios.get(`http://192.168.173.23:8000/api/cart?user_id=${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setUserId(response.data.id);
-                // const storeResponse = await axios.get(`http://192.168.173.23:8000/api/stores/${response.data.id}`, {
-                //     headers: {
-                //       Authorization: `Bearer ${token}`,
-                //     },
-                // });
-                // setStoreId(storeResponse.data.id);
+                setCartData(response.data);
             } catch (error) {
-                console.error('Failed to fetch user data:', error);
-                Alert.alert('Error', 'Failed to fetch user data.');
+                console.error('Error fetching cart data:', error);
+                Alert.alert('Error', 'Error fetching cart data.');
             }
-        };
+        }
+    };
 
+    useEffect(() => {
         fetchUserId();
     }, []);
 
     useEffect(() => {
-        const fetchCartData = async () => {
-            if (userId) {
-                try {
-                    const token = await AsyncStorage.getItem('auth_token');
-                    const response = await axios.get(`http://192.168.173.23:8000/api/cart?user_id=${userId}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-                    setCartData(response.data);
-                } catch (error) {
-                    console.error('Error fetching cart data:', error);
-                    Alert.alert('Error', 'Error fetching cart data.');
-                }
-            }
-        }; 
-
         fetchCartData();
     }, [userId]);
+
+    const onRefresh = () => {
+        setRefreshing(true);
+        fetchCartData().finally(() => setRefreshing(false));
+    };
 
     const handleNavItemClick = (itemName) => {
         if (itemName === 'home') {
@@ -92,32 +91,9 @@ const CartScreen = ({ navigation }) => {
         setModalVisible(false);
     };
 
-    const confirmCheckout = async () => {
-        try {
-            const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.post('http://192.168.173.23:8000/api/transactions', {
-                user_id: userId,
-                // store_id: storeId,
-                items: selectedItems.map(item => ({
-                    variation_id: item.variation_id,
-                    variation_name: item.variation_name,
-                    variation_image: item.variation_image,
-                    quantity: item.quantity,
-                    unit_price: item.unit_price,
-                    total_price: item.total_price,
-                })),
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            console.log('Transaction saved:', response.data);
-            setModalVisible(false);
-            navigation.navigate('TransactionsPayment', { selectedItems });
-        } catch (error) {
-            console.error('Error saving transaction:', error);
-            Alert.alert('Error', 'Failed to save transaction.');
-        }
+    const confirmCheckout = () => {
+        setModalVisible(false);
+        navigation.navigate('TransactionsPayment', { selectedItems });
     };
 
     return (
@@ -147,6 +123,9 @@ const CartScreen = ({ navigation }) => {
                                 </View>
                             </View>
                         )}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
                     />
                     <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
                         <Text style={styles.checkoutButtonText}>Checkout</Text>
@@ -310,4 +289,3 @@ const styles = StyleSheet.create({
 });
 
 export default CartScreen;
-

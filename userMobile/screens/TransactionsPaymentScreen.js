@@ -4,9 +4,10 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useForm, Controller } from "react-hook-form";
 import UploadImages from "../components/UploadImages";
+import { Picker } from '@react-native-picker/picker';
 
 const TransactionsPaymentScreen = ({ navigation, route }) => {
-    const { control, handleSubmit, watch } = useForm({
+    const { control, handleSubmit, setValue, watch } = useForm({
         defaultValues: {
             fullAddress: '',
             googleMapsLink: '',
@@ -15,6 +16,8 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
         }
     });
     const [userId, setUserId] = useState(null);
+    const [banks, setBanks] = useState([]);
+    const [selectedBank, setSelectedBank] = useState(null);
     const selectedItems = route.params.selectedItems || [];
 
     useEffect(() => {
@@ -26,28 +29,64 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setUserId(response.data.id);
+                const userData = response.data;
+                setUserId(userData.id);
+
+                // Set the default values for the form fields
+                setValue('fullAddress', userData.address || '');
+                setValue('googleMapsLink', userData.google_maps_link || '');
             } catch (error) {
                 console.error('Failed to fetch user data:', error);
                 Alert.alert('Error', 'Failed to fetch user data.');
             }
         };
 
+        const fetchBankData = async () => {
+            try {
+                const response = await axios.get('http://192.168.173.23:8000/api/metodeTransaksi');
+                setBanks(response.data);
+            } catch (error) {
+                console.error('Failed to fetch bank data:', error);
+                Alert.alert('Error', 'Failed to fetch bank data.');
+            }
+        };
+
         fetchUserId();
+        fetchBankData();
     }, []);
+
+    const renderBankOptions = () => {
+        return banks.map((bank) => (
+            <Picker.Item key={bank.id} label={bank.bank_name} value={bank} />
+        ));
+    };
+
+    const onBankChange = (itemValue) => {
+        setSelectedBank(itemValue);
+        setValue('paymentMethod', itemValue.bank_name); // Set the payment method field
+    };
 
     const confirmCheckout = async (data) => {
         if (!userId) {
             Alert.alert('Error', 'User ID not available.');
             return;
         }
-
+    
+        if (!selectedBank) {
+            Alert.alert('Error', 'Please select a bank.');
+            return;
+        }
+    
         const formData = new FormData();
         formData.append('user_id', userId);
         formData.append('full_address', data.fullAddress);
         formData.append('google_maps_link', data.googleMapsLink);
-        formData.append('payment_method', data.paymentMethod);
-
+        formData.append('payment_method', selectedBank.bank_name); // Use bank_name as payment method
+    
+        // Append username_pengguna and no_rekening to formData
+        formData.append('username_pengguna', selectedBank.username_pengguna);
+        formData.append('no_rekening', selectedBank.no_rekening);
+    
         selectedItems.forEach((item, index) => {
             formData.append(`items[${index}][variation_id]`, item.variation_id);
             formData.append(`items[${index}][variation_name]`, item.variation_name);
@@ -56,7 +95,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
             formData.append(`items[${index}][unit_price]`, item.unit_price);
             formData.append(`items[${index}][total_price]`, item.total_price);
         });
-
+    
         data.images.forEach((image, index) => {
             formData.append(`payment_proof[${index}]`, {
                 uri: image.uri,
@@ -64,7 +103,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
                 name: image.name,
             });
         });
-
+    
         try {
             const token = await AsyncStorage.getItem('auth_token');
             const response = await axios.post('http://192.168.173.23:8000/api/transactions', formData, {
@@ -73,13 +112,36 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
                     'Content-Type': 'multipart/form-data'
                 },
             });
+    
             console.log('Transaction saved:', response.data);
-            navigation.navigate('TransactionsPayment', { selectedItems });
+    
+            // Delete items from the cart
+            const deletePromises = selectedItems.map((item) => {
+                return axios.delete(`http://192.168.173.23:8000/api/cart/${item.id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }).then(response => {
+                    console.log(`Deleted item ${item.id} from cart`);
+                }).catch(error => {
+                    console.error(`Failed to delete item ${item.id} from cart:`, error);
+                });
+            });
+    
+            await Promise.all(deletePromises);
+    
+            Alert.alert('Success', 'Transaction saved successfully.', [
+                {
+                    text: 'OK',
+                    onPress: () => navigation.navigate('Cart'),
+                },
+            ]);
         } catch (error) {
             console.error('Error saving transaction:', error);
             Alert.alert('Error', 'Failed to save transaction.');
         }
     };
+    
 
     return (
         <View style={styles.container}>
@@ -110,18 +172,22 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
                 )}
             />
             <Text style={styles.label}>Payment Method:</Text>
-            <Controller
-                control={control}
-                name="paymentMethod"
-                render={({ field: { onChange, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Enter payment method"
-                        value={value}
-                        onChangeText={onChange}
-                    />
-                )}
-            />
+            <Picker
+                selectedValue={selectedBank}
+                onValueChange={(itemValue) => onBankChange(itemValue)}
+                style={styles.input}
+            >
+                <Picker.Item label="Select a bank" value={null} />
+                {renderBankOptions()}
+            </Picker>
+            {selectedBank && (
+                <View>
+                    <Text style={styles.label}>Username Pengguna:</Text>
+                    <Text style={styles.value}>{selectedBank.username_pengguna}</Text>
+                    <Text style={styles.label}>No. Rekening:</Text>
+                    <Text style={styles.value}>{selectedBank.no_rekening}</Text>
+                </View>
+            )}
             <Text style={styles.label}>Selected Items:</Text>
             <FlatList
                 data={selectedItems}
@@ -165,6 +231,10 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 16,
         fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    value: {
+        fontSize: 16,
         marginBottom: 10,
     },
     input: {
@@ -227,4 +297,3 @@ const styles = StyleSheet.create({
 });
 
 export default TransactionsPaymentScreen;
-

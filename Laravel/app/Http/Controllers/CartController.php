@@ -48,4 +48,17 @@ class CartController extends Controller
 
         return response()->json($cartItems);
     }
+    public function deleteCartItem($id)
+{
+    $cartItem = Cart::find($id);
+
+    if (!$cartItem) {
+        return response()->json(['message' => 'Cart item not found'], 404);
+    }
+
+    $cartItem->delete();
+
+    return response()->json(['message' => 'Cart item deleted successfully']);
+}
+    
 }

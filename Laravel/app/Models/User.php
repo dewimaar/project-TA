@@ -24,6 +24,7 @@ class User extends Authenticatable
         'noTelp',
         'profile_photo',
         'address',
+        'google_maps_link',
         'birthdate',
         'gender',
     ];

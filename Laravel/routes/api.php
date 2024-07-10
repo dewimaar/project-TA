@@ -50,3 +50,6 @@ Route::middleware('auth:sanctum')->post('/payment-methods', [BankDetailControlle
 Route::get('/payment-methods/{storeId}', [BankDetailController::class, 'getPaymentMethodsByStore']);
 Route::get('/metodeTransaksi', [metodeTransaksiController::class, 'metodeTransaksi']);
 Route::middleware('auth:sanctum')->post('/transactions', [TransactionController::class, 'store']);
+Route::middleware('auth:sanctum')->delete('/cart/{id}', [CartController::class, 'deleteCartItem']);
+
+
