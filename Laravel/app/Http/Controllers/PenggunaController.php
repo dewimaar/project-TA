@@ -19,4 +19,15 @@ class PenggunaController extends Controller
             'users' => $users, // Mengirimkan data pengguna ke view
         ]);
     }
+
+    public function detailPengguna($id)
+    {
+        // Mengambil data pengguna berdasarkan ID
+        $user = User::findOrFail($id);
+        return view('admin.page.Pengguna.detailPengguna',[
+            'name' => 'Detail Pengguna',
+            'title' => 'Detail Pengguna',
+            'user' => $user,
+        ]);
+    }
 }

@@ -128,8 +128,8 @@
                                     <td>{{ $user->email }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center align-items-center gap-2">
-                                            <button class="btn-custom btn-detail" onclick="window.location='{{ route('detailPengguna', ['id' => $user->id]) }}';">Detail</button>
-                                            <button class="btn-custom btn-delete">Delete</button>
+                                            {{-- <button class="btn-custom btn-detail" onclick="window.location='{{ route('detailPengguna', ['id' => $user->id]) }}';">Detail</button> --}}
+                                            <a href="{{ route('detailPengguna', ['id' => $user->id]) }}" class="btn-custom btn-detail">Detail</a>
                                         </div>
                                     </td>
                                 </tr>

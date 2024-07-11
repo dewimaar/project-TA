@@ -19,6 +19,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
     const [banks, setBanks] = useState([]);
     const [selectedBank, setSelectedBank] = useState(null);
     const selectedItems = route.params.selectedItems || [];
+    const setResetCartItems = route.params.setResetCartItems || [];
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -133,7 +134,10 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
             Alert.alert('Success', 'Transaction saved successfully.', [
                 {
                     text: 'OK',
-                    onPress: () => navigation.navigate('Cart'),
+                    onPress: () => {
+                        setResetCartItems(true); // Set resetCartItems to true
+                        navigation.navigate('Cart');
+                    },
                 },
             ]);
         } catch (error) {

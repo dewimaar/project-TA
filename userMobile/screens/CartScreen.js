@@ -12,6 +12,17 @@ const CartScreen = ({ navigation }) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const [resetCartItems, setResetCartItems] = useState(false);
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('MyOrders')}>
+                    <Text style={styles.headerRightText}>Pesanan Saya</Text>
+                </TouchableOpacity>
+            ),
+        });
+    }, [navigation]);
 
     const fetchUserId = async () => {
         try {
@@ -27,6 +38,13 @@ const CartScreen = ({ navigation }) => {
             Alert.alert('Error', 'Failed to fetch user data.');
         }
     };
+
+    useEffect(() => {
+        if (resetCartItems) {
+            setSelectedItems([]);
+            setResetCartItems(false);
+        }
+    }, [resetCartItems]);
 
     const fetchCartData = async () => {
         if (userId) {
@@ -84,7 +102,11 @@ const CartScreen = ({ navigation }) => {
     };
 
     const handleCheckout = () => {
-        setModalVisible(true);
+        if (selectedItems.length === 0) {
+            Alert.alert('Alert', 'Pilih produk terlebih dahulu');
+        } else {
+            setModalVisible(true);
+        }
     };
 
     const closeModal = () => {
@@ -93,7 +115,7 @@ const CartScreen = ({ navigation }) => {
 
     const confirmCheckout = () => {
         setModalVisible(false);
-        navigation.navigate('TransactionsPayment', { selectedItems });
+        navigation.navigate('TransactionsPayment', { selectedItems, setResetCartItems });
     };
 
     return (
@@ -285,6 +307,11 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    headerRightText: {
+        color: '#007bff',
+        fontSize: 16,
+        marginRight: 15,
     },
 });
 

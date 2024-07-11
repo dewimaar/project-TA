@@ -51,6 +51,14 @@
         padding: 15px;
         border: 1px solid #dee2e6;
     }
+
+    .profile-photo {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
 </style>
 
 <div class="container mt-4">
@@ -62,35 +70,42 @@
                     <i class="bi bi-arrow-left-circle-fill" onclick="window.location='{{ route('pengguna') }}';"></i>
                 </div>
                 <div class="profile-body">
-                    <table class="table table-bordered">
+                    <div class="text-center">
+                        <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Profile Photo" class="profile-photo">
+                    </div>
+                    <table class="table table-bordered mt-4">
                         <tbody>
                             <tr>
                                 <th scope="row">Id</th>
-                                <td id="idPengguna">1</td>
+                                <td>{{ $user->id }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">Nama</th>
-                                <td id="namaPengguna">John Doe</td>
+                                <td>{{ $user->name }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">No Telp</th>
-                                <td id="noTelpPengguna">1234567890</td>
+                                <td>{{ $user->noTelp }}</td>
                             </tr>
                             <tr>
                                 <th scope="row">Email</th>
-                                <td id="emailPengguna">johndoe@example.com</td>
+                                <td>{{ $user->email }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Jenis Usaha</th>
-                                <td id="jenisUsahaPengguna">Retail</td>
+                                <th scope="row">Alamat</th>
+                                <td>{{ $user->address }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Nama Usaha</th>
-                                <td id="namaUsahaPengguna">Doe Mart</td>
+                                <th scope="row">Google Maps Link</th>
+                                <td>{{ $user->google_maps_link }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Alamat Usaha</th>
-                                <td id="alamatUsahaPengguna">123 Main St, Springfield</td>
+                                <th scope="row">Tanggal Lahir</th>
+                                <td>{{ $user->birthdate }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Jenis Kelamin</th>
+                                <td>{{ $user->gender }}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -114,27 +114,33 @@
                                 <tr>
                                     <th scope="col" class="col-1">ID</th>
                                     <th scope="col" class="col-4">Nama</th>
-                                    <th scope="col" class="col-3">No Telp</th>
-                                    <th scope="col" class="col-4">Email</th>
+                                    <th scope="col" class="col-3">Kategori</th>
+                                    <th scope="col" class="col-3">Nama Bank</th>
+                                    <th scope="col" class="col-3">Username Bank</th>
+                                    <th scope="col" class="col-3">No Rekening</th>
                                     <th scope="col" class="col-1">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($users as $user)
+                                @foreach ($stores as $store)
+                                @foreach ($store->bankDetails as $bankDetail)
                                 <tr>
-                                    <td>{{ $user->id }}</td>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->noTelp }}</td> <!-- Asumsikan ada kolom no telp di tabel user -->
-                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $store->id }}</td>
+                                    <td>{{ $store->name }}</td>
+                                    <td>{{ $store->category }}</td>
+                                    <td>{{ $bankDetail->bank_name }}</td>
+                                    <td>{{ $bankDetail->bank_username }}</td>
+                                    <td>{{ $bankDetail->bank_account_number }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center align-items-center gap-2">
-                                            <button class="btn-custom btn-detail" onclick="window.location='{{ route('detailPengguna', ['id' => $user->id]) }}';">Detail</button>
-                                            <button class="btn-custom btn-delete">Delete</button>
+                                            <a href="{{ route('detailMitra', ['id' => $store->id]) }}" class="btn-custom btn-detail">Detail</a>
                                         </div>
                                     </td>
                                 </tr>
                                 @endforeach
+                                @endforeach
                             </tbody>
+                            
                         </table>
                     </div>
                     <nav aria-label="Page navigation example" class="pagination-custom">

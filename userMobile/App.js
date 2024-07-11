@@ -22,6 +22,9 @@ import ProductDetailHomeScreen from './screens/ProductDetailHomeScreen';
 import TransactionsScreen from './screens/TransactionsScreen';
 import TransactionMethodsScreen from './screens/TransactionMethodsScreen';
 import TransactionsPaymentScreen from './screens/TransactionsPaymentScreen';
+import HelpSupportScreen from './screens/HelpSupportScreen';
+import AboutAppScreen from './screens/AboutAppScreen';
+import MyOrdersScreen from './screens/MyOrdersScreen';
 
 const Stack = createStackNavigator();
 
@@ -47,6 +50,9 @@ const App = () => {
         <Stack.Screen name="Transactions" component={TransactionsScreen} />
         <Stack.Screen name="TransactionMethods" component={TransactionMethodsScreen} />
         <Stack.Screen name="TransactionsPayment" component={TransactionsPaymentScreen} />
+        <Stack.Screen name="HelpSupport" component={HelpSupportScreen} options={{ title: 'Bantuan/Dukungan' }} />
+        <Stack.Screen name="AboutApp" component={AboutAppScreen} options={{ title: 'Tentang Aplikasi' }} />
+        <Stack.Screen name="MyOrders" component={MyOrdersScreen} options={{ title: 'Pesanan Saya' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -92,15 +92,6 @@ const ProfileScreen = ({ navigation }) => {
                     <Text style={styles.name}>{userData.name}</Text>
                     <Text style={styles.email}>{userData.email}</Text>
                 </View>
-                {userData.store && (
-                    <View style={styles.storeInfo}>
-                        <Text style={styles.storeTitle}>Informasi Toko</Text>
-                        <Text style={styles.storeDetail}>Nama Toko: {userData.store.name}</Text>
-                        <Text style={styles.storeDetail}>Kategori: {userData.store.category}</Text>
-                        <Text style={styles.storeDetail}>Alamat: {userData.store.address}</Text>
-                        <Text style={styles.storeDetail}>Deskripsi: {userData.store.description}</Text>
-                    </View>
-                )}
                 <View style={styles.menu}>
                     <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
                         <Icon name="call-outline" size={20} color="#00796B" style={styles.menuIcon} />
@@ -127,11 +118,19 @@ const ProfileScreen = ({ navigation }) => {
                         <Text style={styles.menuText}>Jenis Kelamin</Text>
                         <Text style={styles.menuDetail}>{userData.gender}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+                    <TouchableOpacity 
+                        style={styles.menuItem} 
+                        activeOpacity={0.7}
+                        onPress={() => navigation.navigate('HelpSupport')}
+                    >
                         <Icon name="help-circle-outline" size={20} color="#00796B" style={styles.menuIcon} />
                         <Text style={styles.menuText}>Bantuan/Dukungan</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+                    <TouchableOpacity 
+                        style={styles.menuItem} 
+                        activeOpacity={0.7}
+                        onPress={() => navigation.navigate('AboutApp')}
+                    >
                         <Icon name="information-circle-outline" size={20} color="#00796B" style={styles.menuIcon} />
                         <Text style={styles.menuText}>Tentang Aplikasi</Text>
                     </TouchableOpacity>
@@ -162,7 +161,7 @@ const styles = StyleSheet.create({
         paddingBottom: 80,
     },
     header: {
-        backgroundColor: 'transparent',  // Ganti warna latar belakang menjadi transparan
+        backgroundColor: 'transparent',  
         paddingVertical: 30,
         alignItems: 'center',
     },

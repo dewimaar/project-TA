@@ -24,30 +24,30 @@ class Controller extends BaseController
     //         'title' => 'Pengguna',
     //     ]);
     // }
-    public function detailPengguna ()
-    {
-        return view('admin.page.Pengguna.detailPengguna',[
-            'name' => 'Detail Pengguna',
-            'title' => 'Detail Pengguna',
-        ]);
-    }
-    public function mitraUsaha ()
-    {
-        $users = User::all(); // Contoh pengambilan data pengguna (pastikan model dan querynya disesuaikan)
+    // public function detailPengguna ()
+    // {
+    //     return view('admin.page.Pengguna.detailPengguna',[
+    //         'name' => 'Detail Pengguna',
+    //         'title' => 'Detail Pengguna',
+    //     ]);
+    // }
+    // public function mitraUsaha ()
+    // {
+    //     $users = User::all(); // Contoh pengambilan data pengguna (pastikan model dan querynya disesuaikan)
         
-        return view('admin.page.mitraUsaha.mitraUsaha',[
-            'name' => 'Mitra Usaha',
-            'title' => 'Mitra Usaha',
-            'users' => $users,
-        ]);
-    }
-    public function detailMitra ()
-    {
-        return view('admin.page.mitraUsaha.detailMitra',[
-            'name' => 'Detail Mitra',
-            'title' => 'Detail Mitra',
-        ]);
-    }
+    //     return view('admin.page.mitraUsaha.mitraUsaha',[
+    //         'name' => 'Mitra Usaha',
+    //         'title' => 'Mitra Usaha',
+    //         'users' => $users,
+    //     ]);
+    // }
+    // public function detailMitra ()
+    // {
+    //     return view('admin.page.mitraUsaha.detailMitra',[
+    //         'name' => 'Detail Mitra',
+    //         'title' => 'Detail Mitra',
+    //     ]);
+    // }
     public function rekapPenghasilan ()
     {
         return view('admin.page.rekapPenghasilan',[
