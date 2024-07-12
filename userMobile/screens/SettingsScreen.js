@@ -26,7 +26,7 @@ const SettingsScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Settings</Text>
+            <Text style={styles.title}>Pengaturan</Text>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <Text style={styles.sectionTitle}>Notifikasi Email</Text>
                 <View style={styles.settingItem}>

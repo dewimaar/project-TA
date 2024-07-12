@@ -1,24 +1,45 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 const HelpSupportScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Halaman Bantuan/Dukungan</Text>
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Bantuan/Dukungan</Text>
+      </View>
+      <Text style={styles.content}>
+        Jika Anda membutuhkan bantuan, silakan hubungi kami melalui email 33421307.dewi@mhs.polines.ac.id atau telepon di nomor +62 85606 990671.
+      </Text>
+      <Text style={styles.content}>
+        Kami tersedia 24/7 untuk membantu Anda dengan masalah atau pertanyaan apa pun yang Anda miliki.
+      </Text>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
+    flexGrow: 1,
+    padding: 20,
+    backgroundColor: '#ffffff',
   },
-  text: {
-    fontSize: 18,
+  headerContainer: {
+    backgroundColor: '#3498db',
+    paddingVertical: 20,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  header: {
+    fontSize: 26,
     fontWeight: 'bold',
+    color: '#ffffff',
+    textAlign: 'center',
+  },
+  content: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#34495e',
+    marginBottom: 10,
   },
 });
 
