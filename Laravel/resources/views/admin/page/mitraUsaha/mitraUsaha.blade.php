@@ -69,12 +69,12 @@
     }
 
     .btn-detail {
-        background-color: #007bff;
+        background-color: #00796B;
         color: white;
     }
 
     .btn-detail:hover {
-        background-color: #0056b3;
+        background-color: #7fb0aa;
     }
 
     .btn-delete {

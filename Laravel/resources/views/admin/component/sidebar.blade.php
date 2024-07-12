@@ -1,12 +1,9 @@
 <aside id="sidebar">
 
-    <div class="d-flex">
-        <button class="toggle-btn" type="button">
-            <i class="lni lni-cart-full"></i>
-        </button>
-        <div class="sidebar-logo">
-            <a href="#">Marketplace</a>
-        </div>
+    <div class="sidebar-logo">
+        <a href="#">
+            <img src="/img/logoo.png" class="sidebar-logo-img" alt="Logo">
+        </a>
     </div>
     <ul class="sidebar-nav">
         <li class="sidebar-item {{ Request::path() == 'admin/dashboard' ? 'active' : '' }}">
@@ -29,7 +26,7 @@
         </li>
         <li class="sidebar-item {{ Request::path() == 'admin/metodeTransaksi' ? 'active' : '' }}">
             <a href="/admin/metodeTransaksi" class="sidebar-link">
-                <i class="bi bi-building"></i>
+                <i class="bi bi-credit-card"></i>
                 <span>Metode Transaksi</span>
             </a>
         </li>

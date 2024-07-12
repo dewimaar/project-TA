@@ -17,6 +17,7 @@ h1 {
     font-weight: 600;
     font-size: 1.5rem;
 }
+
 .wrapper {
     display: flex;
     position: relative;
@@ -27,19 +28,23 @@ h1 {
     width: 100%;
     overflow: hidden;
     transition: all 0.35s ease-in-out;
-    background-color: #EDECEA;
+    background-color: #EBF1F5;
     margin-left: 70px;
 }
+
 #sidebar {
     width: 220px;
     min-width: 220px;
     position: fixed;
     z-index: 2000;
     transition: all .25s ease-in-out;
-    background-color: #283618;
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
     height: 100vh;
+    border-top-left-radius: 20px; /* Lengkungan pada sudut kiri atas */
+    border-bottom-left-radius: 20px; /* Lengkungan pada sudut kiri bawah */
+    overflow: hidden; /* Pastikan lengkungan terlihat */
 }
 
 #sidebar.expand {
@@ -56,21 +61,25 @@ h1 {
 
 .toggle-btn i {
     font-size: 1.5rem;
-    color: #FFF;
+    color: #000000;
 }
 
 .sidebar-logo {
-    margin: auto 0;
-    margin-left: -12px;
-    white-space: nowrap;
+    text-align: center;
+    margin: 0.5rem 0;
 }
 
-.sidebar-logo a {
-    color: #FFF;
-    font-size: 1.15rem;
-    font-weight: 600;
+.sidebar-nav {
+    margin-top: 0.5rem;
 }
 
+.sidebar-logo-img {
+    width: 80%;
+    max-width: 150px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
 
 #sidebar:not(.expand) .sidebar-logo,
 #sidebar:not(.expand) a.sidebar-link span {
@@ -84,7 +93,7 @@ h1 {
 
 a.sidebar-link {
     padding: .625rem 1.625rem;
-    color: #FFF;
+    color: #000000;
     display: block;
     font-size: 0.9rem;
     white-space: nowrap;
@@ -96,17 +105,23 @@ a.sidebar-link {
     margin-right: .75rem;
 }
 
-a.sidebar-link:hover {
+.sidebar-link:hover {
     background-color: rgba(255, 255, 255, .075);
-    border-left: 3px solid #3b7ddd;
+    color: #307743;
 }
 
 .sidebar-item {
     position: relative;
 }
+
 .sidebar-item.active {
     background-color: rgba(255, 255, 255, .075);
     border-left: 3px solid #3b7ddd;
+}
+
+.sidebar-item.active .sidebar-link {
+    background-color: #d6e4f0; /* Ganti dengan warna yang diinginkan */
+    color: #000000; /* Ganti dengan warna teks yang diinginkan */
 }
 
 #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
@@ -141,12 +156,12 @@ a.sidebar-link:hover {
 
 #sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
     transform: rotate(45deg);
-    transition: all .2s ease-out;
+    transition: all .2s ease-out;
 }
 
 /* desain table */
 .table-bordered th,
-    .table-bordered td {
-        border: 2px solid #b6b6b6;
-        background-color: #f0efef;
-    }
+.table-bordered td {
+    border: 2px solid #f0efef;
+    background-color: #ffffff;
+}
