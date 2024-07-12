@@ -51,5 +51,6 @@ Route::get('/payment-methods/{storeId}', [BankDetailController::class, 'getPayme
 Route::get('/metodeTransaksi', [metodeTransaksiController::class, 'metodeTransaksi']);
 Route::middleware('auth:sanctum')->post('/transactions', [TransactionController::class, 'store']);
 Route::middleware('auth:sanctum')->delete('/cart/{id}', [CartController::class, 'deleteCartItem']);
-
-
+Route::middleware('auth:sanctum')->get('/transactions', [TransactionController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/transactions/{id}', [TransactionController::class, 'show']);
+Route::put('/transactions/{id}/status', [TransactionController::class, 'updateStatus']);

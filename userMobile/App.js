@@ -20,11 +20,13 @@ import MyProductsScreen from './screens/MyProductsScreen';
 import ProductDetailScreen from './screens/ProductDetailScreen';
 import ProductDetailHomeScreen from './screens/ProductDetailHomeScreen';
 import TransactionsScreen from './screens/TransactionsScreen';
+import TransactionDetailScreen from './screens/TransactionDetailScreen';
 import TransactionMethodsScreen from './screens/TransactionMethodsScreen';
 import TransactionsPaymentScreen from './screens/TransactionsPaymentScreen';
 import HelpSupportScreen from './screens/HelpSupportScreen';
 import AboutAppScreen from './screens/AboutAppScreen';
 import MyOrdersScreen from './screens/MyOrdersScreen';
+import MyOrdersDetailScreen from './screens/MyOrdersDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -48,11 +50,13 @@ const App = () => {
         <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
         <Stack.Screen name="ProductDetailHome" component={ProductDetailHomeScreen} />
         <Stack.Screen name="Transactions" component={TransactionsScreen} />
+        <Stack.Screen name="TransactionDetail" component={TransactionDetailScreen} />
         <Stack.Screen name="TransactionMethods" component={TransactionMethodsScreen} />
         <Stack.Screen name="TransactionsPayment" component={TransactionsPaymentScreen} />
         <Stack.Screen name="HelpSupport" component={HelpSupportScreen} options={{ title: 'Bantuan/Dukungan' }} />
         <Stack.Screen name="AboutApp" component={AboutAppScreen} options={{ title: 'Tentang Aplikasi' }} />
         <Stack.Screen name="MyOrders" component={MyOrdersScreen} options={{ title: 'Pesanan Saya' }} />
+        <Stack.Screen name="MyOrdersDetail" component={MyOrdersDetailScreen} options={{ title: 'Detail Pesanan Saya' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

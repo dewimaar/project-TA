@@ -58,4 +58,40 @@ class TransactionController extends Controller
         return response()->json(['error' => 'Internal Server Error'], 500);
     }
 }
+public function index(Request $request)
+{
+    try {
+        $userId = $request->user()->id;
+        $transactions = Transaction::where('user_id', $userId)->get();
+
+        return response()->json($transactions, 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Internal Server Error'], 500);
+    }
+}
+
+public function show($id)
+{
+    try {
+        $transaction = Transaction::findOrFail($id);
+        return response()->json($transaction, 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Transaction not found'], 404);
+    }
+}
+public function updateStatus(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|string|in:Pending,Diproses,Dikirim,Selesai,Dibatalkan',
+    ]);
+
+    $transaction = Transaction::findOrFail($id);
+    $transaction->status = $request->status;
+    $transaction->save();
+
+    return response()->json([
+        'message' => 'Status updated successfully.',
+        'transaction' => $transaction,
+    ]);
+}
 }

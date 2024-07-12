@@ -23,5 +23,12 @@ class Transaction extends Model
         'payment_proof',
         'username_pengguna',
         'no_rekening',
+        'status',
     ];
+
+    const STATUS_PENDING = 'Pending';
+    const STATUS_PROCESSED = 'Diproses';
+    const STATUS_SHIPPED = 'Dikirim';
+    const STATUS_COMPLETED = 'Selesai';
+    const STATUS_CANCELLED = 'Dibatalkan';
 }

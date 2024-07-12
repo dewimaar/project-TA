@@ -539,6 +539,7 @@ class ComposerStaticInite12979695ee2d9934ddad3eef4e08007
         'App\\Http\\Controllers\\StoreController' => __DIR__ . '/../..' . '/app/Http/Controllers/StoreController.php',
         'App\\Http\\Controllers\\TransactionController' => __DIR__ . '/../..' . '/app/Http/Controllers/TransactionController.php',
         'App\\Http\\Controllers\\metodeTransaksiController' => __DIR__ . '/../..' . '/app/Http/Controllers/metodeTransaksiController.php',
+        'App\\Http\\Controllers\\mitraController' => __DIR__ . '/../..' . '/app/Http/Controllers/mitraController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\AdminAuth' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminAuth.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',

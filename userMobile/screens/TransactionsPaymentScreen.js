@@ -136,7 +136,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
                     text: 'OK',
                     onPress: () => {
                         setResetCartItems(true); // Set resetCartItems to true
-                        navigation.navigate('Cart');
+                        navigation.navigate('MyOrders');
                     },
                 },
             ]);

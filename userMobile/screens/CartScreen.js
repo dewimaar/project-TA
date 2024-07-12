@@ -118,6 +118,14 @@ const CartScreen = ({ navigation }) => {
         navigation.navigate('TransactionsPayment', { selectedItems, setResetCartItems });
     };
 
+    const formatPrice = (price) => {
+        if (price === undefined || price === null || isNaN(Number(price))) {
+            return 'Price not available';
+        }
+        const numberPrice = Number(price);
+        return `Rp ${numberPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+    };
+
     return (
         <View style={styles.container}>
             {cartData.length === 0 ? (
@@ -141,7 +149,7 @@ const CartScreen = ({ navigation }) => {
                                 />
                                 <View style={styles.itemDetails}>
                                     <Text style={styles.itemTitle}>{item.variation_name}</Text>
-                                    <Text style={styles.itemPrice}>{item.total_price}</Text>
+                                    <Text style={styles.itemPrice}>{formatPrice(item.total_price)}</Text>
                                 </View>
                             </View>
                         )}
@@ -169,7 +177,7 @@ const CartScreen = ({ navigation }) => {
                                 />
                                 <View style={styles.modalItemDetails}>
                                     <Text style={styles.modalItemTitle}>{item.variation_name}</Text>
-                                    <Text style={styles.modalItemPrice}>{item.total_price}</Text>
+                                    <Text style={styles.modalItemPrice}>{formatPrice(item.total_price)}</Text>
                                 </View>
                             </View>
                         ))}
