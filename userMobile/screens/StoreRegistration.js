@@ -49,7 +49,7 @@ const StoreRegistration = ({ navigation }) => {
                 const token = await AsyncStorage.getItem('auth_token');
                 console.log('Retrieved Token:', token);
 
-                const response = await axios.get('http://192.168.99.23:8000/api/user', {
+                const response = await axios.get('http://192.168.0.23:8000/api/user', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -77,7 +77,7 @@ const StoreRegistration = ({ navigation }) => {
             formData.append("image", gambar);
             console.log('g', gambar);
           });
-        const { data } = await axios.post('http://192.168.99.23:8000/api/stores', formData, {
+        const { data } = await axios.post('http://192.168.0.23:8000/api/stores', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },

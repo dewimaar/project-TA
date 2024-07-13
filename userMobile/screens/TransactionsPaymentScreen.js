@@ -25,7 +25,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
         const fetchUserId = async () => {
             try {
                 const token = await AsyncStorage.getItem('auth_token');
-                const response = await axios.get('http://192.168.99.23:8000/api/user', {
+                const response = await axios.get('http://192.168.0.23:8000/api/user', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -44,7 +44,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
 
         const fetchBankData = async () => {
             try {
-                const response = await axios.get('http://192.168.99.23:8000/api/metodeTransaksi');
+                const response = await axios.get('http://192.168.0.23:8000/api/metodeTransaksi');
                 setBanks(response.data);
             } catch (error) {
                 console.error('Failed to fetch bank data:', error);
@@ -107,7 +107,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
     
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.post('http://192.168.99.23:8000/api/transactions', formData, {
+            const response = await axios.post('http://192.168.0.23:8000/api/transactions', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -118,7 +118,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
     
             // Delete items from the cart
             const deletePromises = selectedItems.map((item) => {
-                return axios.delete(`http://192.168.99.23:8000/api/cart/${item.id}`, {
+                return axios.delete(`http://192.168.0.23:8000/api/cart/${item.id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -200,7 +200,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
                     <View style={styles.cartItem}>
                         <Image
                             style={styles.itemImage}
-                            source={{ uri: `http://192.168.99.23:8000/storage/${item.variation_image}` }}
+                            source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
                             resizeMode="contain"
                         />
                         <View style={styles.itemDetails}>

@@ -15,7 +15,7 @@ const MarketScreen = ({ navigation }) => {
       const token = await AsyncStorage.getItem("auth_token");
       console.log("Retrieved Token:", token);
 
-      const response = await axios.get("http://192.168.99.23:8000/api/user", {
+      const response = await axios.get("http://192.168.0.23:8000/api/user", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -30,7 +30,7 @@ const MarketScreen = ({ navigation }) => {
 
   const fetchStore = async () => {
     try {
-      const response = await fetch(`http://192.168.99.23:8000/api/stores/${userData.id}`);
+      const response = await fetch(`http://192.168.0.23:8000/api/stores/${userData.id}`);
       if (response.ok) {
         const data = await response.json();
         setStore(data);
@@ -95,7 +95,7 @@ const MarketScreen = ({ navigation }) => {
               <Image
                 style={styles.image}
                 source={{
-                  uri: `http://192.168.99.23:8000/storage/${store.image}`,
+                  uri: `http://192.168.0.23:8000/storage/${store.image}`,
                 }}
                 resizeMode="contain"
               />

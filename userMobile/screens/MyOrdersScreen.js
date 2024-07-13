@@ -16,7 +16,7 @@ const MyOrdersScreen = ({ navigation }) => {
           return;
         }
 
-        const response = await axios.get('http://192.168.99.23:8000/api/transactions', {
+        const response = await axios.get('http://192.168.0.23:8000/api/transactions', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -51,7 +51,7 @@ const MyOrdersScreen = ({ navigation }) => {
           <View style={styles.card}>
             <Image
               style={styles.modalItemImage}
-              source={{ uri: `http://192.168.99.23:8000/storage/${item.variation_image}` }}
+              source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
               resizeMode="contain"
             />
             <View style={styles.cardContent}>

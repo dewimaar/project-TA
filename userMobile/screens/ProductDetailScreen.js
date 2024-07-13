@@ -9,7 +9,7 @@ const ProductDetailScreen = ({ route }) => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`http://192.168.99.23:8000/api/products/detail/${productId}`);
+        const response = await axios.get(`http://192.168.0.23:8000/api/products/detail/${productId}`);
         setProduct(response.data);
       } catch (error) {
         console.error('Failed to fetch product details:', error);
@@ -39,7 +39,7 @@ const ProductDetailScreen = ({ route }) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Image
         style={styles.productImage}
-        source={{ uri: `http://192.168.99.23:8000/storage/${product.image}` }}
+        source={{ uri: `http://192.168.0.23:8000/storage/${product.image}` }}
         resizeMode="contain"
       />
       <Text style={styles.productName}>{product.name}</Text>
@@ -53,7 +53,7 @@ const ProductDetailScreen = ({ route }) => {
           {variation.image && (
             <Image
               style={styles.variationImage}
-              source={{ uri: `http://192.168.99.23:8000/storage/${variation.image}` }}
+              source={{ uri: `http://192.168.0.23:8000/storage/${variation.image}` }}
               resizeMode="contain"
             />
           )}

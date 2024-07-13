@@ -27,7 +27,7 @@ const CartScreen = ({ navigation }) => {
     const fetchUserId = async () => {
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.get('http://192.168.99.23:8000/api/user', {
+            const response = await axios.get('http://192.168.0.23:8000/api/user', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -50,7 +50,7 @@ const CartScreen = ({ navigation }) => {
         if (userId) {
             try {
                 const token = await AsyncStorage.getItem('auth_token');
-                const response = await axios.get(`http://192.168.99.23:8000/api/cart?user_id=${userId}`, {
+                const response = await axios.get(`http://192.168.0.23:8000/api/cart?user_id=${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -144,7 +144,7 @@ const CartScreen = ({ navigation }) => {
                                 />
                                 <Image
                                     style={styles.itemImage}
-                                    source={{ uri: `http://192.168.99.23:8000/storage/${item.variation_image}` }}
+                                    source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
                                     resizeMode="contain"
                                 />
                                 <View style={styles.itemDetails}>
@@ -172,7 +172,7 @@ const CartScreen = ({ navigation }) => {
                             <View key={item.id} style={styles.modalItem}>
                                 <Image
                                     style={styles.modalItemImage}
-                                    source={{ uri: `http://192.168.99.23:8000/storage/${item.variation_image}` }}
+                                    source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
                                     resizeMode="contain"
                                 />
                                 <View style={styles.modalItemDetails}>

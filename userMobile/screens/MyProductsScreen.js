@@ -11,7 +11,7 @@ const MyProductsScreen = ({ navigation }) => {
   const fetchUserData = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get('http://192.168.99.23:8000/api/user', {
+      const response = await axios.get('http://192.168.0.23:8000/api/user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -25,7 +25,7 @@ const MyProductsScreen = ({ navigation }) => {
   const fetchProducts = async () => {
     if (!userData) return;
     try {
-      const response = await axios.get(`http://192.168.99.23:8000/api/products/${userData.id}`);
+      const response = await axios.get(`http://192.168.0.23:8000/api/products/${userData.id}`);
       const updatedProducts = response.data.map(product => ({
         ...product,
         images: Array.isArray(product.image) ? product.image : [product.image]
@@ -55,7 +55,7 @@ const MyProductsScreen = ({ navigation }) => {
         <Image
           key={index}
           style={styles.productImage}
-          source={{ uri: `http://192.168.99.23:8000/storage/${image}` }}
+          source={{ uri: `http://192.168.0.23:8000/storage/${image}` }}
           resizeMode="contain"
         />
       ))}

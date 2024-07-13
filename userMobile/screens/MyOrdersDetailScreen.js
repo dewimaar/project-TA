@@ -16,7 +16,7 @@ const MyOrdersDetailScreen = ({ route }) => {
           return;
         }
 
-        const response = await axios.get(`http://192.168.99.23:8000/api/transactions/${transactionId}`, {
+        const response = await axios.get(`http://192.168.0.23:8000/api/transactions/${transactionId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -44,7 +44,7 @@ const MyOrdersDetailScreen = ({ route }) => {
       <Text style={styles.title}>Detail Transaksi</Text>
       <Image
         style={styles.itemImage}
-        source={{ uri: `http://192.168.99.23:8000/storage/${transaction.variation_image}` }}
+        source={{ uri: `http://192.168.0.23:8000/storage/${transaction.variation_image}` }}
         resizeMode="contain"
       />
       <Text style={styles.itemText}>Nama Produk: {transaction.variation_name}</Text>
