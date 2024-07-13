@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('bank_transfers', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('store_id');
+            $table->unsignedBigInteger('transaction_id');
+            $table->string('bank_name');
+            $table->string('bank_username');
+            $table->string('bank_account_number');
+            $table->string('payment_image');
+            $table->timestamps();
+
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
+            $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('bank_transfers');
+    }
+};

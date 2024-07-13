@@ -10,7 +10,7 @@ class Transaction extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
-        // 'store_id',
+        'store_id',
         'variation_id',
         'variation_name',
         'variation_image',
@@ -31,4 +31,13 @@ class Transaction extends Model
     const STATUS_SHIPPED = 'Dikirim';
     const STATUS_COMPLETED = 'Selesai';
     const STATUS_CANCELLED = 'Dibatalkan';
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

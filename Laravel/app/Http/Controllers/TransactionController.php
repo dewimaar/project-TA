@@ -14,6 +14,7 @@ class TransactionController extends Controller
             'user_id' => 'required|exists:users,id',
             'items' => 'required|array',
             'items.*.variation_id' => 'required',
+            'items.*.store_id' => 'required',
             'items.*.variation_name' => 'required',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.unit_price' => 'required|numeric|min:0',
@@ -37,6 +38,7 @@ class TransactionController extends Controller
         foreach ($request->items as $item) {
             Transaction::create([
                 'user_id' => $request->user_id,
+                'store_id' => $item['store_id'],
                 'variation_id' => $item['variation_id'],
                 'variation_name' => $item['variation_name'],
                 'variation_image' => $item['variation_image'] ?? null,
@@ -69,11 +71,22 @@ public function index(Request $request)
         return response()->json(['error' => 'Internal Server Error'], 500);
     }
 }
+public function indexUser($id)
+{
+    try {
+        
+        $transactions = Transaction::where('store_id', $id)->get();
+
+        return response()->json($transactions, 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Internal Server Error'], 500);
+    }
+}
 
 public function show($id)
 {
     try {
-        $transaction = Transaction::findOrFail($id);
+        $transaction = Transaction::with('user')->find($id);
         return response()->json($transaction, 200);
     } catch (\Exception $e) {
         return response()->json(['error' => 'Transaction not found'], 404);

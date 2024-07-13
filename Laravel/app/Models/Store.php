@@ -26,4 +26,10 @@ class Store extends Model
     {
         return $this->hasMany(BankDetail::class);
     }
+
+    public function banks()
+    {
+        return $this->hasMany(BankDetail::class);
+    }
+
 }

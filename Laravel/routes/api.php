@@ -42,7 +42,7 @@ Route::get('/stores/{id}', [StoreController::class, 'show']);
 Route::post('/products', [ProductController::class, 'store']);
 Route::get('/products/{userId}', [ProductController::class, 'getProductsByUser']);
 Route::get('/products/detail/{id}', [ProductController::class, 'show']);
-Route::get('/products', [ProductController::class, 'getAllProducts']);
+Route::get('/product/{userId}', [ProductController::class, 'getAllProducts']);
 
 Route::post('/cart', [CartController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'index']);
@@ -53,4 +53,5 @@ Route::middleware('auth:sanctum')->post('/transactions', [TransactionController:
 Route::middleware('auth:sanctum')->delete('/cart/{id}', [CartController::class, 'deleteCartItem']);
 Route::middleware('auth:sanctum')->get('/transactions', [TransactionController::class, 'index']);
 Route::middleware('auth:sanctum')->get('/transactions/{id}', [TransactionController::class, 'show']);
+Route::get('/transaction/{id}', [TransactionController::class, 'indexUser']);
 Route::put('/transactions/{id}/status', [TransactionController::class, 'updateStatus']);

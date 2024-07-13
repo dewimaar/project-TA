@@ -11,6 +11,7 @@ const CartScreen = ({ navigation }) => {
     const [cartData, setCartData] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
+  const [store, setStore] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
     const [resetCartItems, setResetCartItems] = useState(false);
 
@@ -62,6 +63,26 @@ const CartScreen = ({ navigation }) => {
             }
         }
     };
+
+    useEffect(() => {
+        const fetchStore = async () => {
+          if (userId) {
+            try {
+              const response = await fetch(`http://192.168.0.23:8000/api/stores/${userId}`);
+              if (response.ok) {
+                const data = await response.json();
+                setStore(data);
+              } else {
+                Alert.alert('Error', 'Failed to fetch store data');
+              }
+            } catch (error) {
+              Alert.alert('Error', 'Failed to fetch store data');
+            }
+          }
+        };
+    
+        fetchStore();
+      }, [userId]);
 
     useEffect(() => {
         fetchUserId();
@@ -149,6 +170,7 @@ const CartScreen = ({ navigation }) => {
                                 />
                                 <View style={styles.itemDetails}>
                                     <Text style={styles.itemTitle}>{item.variation_name}</Text>
+                                    <Text style={styles.itemTitle}>{item.store.name}</Text>
                                     <Text style={styles.itemPrice}>{formatPrice(item.total_price)}</Text>
                                 </View>
                             </View>

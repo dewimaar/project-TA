@@ -36,6 +36,12 @@
                 <span>Riwayat Transaksi</span>
             </a>
         </li>
+        <li class="sidebar-item {{ Request::path() == 'admin/transaksi' ? 'active' : '' }}">
+            <a href="/admin/transaksi" class="sidebar-link">
+                <i class="bi bi-clock-history"></i>
+                <span>Transaksi</span>
+            </a>
+        </li>
         <li class="sidebar-item {{ Request::path() == 'admin/rekapPenghasilan' ? 'active' : '' }}">
             <a href="/admin/rekapPenghasilan" class="sidebar-link">
                 <i class="bi bi-file-earmark-bar-graph"></i>

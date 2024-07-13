@@ -38,12 +38,12 @@ const App = () => {
         <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{headerLeft:()=>null}}/>
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{headerLeft:()=>null}}/>
         <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-        <Stack.Screen name="Market" component={MarketScreen} />
-        <Stack.Screen name="Cart" component={CartScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="Market" component={MarketScreen} options={{headerLeft:()=>null}}/>
+        <Stack.Screen name="Cart" component={CartScreen} options={{headerLeft:()=>null}} />
+        <Stack.Screen name="Settings" component={SettingsScreen} options={{headerLeft:()=>null}} />
         <Stack.Screen name="StoreRegistration" component={StoreRegistration} />
         <Stack.Screen name="AddProduct" component={AddProductScreen} />
         <Stack.Screen name="MyProducts" component={MyProductsScreen} />

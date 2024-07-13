@@ -17,6 +17,7 @@ class ProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required|exists:users,id',
+            'store_id' => 'required|exists:stores,id',
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -39,6 +40,7 @@ class ProductController extends Controller
 
         $product = Product::create([
             'user_id' => $request->user_id,
+            'store_id' => $request->store_id,
             'name' => $request->name,
             'description' => $request->description,
             'image' => $productImagePaths,
@@ -80,9 +82,9 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function getAllProducts()
+    public function getAllProducts($userId)
     {
-        $products = Product::with('variations')->get();
+        $products = Product::with('variations', 'store')->where('user_id','!=', $userId)->get();
         return response()->json($products, 200);
     }
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, FlatList, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, FlatList, Image, ScrollView } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useForm, Controller } from "react-hook-form";
@@ -17,10 +17,11 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
     });
     const [userId, setUserId] = useState(null);
     const [banks, setBanks] = useState([]);
+    const [store, setStore] = useState(null);
     const [selectedBank, setSelectedBank] = useState(null);
     const selectedItems = route.params.selectedItems || [];
     const setResetCartItems = route.params.setResetCartItems || [];
-
+console.log('id',selectedItems);
     useEffect(() => {
         const fetchUserId = async () => {
             try {
@@ -90,6 +91,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
     
         selectedItems.forEach((item, index) => {
             formData.append(`items[${index}][variation_id]`, item.variation_id);
+            formData.append(`items[${index}][store_id]`, item.store.id);
             formData.append(`items[${index}][variation_name]`, item.variation_name);
             formData.append(`items[${index}][variation_image]`, item.variation_image);
             formData.append(`items[${index}][quantity]`, item.quantity);
@@ -146,9 +148,33 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
         }
     };
     
+    const formatRupiah = (amount) => {
+        return 'Rp ' + Number(amount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    };
 
     return (
         <View style={styles.container}>
+            <Text style={styles.label}>Selected Items:</Text>
+            <FlatList
+                data={selectedItems}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.cartItem}>
+                        <Image
+                            style={styles.itemImage}
+                            source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
+                            resizeMode="contain"
+                        />
+                        <View style={styles.itemDetails}>
+                            <Text style={styles.itemTitle}>{item.variation_name}</Text>
+                            <Text style={styles.itemTitle}>{item.store.name}</Text>
+                            <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
+                            <Text style={styles.itemPrice}>Unit Price: {formatRupiah(item.unit_price)}</Text>
+                            <Text style={styles.itemTotalPrice}>Total Price: {formatRupiah(item.total_price)}</Text>
+                        </View>
+                    </View>
+                )}
+            />
             <Text style={styles.label}>Full Address:</Text>
             <Controller
                 control={control}
@@ -192,26 +218,6 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
                     <Text style={styles.value}>{selectedBank.no_rekening}</Text>
                 </View>
             )}
-            <Text style={styles.label}>Selected Items:</Text>
-            <FlatList
-                data={selectedItems}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <View style={styles.cartItem}>
-                        <Image
-                            style={styles.itemImage}
-                            source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
-                            resizeMode="contain"
-                        />
-                        <View style={styles.itemDetails}>
-                            <Text style={styles.itemTitle}>{item.variation_name}</Text>
-                            <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
-                            <Text style={styles.itemPrice}>Unit Price: {item.unit_price}</Text>
-                            <Text style={styles.itemTotalPrice}>Total Price: {item.total_price}</Text>
-                        </View>
-                    </View>
-                )}
-            />
             <UploadImages
                 name="images"
                 control={control}

@@ -24,6 +24,7 @@ const AddProductScreen = ({ navigation }) => {
     },
   });
   const [userData, setUserData] = useState(null);
+  const [store, setStore] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -47,6 +48,26 @@ const AddProductScreen = ({ navigation }) => {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    const fetchStore = async () => {
+      if (userData) {
+        try {
+          const response = await fetch(`http://192.168.0.23:8000/api/stores/${userData.id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setStore(data);
+          } else {
+            Alert.alert('Error', 'Failed to fetch store data');
+          }
+        } catch (error) {
+          Alert.alert('Error', 'Failed to fetch store data');
+        }
+      }
+    };
+
+    fetchStore();
+  }, [userData]);
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "variations",
@@ -54,14 +75,15 @@ const AddProductScreen = ({ navigation }) => {
 
   const onSubmit = async (data) => {
     try {
-      if (!userData) {
-        Alert.alert("Error", "User data is not available.");
+      if (!userData || !store) {
+        Alert.alert("Error", "User or store data is not available.");
         return;
       }
 
       const token = await AsyncStorage.getItem("auth_token");
       const formData = new FormData();
       formData.append('user_id', String(userData.id));
+      formData.append('store_id', String(store.id)); // Include store_id
       formData.append("name", data.name);
       formData.append("description", data.description);
 

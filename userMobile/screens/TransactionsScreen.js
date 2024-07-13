@@ -6,8 +6,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TransactionsScreen = ({ navigation }) => {
   const [transactions, setTransactions] = useState([]);
+  const [store, setStore] = useState(null);
+  const [userData, setUserData] = useState(null);
 
-  useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('auth_token');
+      const response = await axios.get('http://192.168.0.23:8000/api/user', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUserData(response.data);
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+    }
+  };
+
+
     const fetchTransactions = async () => {
       try {
         const token = await AsyncStorage.getItem('auth_token');
@@ -16,7 +32,7 @@ const TransactionsScreen = ({ navigation }) => {
           return;
         }
 
-        const response = await axios.get('http://192.168.0.23:8000/api/transactions', {
+        const response = await axios.get(`http://192.168.0.23:8000/api/transaction/${store.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -33,8 +49,35 @@ const TransactionsScreen = ({ navigation }) => {
       }
     };
 
-    fetchTransactions();
+    const fetchStore = async () => {
+      try {
+        const response = await fetch(`http://192.168.0.23:8000/api/stores/${userData.id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setStore(data);
+        } else {
+          // Alert.alert('Error', 'Failed to fetch store data');
+        }
+      } catch (error) {
+        // Alert.alert('Error', 'Failed to fetch store data');
+      }
+    };
+  
+  useEffect(() => {
+    fetchUserData();
   }, []);
+
+  useEffect(() => {
+    if (userData) {
+      fetchStore();
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (store) {
+      fetchTransactions();
+    }
+  }, [store]);
 
   const handleTransactionMethods = () => {
     navigation.navigate('TransactionMethods');
@@ -63,7 +106,7 @@ const TransactionsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Transaksi Saya</Text>
+      <Text style={styles.title}>Transaksi Toko Saya</Text>
       <FlatList
         data={transactions}
         keyExtractor={(item) => item.id.toString()}

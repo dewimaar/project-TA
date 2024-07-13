@@ -66,7 +66,7 @@ const TransactionDetailScreen = ({ route }) => {
       </View>
     );
   }
-
+console.log(transaction)
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Detail Transaksi</Text>
@@ -76,6 +76,7 @@ const TransactionDetailScreen = ({ route }) => {
         resizeMode="contain"
       />
       <Text style={styles.itemText}>Nama Produk: {transaction.variation_name}</Text>
+      <Text style={styles.itemText}>Nama Pembeli: {transaction.user.name}</Text>
       <Text style={styles.itemText}>Jumlah: {transaction.quantity}</Text>
       <Text style={styles.itemText}>Harga Unit: ${transaction.unit_price}</Text>
       <Text style={styles.itemText}>Total Harga: ${transaction.total_price}</Text>

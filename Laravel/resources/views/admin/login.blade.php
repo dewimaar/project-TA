@@ -173,9 +173,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            var emailInput = document.querySelector('input[name="email"]');
             var passwordInput = document.querySelector('input[name="password"]');
+            var rememberCheckbox = document.querySelector('input[name="remember"]');
             var togglePasswordButton = document.getElementById('togglePassword');
             
+            // Retrieve stored email from localStorage if it exists
+            if (localStorage.getItem('rememberedEmail')) {
+                emailInput.value = localStorage.getItem('rememberedEmail');
+                rememberCheckbox.checked = true;
+            }
+
             if (passwordInput && togglePasswordButton) {
                 togglePasswordButton.addEventListener('click', function() {
                     var type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -188,6 +196,15 @@
                     }
                 });
             }
+
+            // Store email in localStorage if "Remember Me" is checked
+            document.querySelector('form').addEventListener('submit', function(event) {
+                if (rememberCheckbox.checked) {
+                    localStorage.setItem('rememberedEmail', emailInput.value);
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                }
+            });
         });
     </script>    
 </body>

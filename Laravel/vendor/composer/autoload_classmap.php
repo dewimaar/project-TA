@@ -20,6 +20,7 @@ return array(
     'App\\Http\\Controllers\\TransactionController' => $baseDir . '/app/Http/Controllers/TransactionController.php',
     'App\\Http\\Controllers\\metodeTransaksiController' => $baseDir . '/app/Http/Controllers/metodeTransaksiController.php',
     'App\\Http\\Controllers\\mitraController' => $baseDir . '/app/Http/Controllers/mitraController.php',
+    'App\\Http\\Controllers\\transaksiAdminController' => $baseDir . '/app/Http/Controllers/transaksiAdminController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\AdminAuth' => $baseDir . '/app/Http/Middleware/AdminAuth.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',

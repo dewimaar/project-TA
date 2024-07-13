@@ -62,13 +62,13 @@ class Controller extends BaseController
             'title' => 'Notifikasi',
         ]);
     }
-    public function riwayatTransaksi ()
-    {
-        return view('admin.page.riwayatTransaksi.riwayatTransaksi',[
-            'name' => 'Riwayat Transaksi',
-            'title' => 'Riwayat Transaksi',
-        ]);
-    }
+    // public function riwayatTransaksi ()
+    // {
+    //     return view('admin.page.riwayatTransaksi.riwayatTransaksi',[
+    //         'name' => 'Riwayat Transaksi',
+    //         'title' => 'Riwayat Transaksi',
+    //     ]);
+    // }
     public function deleteUser($id)
 {
     $user = User::find($id);

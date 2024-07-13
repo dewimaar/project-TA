@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from "@react-navigation/native";
 import ProfileScreen from './ProfileScreen';
 import BottomNavbar from './BottomNavbar';
 import place1 from '../assets/place1.jpg';
@@ -55,19 +56,21 @@ const HomeScreen = ({ navigation }) => {
 
     const fetchProducts = async () => {
         try {
-            const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.get('http://192.168.0.23:8000/api/products');
-            const updatedProducts = response.data.map(product => {
-                const price = product.variations && product.variations.length > 0 
-                    ? product.variations[0].price 
-                    : 'N/A';
-                return {
-                    ...product,
-                    price,
-                    images: Array.isArray(product.image) ? product.image : [product.image]
-                };
-            });
-            setProducts(updatedProducts);
+            if (userData) {
+                const token = await AsyncStorage.getItem('auth_token');
+                const response = await axios.get(`http://192.168.0.23:8000/api/product/${userData.id}`);
+                const updatedProducts = response.data.map(product => {
+                    const price = product.variations && product.variations.length > 0 
+                        ? product.variations[0].price 
+                        : 'N/A';
+                    return {
+                        ...product,
+                        price,
+                        images: Array.isArray(product.image) ? product.image : [product.image]
+                    };
+                });
+                setProducts(updatedProducts);
+            }
         } catch (error) {
             console.error('Failed to fetch products:', error);
         }
@@ -84,12 +87,13 @@ const HomeScreen = ({ navigation }) => {
     const handlerRefetchData = useCallback(async () => {
         setIsRefetching(true);
         try {
+            await fetchUserData();
             await fetchProducts();
             setIsRefetching(false);
         } catch (error) {
             setIsRefetching(false);
         }
-    }, [isRefetching, fetchProducts]);
+    }, [isRefetching, fetchProducts, fetchUserData]);
 
     const RefreshControlComponent = useMemo(() => {
         return (
@@ -104,17 +108,34 @@ const HomeScreen = ({ navigation }) => {
         setProducts(prevProducts => [...prevProducts, newProduct]);
     };
 
+    useEffect(
+        React.useCallback(() => {
+            const Refresh = navigation.addListener("focus", () => {
+                fetchUserData();
+                fetchProducts();
+            });
+            return Refresh;
+        }, [navigation])
+    );
+
     useEffect(() => {
         fetchUserData();
-        fetchProducts();
     }, []);
 
+    useEffect(() => {
+        if (userData) {
+            fetchProducts();
+        }
+    }, [userData]);
+
     const renderItem = ({ item }) => (
+        console.log(item),
         <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
             <View style={styles.productContainer}>
                 <Image source={{ uri: `http://192.168.0.23:8000/storage/${item.image}` }} style={styles.productImage} />
                 <Text style={styles.productTitle}>{item.name}</Text>
                 <Text style={styles.productPrice}>Rp{formatPrice(item.price)}</Text>
+                <Text style={styles.productTitle}>{item.store.name}</Text>
                 <TouchableOpacity style={styles.productButton} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
                     <Text style={styles.productButtonText}>Detail</Text>
                 </TouchableOpacity>

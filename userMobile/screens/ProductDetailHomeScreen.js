@@ -98,7 +98,7 @@ const ProductDetailHomeScreen = ({ route }) => {
     try {
       const response = await axios.post("http://192.168.0.23:8000/api/cart", {
         user_id: userId,
-        store_id: storeId,
+        store_id: product.store.id,
         variation_id: selectedVariation.id,
         variation_name: selectedVariation.name,
         variation_image: selectedVariation.image,
