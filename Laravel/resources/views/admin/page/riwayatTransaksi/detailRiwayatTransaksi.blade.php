@@ -69,30 +69,10 @@
             </table>
         </div>
     </div>
-    
-    <div class="card mb-4">
-        <div class="card-header">
-            <h2>Update Status Admin</h2>
-        </div>
-        <div class="card-body">
-            <form action="{{ route('updateAdminStatus', ['id' => $transactions->id]) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="form-group">
-                    <label for="statusAdmin">Status Admin:</label>
-                    <select name="statusAdmin" id="statusAdmin" class="form-control">
-                        <option value="Pesanan belum disetujui" {{ $transactions->statusAdmin == 'Pesanan belum disetujui' ? 'selected' : '' }}>Pesanan belum disetujui</option>
-                        <option value="Pesanan disetujui" {{ $transactions->statusAdmin == 'Pesanan disetujui' ? 'selected' : '' }}>Pesanan disetujui</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary mt-2">Update Status</button>
-            </form>
-        </div>
-    </div>
 
     <div class="d-flex justify-content-between">
-        <a href="{{ route('transferDanaTransaksi', ['id' => $transactions->id]) }}" class="btn btn-success">Keuangan Seller</a>
-        <a href="{{ route('transaksi') }}" class="btn btn-danger">Kembali</a>
+        {{-- <a href="{{ route('transferDanaTransaksi', ['id' => $transactions->id]) }}" class="btn btn-success">Keuangan Seller</a> --}}
+        <a href="{{ route('riwayatTransaksi') }}" class="btn btn-danger">Kembali</a>
     </div>
 </div>
 @endsection

@@ -10,7 +10,7 @@ use App\Http\Controllers\BankDetailController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\metodeTransaksiController;
 use App\Http\Controllers\TransactionController;
-
+use App\Http\Controllers\transaksiAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,3 +55,4 @@ Route::middleware('auth:sanctum')->get('/transactions', [TransactionController::
 Route::middleware('auth:sanctum')->get('/transactions/{id}', [TransactionController::class, 'show']);
 Route::get('/transaction/{id}', [TransactionController::class, 'indexUser']);
 Route::put('/transactions/{id}/status', [TransactionController::class, 'updateStatus']);
+Route::get('/bank-transfers/{storeId}', [transaksiAdminController::class, 'getBankTransferByStore']);

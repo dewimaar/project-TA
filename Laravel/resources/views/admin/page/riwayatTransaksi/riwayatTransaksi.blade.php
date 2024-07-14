@@ -66,7 +66,7 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-        font-size: 14px; /* Adjust font size */
+        font-size: 14px;
     }
 
     .btn-detail {
@@ -116,44 +116,35 @@
                                     <th scope="col" class="col-1">ID</th>
                                     <th scope="col" class="col-2">Nama Pembeli</th>
                                     <th scope="col" class="col-2">Jumlah Barang</th>
-                                    <th scope="col" class="col-3">Harga Barang</th>
+                                    <th scope="col" class="col-3">Total Harga</th>
                                     <th scope="col" class="col-2">Nama Toko</th>
                                     <th scope="col" class="col-2">Tanggal Transaksi</th>
                                     <th scope="col" class="col-1">Bukti Transaksi</th>
+                                    <th scope="col" class="col-1">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($transactions as $transaction)
                                 <tr>
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>3</td>
-                                    <td>Rp 300.000</td>
-                                    <td>Toko ABC</td>
-                                    <td>2024-06-30</td>
+                                    <td>{{ $transaction->id }}</td>
+                                    <td>{{ $transaction->user->name }}</td>
+                                    <td>{{ $transaction->quantity }}</td>
+                                    <td>Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</td>
+                                    <td>{{ $transaction->store->name }}</td>
+                                    <td>{{ $transaction->created_at->format('Y-m-d') }}</td>
                                     <td>
-                                        <button class="btn-custom btn-detail">Lihat</button>
+                                        <a href="{{ asset('storage/'.$transaction->payment_proof) }}" target="_blank" class="btn-custom btn-detail">Lihat</a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('detailRiwayatTransaksi', $transaction->id) }}" class="btn btn-success btn-sm">Detail</a>
                                     </td>
                                 </tr>
-                                <!-- Tambahkan baris data lainnya sesuai kebutuhan -->
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
                     <nav aria-label="Page navigation example" class="pagination-custom">
-                        <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
+                        {{-- {{ $transactions->links() }} --}}
                     </nav>
                 </div>
                 <div class="card-footer card-footer-custom">

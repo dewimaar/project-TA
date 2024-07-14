@@ -24,6 +24,7 @@ class Transaction extends Model
         'username_pengguna',
         'no_rekening',
         'status',
+        'statusAdmin'
     ];
 
     const STATUS_PENDING = 'Pending';

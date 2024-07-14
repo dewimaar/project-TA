@@ -13,14 +13,17 @@ use Illuminate\Support\Facades\Validator;
 class transaksiAdminController extends Controller
 {
     public function transaksi ()
-    {
-        $transactions = Transaction::with('store','user')->get();
-        return view('admin.page.transaksi.Transaksi',[
-            'name' => 'Transaksi',
-            'title' => 'Transaksi',
-            'transactions' => $transactions,
-        ]);
-    }
+{
+    $transactions = Transaction::with('store','user')
+                                ->where('statusAdmin', 'Pesanan belum disetujui')
+                                ->get();
+    return view('admin.page.transaksi.Transaksi', [
+        'name' => 'Transaksi',
+        'title' => 'Transaksi',
+        'transactions' => $transactions,
+    ]);
+}
+
     public function detailTransaksi($id)
     {
         $transactions = Transaction::with('store','user')->findOrFail($id);
@@ -29,6 +32,24 @@ class transaksiAdminController extends Controller
             'title' => 'Detail Transaksi',
             'transactions' => $transactions,
         ]);
+    }
+    public function updateAdminStatus(Request $request, $id)
+    {
+        $request->validate([
+            'statusAdmin' => 'required|string|in:Pesanan disetujui,Pesanan belum disetujui',
+        ]);
+
+        try {
+            $transaction = Transaction::findOrFail($id);
+            $transaction->statusAdmin = $request->statusAdmin;
+            $transaction->save();
+
+            return redirect()->route('detailTransaksi', ['id' => $id])
+                ->with('success', 'Status admin berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->route('detailTransaksi', ['id' => $id])
+                ->with('error', 'Terjadi kesalahan saat memperbarui status admin.');
+        }
     }
     public function transferDanaTransaksi($id)
     {
@@ -42,11 +63,24 @@ class transaksiAdminController extends Controller
         ]);
     }
 
-    public function riwayatTransaksi ()
+    public function riwayatTransaksi()
     {
-        return view('admin.page.riwayatTransaksi.riwayatTransaksi',[
+        $transactions = Transaction::with('store', 'user')
+                                    ->where('statusAdmin', 'Pesanan disetujui')
+                                    ->get();
+        return view('admin.page.riwayatTransaksi.riwayatTransaksi', [
             'name' => 'Riwayat Transaksi',
             'title' => 'Riwayat Transaksi',
+            'transactions' => $transactions,
+        ]);
+    }
+    public function detailRiwayatTransaksi($id)
+    {
+        $transactions = Transaction::with('store','user')->findOrFail($id);
+        return view('admin.page.riwayatTransaksi.detailRiwayatTransaksi',[
+            'name' => 'Detail Riwayat Transaksi',
+            'title' => 'Detail Riwayat Transaksi',
+            'transactions' => $transactions,
         ]);
     }
     public function transferSeller(Request $request)
@@ -83,5 +117,13 @@ class transaksiAdminController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e);
         }
+    }
+    public function getBankTransferByStore($storeId)
+    {
+        // Fetch BankTransfer data based on store_id
+        $bankTransfers = BankTransfer::where('store_id', $storeId)->get();
+        
+        // Return the data as a JSON response
+        return response()->json($bankTransfers);
     }
 }

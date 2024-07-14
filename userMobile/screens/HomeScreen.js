@@ -129,13 +129,12 @@ const HomeScreen = ({ navigation }) => {
     }, [userData]);
 
     const renderItem = ({ item }) => (
-        console.log(item),
         <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
             <View style={styles.productContainer}>
                 <Image source={{ uri: `http://192.168.92.23:8000/storage/${item.image}` }} style={styles.productImage} />
                 <Text style={styles.productTitle}>{item.name}</Text>
                 <Text style={styles.productPrice}>Rp{formatPrice(item.price)}</Text>
-                <Text style={styles.productTitle}>{item.store.name}</Text>
+                <Text style={styles.storeName}>{item.store.name}</Text>
                 <TouchableOpacity style={styles.productButton} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
                     <Text style={styles.productButtonText}>Detail</Text>
                 </TouchableOpacity>
@@ -271,12 +270,14 @@ const styles = StyleSheet.create({
         padding: 8,
         backgroundColor: '#fff',
         minHeight: 300,
+        width: '100%',
     },
     productImage: {
         width: '100%',
         height: 150,
         borderRadius: 8,
         marginBottom: 8,
+        resizeMode: 'contain',
     },
     productTitle: {
         fontSize: 16,
@@ -287,6 +288,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#888',
         marginBottom: 8,
+        textAlign: 'center',
+    },
+    storeName: { // Added this style
+        fontSize: 16,
+        color: '#00796B', // Set the desired color here
+        marginBottom: 4,
         textAlign: 'center',
     },
     productButton: {

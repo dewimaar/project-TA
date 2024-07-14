@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use App\Models\variations;
 
 class TransactionController extends Controller
 {
@@ -35,7 +36,11 @@ class TransactionController extends Controller
             }
         }
 
+
         foreach ($request->items as $item) {
+            $variation = variations::findOrFail($item['variation_id']);
+            $newStock = $variation->stock - $item['quantity'];
+            $variation->update(['stock' => $newStock]);
             Transaction::create([
                 'user_id' => $request->user_id,
                 'store_id' => $item['store_id'],

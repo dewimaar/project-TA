@@ -7,6 +7,7 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\metodeTransaksiController;
 use App\Http\Controllers\mitraController;
 use App\Http\Controllers\transaksiAdminController;
+use App\Http\Controllers\transactionController;
 
 
 /*
@@ -38,6 +39,7 @@ Route::middleware('admin.auth')->prefix('admin')->group(function() {
     Route::get('/rekapPenghasilan', [Controller::class, 'rekapPenghasilan'])->name('rekapPenghasilan');
     Route::get('/notifikasi', [Controller::class, 'notifikasi'])->name('notifikasi');
     Route::get('/riwayatTransaksi', [transaksiAdminController::class, 'riwayatTransaksi'])->name('riwayatTransaksi');
+    Route::get('/detailRiwayatTransaksi/{id}', [transaksiAdminController::class, 'detailRiwayatTransaksi'])->name('detailRiwayatTransaksi');
     Route::get('/transaksi', [transaksiAdminController::class, 'transaksi'])->name('transaksi');
     Route::get('/detailTransaksi/{id}', [transaksiAdminController::class, 'detailTransaksi'])->name('detailTransaksi');
     Route::get('/transferDanaTransaksi/{id}', [transaksiAdminController::class, 'transferDanaTransaksi'])->name('transferDanaTransaksi');
@@ -45,4 +47,5 @@ Route::middleware('admin.auth')->prefix('admin')->group(function() {
     Route::get('/metodeTransaksi', [metodeTransaksiController::class, 'index'])->name('metodeTransaksi');
     Route::post('/metodeTransaksi', [metodeTransaksiController::class, 'store']);    
     Route::post('logout', [AdminController::class, 'logout'])->name('admin.logout');
+    Route::put('/transactions/{id}/admin-status', [transaksiAdminController::class, 'updateAdminStatus'])->name('updateAdminStatus');
 });
