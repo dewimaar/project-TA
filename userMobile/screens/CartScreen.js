@@ -11,7 +11,7 @@ const CartScreen = ({ navigation }) => {
     const [cartData, setCartData] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
-  const [store, setStore] = useState(null);
+    const [store, setStore] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
     const [resetCartItems, setResetCartItems] = useState(false);
 
@@ -28,7 +28,7 @@ const CartScreen = ({ navigation }) => {
     const fetchUserId = async () => {
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.get('http://192.168.0.23:8000/api/user', {
+            const response = await axios.get('http://192.168.92.23:8000/api/user', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -51,7 +51,7 @@ const CartScreen = ({ navigation }) => {
         if (userId) {
             try {
                 const token = await AsyncStorage.getItem('auth_token');
-                const response = await axios.get(`http://192.168.0.23:8000/api/cart?user_id=${userId}`, {
+                const response = await axios.get(`http://192.168.92.23:8000/api/cart?user_id=${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -66,23 +66,23 @@ const CartScreen = ({ navigation }) => {
 
     useEffect(() => {
         const fetchStore = async () => {
-          if (userId) {
-            try {
-              const response = await fetch(`http://192.168.0.23:8000/api/stores/${userId}`);
-              if (response.ok) {
-                const data = await response.json();
-                setStore(data);
-              } else {
-                Alert.alert('Error', 'Failed to fetch store data');
-              }
-            } catch (error) {
-              Alert.alert('Error', 'Failed to fetch store data');
+            if (userId) {
+                try {
+                    const response = await fetch(`http://192.168.92.23:8000/api/stores/${userId}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setStore(data);
+                    } else {
+                        Alert.alert('Error', 'Failed to fetch store data');
+                    }
+                } catch (error) {
+                    Alert.alert('Error', 'Failed to fetch store data');
+                }
             }
-          }
         };
-    
+
         fetchStore();
-      }, [userId]);
+    }, [userId]);
 
     useEffect(() => {
         fetchUserId();
@@ -165,7 +165,7 @@ const CartScreen = ({ navigation }) => {
                                 />
                                 <Image
                                     style={styles.itemImage}
-                                    source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
+                                    source={{ uri: `http://192.168.92.23:8000/storage/${item.variation_image}` }}
                                     resizeMode="contain"
                                 />
                                 <View style={styles.itemDetails}>
@@ -194,7 +194,7 @@ const CartScreen = ({ navigation }) => {
                             <View key={item.id} style={styles.modalItem}>
                                 <Image
                                     style={styles.modalItemImage}
-                                    source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
+                                    source={{ uri: `http://192.168.92.23:8000/storage/${item.variation_image}` }}
                                     resizeMode="contain"
                                 />
                                 <View style={styles.modalItemDetails}>
@@ -205,10 +205,10 @@ const CartScreen = ({ navigation }) => {
                         ))}
                     </ScrollView>
                     <TouchableOpacity style={styles.modalConfirmButton} onPress={confirmCheckout}>
-                        <Text style={styles.modalConfirmButtonText}>Confirm</Text>
+                        <Text style={styles.modalConfirmButtonText}>Konfirmasi</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
-                        <Text style={styles.modalCloseButtonText}>Close</Text>
+                        <Text style={styles.modalCloseButtonText}>Kembali</Text>
                     </TouchableOpacity>
                 </View>
             </Modal>
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        paddingBottom: 80, // To ensure FlatList is not covered by the BottomNavbar
+        paddingBottom: 80, 
     },
     emptyCartText: {
         fontSize: 18,
@@ -268,11 +268,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     checkoutButton: {
-        backgroundColor: '#007bff',
+        backgroundColor: '#00796B',
         paddingVertical: 12,
         borderRadius: 8,
         alignItems: 'center',
-        marginBottom: -10, // To avoid overlap with BottomNavbar
+        marginBottom: -10, 
     },
     checkoutButtonText: {
         color: '#fff',
@@ -341,6 +341,7 @@ const styles = StyleSheet.create({
     headerRightText: {
         color: '#007bff',
         fontSize: 16,
+        fontWeight: 'bold',
         marginRight: 15,
     },
 });

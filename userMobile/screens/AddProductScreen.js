@@ -32,7 +32,7 @@ const AddProductScreen = ({ navigation }) => {
         const token = await AsyncStorage.getItem('auth_token');
         console.log('Retrieved Token:', token);
 
-        const response = await axios.get('http://192.168.0.23:8000/api/user', {
+        const response = await axios.get('http://192.168.92.23:8000/api/user', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -52,7 +52,7 @@ const AddProductScreen = ({ navigation }) => {
     const fetchStore = async () => {
       if (userData) {
         try {
-          const response = await fetch(`http://192.168.0.23:8000/api/stores/${userData.id}`);
+          const response = await fetch(`http://192.168.92.23:8000/api/stores/${userData.id}`);
           if (response.ok) {
             const data = await response.json();
             setStore(data);
@@ -114,7 +114,7 @@ const AddProductScreen = ({ navigation }) => {
       });
 
       const response = await axios.post(
-        "http://192.168.0.23:8000/api/products",
+        "http://192.168.92.23:8000/api/products",
         formData,
         {
           headers: {
@@ -141,14 +141,14 @@ const AddProductScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Add Product</Text>
+      <Text style={styles.title}>Tambah Produk</Text>
       <Controller
         control={control}
         name="name"
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={styles.input}
-            placeholder="Product Name"
+            placeholder="Nama Produk"
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -161,7 +161,7 @@ const AddProductScreen = ({ navigation }) => {
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={styles.input}
-            placeholder="Description"
+            placeholder="Deskripsi Produk"
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -183,7 +183,7 @@ const AddProductScreen = ({ navigation }) => {
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={styles.input}
-                placeholder="Variation Name"
+                placeholder="Variasi Nama Produk"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -196,7 +196,7 @@ const AddProductScreen = ({ navigation }) => {
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={styles.input}
-                placeholder="Price"
+                placeholder="Harga"
                 keyboardType="numeric"
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -210,7 +210,7 @@ const AddProductScreen = ({ navigation }) => {
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={styles.input}
-                placeholder="Stock"
+                placeholder="Stok"
                 keyboardType="numeric"
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -229,7 +229,7 @@ const AddProductScreen = ({ navigation }) => {
             style={[styles.button, styles.removeButton]}
             onPress={() => remove(index)}
           >
-            <Text style={styles.buttonText}>Remove Variation</Text>
+            <Text style={styles.buttonText}>Hapus Variasi Produk</Text>
           </TouchableOpacity>
         </View>
       ))}
@@ -237,13 +237,13 @@ const AddProductScreen = ({ navigation }) => {
         style={[styles.button, styles.addButton]}
         onPress={() => append({ name: "", price: "", stock: "", image: [] })}
       >
-        <Text style={styles.buttonText}>Add Variation</Text>
+        <Text style={styles.buttonText}>Tambah Variasi</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.button, styles.submitButton]}
         onPress={handleSubmit(onSubmit)}
       >
-        <Text style={styles.buttonText}>Add Product</Text>
+        <Text style={styles.buttonText}>Tambah Produk</Text>
       </TouchableOpacity>
     </ScrollView>
   );

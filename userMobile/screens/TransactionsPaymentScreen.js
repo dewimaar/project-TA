@@ -26,7 +26,7 @@ console.log('id',selectedItems);
         const fetchUserId = async () => {
             try {
                 const token = await AsyncStorage.getItem('auth_token');
-                const response = await axios.get('http://192.168.0.23:8000/api/user', {
+                const response = await axios.get('http://192.168.92.23:8000/api/user', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -45,7 +45,7 @@ console.log('id',selectedItems);
 
         const fetchBankData = async () => {
             try {
-                const response = await axios.get('http://192.168.0.23:8000/api/metodeTransaksi');
+                const response = await axios.get('http://192.168.92.23:8000/api/metodeTransaksi');
                 setBanks(response.data);
             } catch (error) {
                 console.error('Failed to fetch bank data:', error);
@@ -109,7 +109,7 @@ console.log('id',selectedItems);
     
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.post('http://192.168.0.23:8000/api/transactions', formData, {
+            const response = await axios.post('http://192.168.92.23:8000/api/transactions', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -120,7 +120,7 @@ console.log('id',selectedItems);
     
             // Delete items from the cart
             const deletePromises = selectedItems.map((item) => {
-                return axios.delete(`http://192.168.0.23:8000/api/cart/${item.id}`, {
+                return axios.delete(`http://192.168.92.23:8000/api/cart/${item.id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -137,7 +137,7 @@ console.log('id',selectedItems);
                 {
                     text: 'OK',
                     onPress: () => {
-                        setResetCartItems(true); // Set resetCartItems to true
+                        setResetCartItems(true); 
                         navigation.navigate('MyOrders');
                     },
                 },
@@ -154,7 +154,7 @@ console.log('id',selectedItems);
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>Selected Items:</Text>
+            <Text style={styles.label}>Item yang Dipilih:</Text>
             <FlatList
                 data={selectedItems}
                 keyExtractor={(item) => item.id.toString()}
@@ -162,20 +162,20 @@ console.log('id',selectedItems);
                     <View style={styles.cartItem}>
                         <Image
                             style={styles.itemImage}
-                            source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
+                            source={{ uri: `http://192.168.92.23:8000/storage/${item.variation_image}` }}
                             resizeMode="contain"
                         />
                         <View style={styles.itemDetails}>
                             <Text style={styles.itemTitle}>{item.variation_name}</Text>
                             <Text style={styles.itemTitle}>{item.store.name}</Text>
-                            <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
-                            <Text style={styles.itemPrice}>Unit Price: {formatRupiah(item.unit_price)}</Text>
-                            <Text style={styles.itemTotalPrice}>Total Price: {formatRupiah(item.total_price)}</Text>
+                            <Text style={styles.itemQuantity}>Jumlah: {item.quantity}</Text>
+                            <Text style={styles.itemPrice}>Harga Satuan: {formatRupiah(item.unit_price)}</Text>
+                            <Text style={styles.itemTotalPrice}>Total Harga: {formatRupiah(item.total_price)}</Text>
                         </View>
                     </View>
                 )}
             />
-            <Text style={styles.label}>Full Address:</Text>
+            <Text style={styles.label}>Alamat Lengkap:</Text>
             <Controller
                 control={control}
                 name="fullAddress"
@@ -188,7 +188,7 @@ console.log('id',selectedItems);
                     />
                 )}
             />
-            <Text style={styles.label}>Google Maps Link:</Text>
+            <Text style={styles.label}>Tautan Alamat:</Text>
             <Controller
                 control={control}
                 name="googleMapsLink"
@@ -201,13 +201,13 @@ console.log('id',selectedItems);
                     />
                 )}
             />
-            <Text style={styles.label}>Payment Method:</Text>
+            <Text style={styles.label}>Metode Pembayaran:</Text>
             <Picker
                 selectedValue={selectedBank}
                 onValueChange={(itemValue) => onBankChange(itemValue)}
                 style={styles.input}
             >
-                <Picker.Item label="Select a bank" value={null} />
+                <Picker.Item label="Pilih Bank" value={null} />
                 {renderBankOptions()}
             </Picker>
             {selectedBank && (
@@ -226,7 +226,7 @@ console.log('id',selectedItems);
                 error={watch("images") && watch("images").length === 0}
             />
             <TouchableOpacity style={styles.confirmButton} onPress={handleSubmit(confirmCheckout)}>
-                <Text style={styles.confirmButtonText}>Confirm Payment</Text>
+                <Text style={styles.confirmButtonText}>Konfirmasi Pembayaran</Text>
             </TouchableOpacity>
         </View>
     );

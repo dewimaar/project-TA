@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const BottomNavbar = ({ navigation, selectedNavItem, handleNavItemClick }) => {
@@ -9,31 +9,36 @@ const BottomNavbar = ({ navigation, selectedNavItem, handleNavItemClick }) => {
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('home')}
       >
-        <Icon name="home-outline" size={24} color={selectedNavItem === 'home' ? '#098C1C' : '#333'} />
+        <Icon name="home-outline" size={20} color={selectedNavItem === 'home' ? '#098C1C' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'home' ? '#098C1C' : '#333' }]}>Beranda</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('cart')}
       >
-        <Icon name="cart-outline" size={24} color={selectedNavItem === 'cart' ? '#098C1C' : '#333'} />
+        <Icon name="cart-outline" size={20} color={selectedNavItem === 'cart' ? '#098C1C' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'cart' ? '#098C1C' : '#333' }]}>Keranjang</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('market')}
       >
-        <Icon name="storefront-outline" size={24} color={selectedNavItem === 'market' ? '#098C1C' : '#333'} />
+        <Icon name="storefront-outline" size={20} color={selectedNavItem === 'market' ? '#098C1C' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'market' ? '#098C1C' : '#333' }]}>Toko</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('settings')}
       >
-        <Icon name="settings-outline" size={24} color={selectedNavItem === 'settings' ? '#098C1C' : '#333'} />
+        <Icon name="settings-outline" size={20} color={selectedNavItem === 'settings' ? '#098C1C' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'settings' ? '#098C1C' : '#333' }]}>Pengaturan</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('profile')}
       >
-        <Icon name="person-outline" size={24} color={selectedNavItem === 'profile' ? '#098C1C' : '#333'} />
+        <Icon name="person-outline" size={20} color={selectedNavItem === 'profile' ? '#098C1C' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'profile' ? '#098C1C' : '#333' }]}>Profil</Text>
       </TouchableOpacity>
     </View>
   );
@@ -51,12 +56,16 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#ddd',
     backgroundColor: '#fff',
-    paddingVertical: 8,
+    paddingVertical: 5,
   },
   bottomBarItem: {
     flex: 1,
     alignItems: 'center',
-    padding: 10,
+    paddingVertical: 5,
+  },
+  bottomBarText: {
+    fontSize: 10,
+    marginTop: 2,
   },
 });
 

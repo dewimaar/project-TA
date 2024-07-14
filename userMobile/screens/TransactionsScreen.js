@@ -12,7 +12,7 @@ const TransactionsScreen = ({ navigation }) => {
   const fetchUserData = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get('http://192.168.0.23:8000/api/user', {
+      const response = await axios.get('http://192.168.92.23:8000/api/user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -32,7 +32,7 @@ const TransactionsScreen = ({ navigation }) => {
           return;
         }
 
-        const response = await axios.get(`http://192.168.0.23:8000/api/transaction/${store.id}`, {
+        const response = await axios.get(`http://192.168.92.23:8000/api/transaction/${store.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -51,7 +51,7 @@ const TransactionsScreen = ({ navigation }) => {
 
     const fetchStore = async () => {
       try {
-        const response = await fetch(`http://192.168.0.23:8000/api/stores/${userData.id}`);
+        const response = await fetch(`http://192.168.92.23:8000/api/stores/${userData.id}`);
         if (response.ok) {
           const data = await response.json();
           setStore(data);
@@ -87,7 +87,7 @@ const TransactionsScreen = ({ navigation }) => {
     <View style={styles.itemContainer}>
       <Image
         style={styles.itemImage}
-        source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
+        source={{ uri: `http://192.168.92.23:8000/storage/${item.variation_image}` }}
         resizeMode="contain"
       />
       <View style={styles.itemDetails}>

@@ -30,7 +30,7 @@ const ProductDetailHomeScreen = ({ route }) => {
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.0.23:8000/api/products/detail/${productId}`
+          `http://192.168.92.23:8000/api/products/detail/${productId}`
         );
         setProduct(response.data);
         setStoreId(response.data.store.id); // Set store ID from product details
@@ -47,7 +47,7 @@ const ProductDetailHomeScreen = ({ route }) => {
       try {
         const token = await AsyncStorage.getItem("auth_token");
         const response = await axios.get(
-          "http://192.168.0.23:8000/api/user",
+          "http://192.168.92.23:8000/api/user",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -67,7 +67,7 @@ const ProductDetailHomeScreen = ({ route }) => {
   const fetchStore = async () => {
     try {
       const response = await fetch(
-        `http://192.168.0.23:8000/api/stores/${userId}`
+        `http://192.168.92.23:8000/api/stores/${userId}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -96,7 +96,7 @@ const ProductDetailHomeScreen = ({ route }) => {
 
   const handleAddToCart = async () => {
     try {
-      const response = await axios.post("http://192.168.0.23:8000/api/cart", {
+      const response = await axios.post("http://192.168.92.23:8000/api/cart", {
         user_id: userId,
         store_id: product.store.id,
         variation_id: selectedVariation.id,
@@ -136,7 +136,7 @@ const ProductDetailHomeScreen = ({ route }) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Image
         style={styles.productImage}
-        source={{ uri: `http://192.168.0.23:8000/storage/${product.image}` }}
+        source={{ uri: `http://192.168.92.23:8000/storage/${product.image}` }}
         resizeMode="contain"
       />
       <Text style={styles.productName}>{product.name}</Text>
@@ -146,14 +146,14 @@ const ProductDetailHomeScreen = ({ route }) => {
         <View key={variation.id} style={styles.variationContainer}>
           <Text style={styles.variationName}>{variation.name}</Text>
           <Text style={styles.variationPrice}>
-            Price: Rp{formatPrice(variation.price)}
+            Harga: Rp{formatPrice(variation.price)}
           </Text>
-          <Text style={styles.variationStock}>Stock: {variation.stock}</Text>
+          <Text style={styles.variationStock}>Stok: {variation.stock}</Text>
           {variation.image && (
             <Image
               style={styles.variationImage}
               source={{
-                uri: `http://192.168.0.23:8000/storage/${variation.image}`,
+                uri: `http://192.168.92.23:8000/storage/${variation.image}`,
               }}
               resizeMode="contain"
             />
@@ -166,7 +166,7 @@ const ProductDetailHomeScreen = ({ route }) => {
           style={styles.addToCartButton}
           onPress={() => setModalVisible(true)}
         >
-          <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+          <Text style={styles.addToCartButtonText}>Masukkan Keranjang</Text>
         </TouchableOpacity>
       )}
 
@@ -184,7 +184,7 @@ const ProductDetailHomeScreen = ({ route }) => {
             >
               <Text style={styles.closeButtonText}>X</Text>
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Select Variation and Quantity</Text>
+            <Text style={styles.modalTitle}>Pilih Variasi dan Jumlah Produk</Text>
 
             <Picker
               selectedValue={selectedVariation}
@@ -213,17 +213,17 @@ const ProductDetailHomeScreen = ({ route }) => {
             {selectedVariation && (
               <>
                 <Text style={styles.unitPrice}>
-                  Unit Price: Rp{formatPrice(selectedVariation.price)}
+                  Harga Satuan: Rp{formatPrice(selectedVariation.price)}
                 </Text>
                 <Text style={styles.totalPrice}>
-                  Total Price: Rp
+                  Total Harga: Rp
                   {formatPrice(selectedVariation.price * quantity)}
                 </Text>
                 <TouchableOpacity
                   style={styles.confirmButton}
                   onPress={handleAddToCart}
                 >
-                  <Text style={styles.confirmButtonText}>Confirm</Text>
+                  <Text style={styles.confirmButtonText}>Konfirmasi</Text>
                 </TouchableOpacity>
               </>
             )}

@@ -20,7 +20,7 @@ const EditProfileScreen = ({ navigation, route }) => {
             setValue('google_maps_link', userData.google_maps_link);
             setValue('birthdate', userData.birthdate);
             setValue('gender', userData.gender);
-            setValue('profile_photo', userData.profile_photo ? [{ uri: `http://192.168.0.23:8000/storage/${userData.profile_photo}` }] : []);
+            setValue('profile_photo', userData.profile_photo ? [{ uri: `http://192.168.92.23:8000/storage/${userData.profile_photo}` }] : []);
         }
     }, [userData]);
 
@@ -52,7 +52,7 @@ const EditProfileScreen = ({ navigation, route }) => {
 
             console.log('Sending request to server with formData:', formData);
 
-            const response = await axios.post('http://192.168.0.23:8000/api/user/update', formData, {
+            const response = await axios.post('http://192.168.92.23:8000/api/user/update', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',

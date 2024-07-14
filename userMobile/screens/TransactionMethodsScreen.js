@@ -18,14 +18,14 @@ const TransactionMethodsScreen = () => {
         const token = await AsyncStorage.getItem('auth_token');
         console.log('Retrieved Token:', token);
 
-        const userResponse = await axios.get('http://192.168.0.23:8000/api/user', {
+        const userResponse = await axios.get('http://192.168.92.23:8000/api/user', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setUserId(userResponse.data.id);
 
-        const storeResponse = await axios.get(`http://192.168.0.23:8000/api/stores/${userResponse.data.id}`, {
+        const storeResponse = await axios.get(`http://192.168.92.23:8000/api/stores/${userResponse.data.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -50,7 +50,7 @@ const TransactionMethodsScreen = () => {
   const fetchPaymentMethods = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get(`http://192.168.0.23:8000/api/payment-methods/${storeId}`, {
+      const response = await axios.get(`http://192.168.92.23:8000/api/payment-methods/${storeId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,7 +64,7 @@ const TransactionMethodsScreen = () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
 
-      const response = await axios.post('http://192.168.0.23:8000/api/payment-methods', {
+      const response = await axios.post('http://192.168.92.23:8000/api/payment-methods', {
         user_id: userId,
         store_id: storeId,
         bank_name: bankName,
@@ -105,7 +105,7 @@ const TransactionMethodsScreen = () => {
       />
       <TextInput
         style={styles.input}
-        placeholder="No Rekening"
+        placeholder="Nomor Rekening"
         value={bankAccountNumber}
         onChangeText={setBankAccountNumber}
         keyboardType="numeric"
@@ -116,12 +116,12 @@ const TransactionMethodsScreen = () => {
 
       {paymentMethods.length > 0 && (
         <View style={styles.listContainer}>
-          <Text style={styles.listTitle}>Metode Transaksi yang Sudah Ditambahkan:</Text>
+          <Text style={styles.listTitle}>Metode Transaksi Toko Saya</Text>
           {paymentMethods.map((method) => (
             <View key={method.id} style={styles.methodItem}>
               <Text style={styles.methodText}>Nama Bank: {method.bank_name}</Text>
               <Text style={styles.methodText}>Username Bank: {method.bank_username}</Text>
-              <Text style={styles.methodText}>No Rekening: {method.bank_account_number}</Text>
+              <Text style={styles.methodText}>Nomor Rekening: {method.bank_account_number}</Text>
             </View>
           ))}
         </View>

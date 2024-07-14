@@ -15,7 +15,7 @@ const MarketScreen = ({ navigation }) => {
       const token = await AsyncStorage.getItem("auth_token");
       console.log("Retrieved Token:", token);
 
-      const response = await axios.get("http://192.168.0.23:8000/api/user", {
+      const response = await axios.get("http://192.168.92.23:8000/api/user", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -30,7 +30,7 @@ const MarketScreen = ({ navigation }) => {
 
   const fetchStore = async () => {
     try {
-      const response = await fetch(`http://192.168.0.23:8000/api/stores/${userData.id}`);
+      const response = await fetch(`http://192.168.92.23:8000/api/stores/${userData.id}`);
       if (response.ok) {
         const data = await response.json();
         setStore(data);
@@ -85,6 +85,10 @@ const MarketScreen = ({ navigation }) => {
     navigation.navigate("Transactions");
   };
 
+  const handleStoreFinance = () => {
+    navigation.navigate("StoreFinance");
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -95,7 +99,7 @@ const MarketScreen = ({ navigation }) => {
               <Image
                 style={styles.image}
                 source={{
-                  uri: `http://192.168.0.23:8000/storage/${store.image}`,
+                  uri: `http://192.168.92.23:8000/storage/${store.image}`,
                 }}
                 resizeMode="contain"
               />
@@ -120,6 +124,12 @@ const MarketScreen = ({ navigation }) => {
               <TouchableOpacity style={styles.button} onPress={handleTransactions}>
                 <Icon name="cash-outline" size={20} color="#fff" />
                 <Text style={styles.buttonText}>Transaksi</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={handleStoreFinance}>
+                <Icon name="wallet-outline" size={20} color="#fff" />
+                <Text style={styles.buttonText}>Keuangan Toko Saya</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -162,7 +172,7 @@ const styles = StyleSheet.create({
   },
   noStoreText: {
     fontSize: 18,
-    marginBottom:  10,
+    marginBottom: 10,
   },
   storeContainer: {
     padding: 20,

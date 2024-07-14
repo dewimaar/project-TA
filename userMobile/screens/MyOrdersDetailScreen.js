@@ -16,7 +16,7 @@ const MyOrdersDetailScreen = ({ route }) => {
           return;
         }
 
-        const response = await axios.get(`http://192.168.0.23:8000/api/transactions/${transactionId}`, {
+        const response = await axios.get(`http://192.168.92.23:8000/api/transactions/${transactionId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,22 +42,56 @@ const MyOrdersDetailScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Detail Transaksi</Text>
-      <Image
-        style={styles.itemImage}
-        source={{ uri: `http://192.168.0.23:8000/storage/${transaction.variation_image}` }}
-        resizeMode="contain"
-      />
-      <Text style={styles.itemText}>Nama Produk: {transaction.variation_name}</Text>
-      <Text style={styles.itemText}>Jumlah: {transaction.quantity}</Text>
-      <Text style={styles.itemText}>Harga Unit: ${transaction.unit_price}</Text>
-      <Text style={styles.itemText}>Total Harga: ${transaction.total_price}</Text>
-      <Text style={styles.itemText}>Alamat: {transaction.full_address}</Text>
-      <Text style={styles.itemText}>Link Google Maps: {transaction.google_maps_link}</Text>
-      <Text style={styles.itemText}>Metode Pembayaran: {transaction.payment_method}</Text>
-      <Text style={styles.itemText}>Status: {transaction.status}</Text>
-      {/* Add other transaction details as needed */}
+      <View style={styles.detailContainer}>
+        <Image
+          style={styles.itemImage}
+          source={{ uri: `http://192.168.92.23:8000/storage/${transaction.variation_image}` }}
+          resizeMode="contain"
+        />
+        <View style={styles.row}>
+          <Text style={styles.label}>Nama Produk:</Text>
+          <Text style={styles.value}>{transaction.variation_name}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Jumlah:</Text>
+          <Text style={styles.value}>{transaction.quantity}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Harga Unit:</Text>
+          <Text style={styles.value}>Rp{formatPrice(transaction.unit_price)}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Total Harga:</Text>
+          <Text style={styles.value}>Rp{formatPrice(transaction.total_price)}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Alamat:</Text>
+          <Text style={styles.value}>{transaction.full_address}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Link Google Maps:</Text>
+          <Text style={styles.value}>{transaction.google_maps_link}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Metode Pembayaran:</Text>
+          <Text style={styles.value}>{transaction.payment_method}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Status:</Text>
+          <Text style={styles.value}>{transaction.status}</Text>
+        </View>
+        {/* Add other transaction details as needed */}
+      </View>
     </View>
   );
+};
+
+const formatPrice = (price) => {
+  if (price === undefined || price === null || isNaN(Number(price))) {
+    return 'Price not available';
+  }
+  const numberPrice = Number(price);
+  return numberPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
 const styles = StyleSheet.create({
@@ -76,13 +110,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
+  detailContainer: {
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  label: {
+    fontWeight: 'bold',
+  },
+  value: {
+    flex: 1,
+    textAlign: 'right',
+  },
   itemImage: {
     width: '100%',
     height: 200,
-    marginBottom: 20,
-  },
-  itemText: {
-    fontSize: 16,
     marginBottom: 10,
   },
 });

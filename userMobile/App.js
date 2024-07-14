@@ -27,6 +27,7 @@ import HelpSupportScreen from './screens/HelpSupportScreen';
 import AboutAppScreen from './screens/AboutAppScreen';
 import MyOrdersScreen from './screens/MyOrdersScreen';
 import MyOrdersDetailScreen from './screens/MyOrdersDetailScreen';
+import StoreFinanceScreen from './screens/StoreFinanceScreen';
 
 const Stack = createStackNavigator();
 
@@ -41,7 +42,7 @@ const App = () => {
         <Stack.Screen name="Home" component={HomeScreen} options={{headerLeft:()=>null}}/>
         <Stack.Screen name="Profile" component={ProfileScreen} options={{headerLeft:()=>null}}/>
         <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-        <Stack.Screen name="Market" component={MarketScreen} options={{headerLeft:()=>null}}/>
+        <Stack.Screen name="Market" component={MarketScreen} options={{headerLeft:()=>null, headerShown: false}}/>
         <Stack.Screen name="Cart" component={CartScreen} options={{headerLeft:()=>null}} />
         <Stack.Screen name="Settings" component={SettingsScreen} options={{headerLeft:()=>null}} />
         <Stack.Screen name="StoreRegistration" component={StoreRegistration} />
@@ -57,6 +58,7 @@ const App = () => {
         <Stack.Screen name="AboutApp" component={AboutAppScreen} options={{ title: 'Tentang Aplikasi' }} />
         <Stack.Screen name="MyOrders" component={MyOrdersScreen} options={{ title: 'Pesanan Saya' }} />
         <Stack.Screen name="MyOrdersDetail" component={MyOrdersDetailScreen} options={{ title: 'Detail Pesanan Saya' }} />
+        <Stack.Screen name="StoreFinance" component={StoreFinanceScreen} options={{ title: 'Keuangan Toko Saya' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

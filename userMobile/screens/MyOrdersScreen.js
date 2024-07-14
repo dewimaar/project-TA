@@ -16,7 +16,7 @@ const MyOrdersScreen = ({ navigation }) => {
           return;
         }
 
-        const response = await axios.get('http://192.168.0.23:8000/api/transactions', {
+        const response = await axios.get('http://192.168.92.23:8000/api/transactions', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,35 +42,45 @@ const MyOrdersScreen = ({ navigation }) => {
     );
   }
 
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => navigation.navigate('MyOrdersDetail', { transactionId: item.id })}
+    >
+      <Image
+        style={styles.modalItemImage}
+        source={{ uri: `http://192.168.92.23:8000/storage/${item.variation_image}` }}
+        resizeMode="contain"
+      />
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle}>{item.variation_name}</Text>
+        <Text>Jumlah: {item.quantity}</Text>
+        <Text style={styles.cardPrice}>Harga Total: Rp{formatPrice(item.total_price)}</Text>
+        <Text>Status: {item.status}</Text>
+        <TouchableOpacity style={styles.detailButton}>
+          <Text style={styles.detailButtonText}>Detail</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
       <FlatList
         data={transactions}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Image
-              style={styles.modalItemImage}
-              source={{ uri: `http://192.168.0.23:8000/storage/${item.variation_image}` }}
-              resizeMode="contain"
-            />
-            <View style={styles.cardContent}>
-              <Text style={styles.cardTitle}>{item.variation_name}</Text>
-              <Text>Quantity: {item.quantity}</Text>
-              <Text>Total Price: ${item.total_price}</Text>
-              <Text>Status: {item.status}</Text>
-              <TouchableOpacity
-                style={styles.detailButton}
-                onPress={() => navigation.navigate('MyOrdersDetail', { transactionId: item.id })}
-              >
-                <Text style={styles.detailButtonText}>Detail</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
+        renderItem={renderItem}
       />
     </View>
   );
+};
+
+const formatPrice = (price) => {
+  if (price === undefined || price === null || isNaN(Number(price))) {
+    return 'Price not available';
+  }
+  const numberPrice = Number(price);
+  return numberPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
 const styles = StyleSheet.create({
@@ -95,7 +105,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
     elevation: 2,
-    position: 'relative',
   },
   modalItemImage: {
     width: 100,
@@ -108,6 +117,11 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  cardPrice: {
+    fontSize: 16,
+    color: '#888',
     marginBottom: 8,
   },
   detailButton: {
