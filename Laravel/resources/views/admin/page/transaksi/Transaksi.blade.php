@@ -6,10 +6,10 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Username Pembeli</th>
+                <th>Nama Pembeli</th>
                 <th>Nama Toko</th>
-                <th>Variation Name</th>
-                <th>Variation Image</th>
+                <th>Variasi Nama Produk</th>
+                <th>Variasi Gambar Produk</th>
                 <th>Jumlah</th>
                 <th>Harga Satuan</th>
                 <th>Total Harga</th>
@@ -24,8 +24,8 @@
                 <td>{{ $transaction->variation_name }}</td>
                 <td><img src="{{ asset('storage/'.$transaction->variation_image) }}" alt="Image" width="50"></td>
                 <td>{{ $transaction->quantity }}</td>
-                <td>{{ $transaction->unit_price }}</td>
-                <td>{{ $transaction->total_price }}</td>
+                <td>Rp {{ number_format($transaction->unit_price, 0, ',', '.') }}</td>
+                <td>Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</td>
                 <td>
                     <a href="{{ route('detailTransaksi', $transaction->id) }}" class="btn btn-success btn-sm">Detail</a>
                 </td>

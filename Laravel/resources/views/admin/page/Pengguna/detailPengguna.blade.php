@@ -15,7 +15,7 @@
     }
 
     .profile-header {
-        background-color: #17461b;
+        background-color: #00796B;
         color: #fff;
         padding: 20px;
         display: flex;
@@ -84,7 +84,7 @@
                                 <td>{{ $user->name }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">No Telp</th>
+                                <th scope="row">Nomor Telepon</th>
                                 <td>{{ $user->noTelp }}</td>
                             </tr>
                             <tr>

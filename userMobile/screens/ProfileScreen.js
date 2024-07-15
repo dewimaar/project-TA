@@ -14,7 +14,7 @@ const ProfileScreen = ({ navigation }) => {
             const token = await AsyncStorage.getItem('auth_token');
             console.log('Retrieved Token:', token);
 
-            const response = await axios.get('http://192.168.92.23:8000/api/user', {
+            const response = await axios.get('http://192.168.154.23:8000/api/user', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -85,7 +85,7 @@ const ProfileScreen = ({ navigation }) => {
                     <View style={styles.imageContainer}>
                         <Image
                             style={styles.image}
-                            source={{ uri: userData.profile_photo ? `http://192.168.92.23:8000/storage/${userData.profile_photo}` : 'https://via.placeholder.com/150' }}
+                            source={{ uri: userData.profile_photo ? `http://192.168.154.23:8000/storage/${userData.profile_photo}` : 'https://via.placeholder.com/150' }}
                             resizeMode="cover"
                         />
                     </View>

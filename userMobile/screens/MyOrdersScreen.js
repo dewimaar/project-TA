@@ -16,7 +16,7 @@ const MyOrdersScreen = ({ navigation }) => {
           return;
         }
 
-        const response = await axios.get('http://192.168.92.23:8000/api/transactions', {
+        const response = await axios.get('http://192.168.154.23:8000/api/transactions', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -45,11 +45,10 @@ const MyOrdersScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigation.navigate('MyOrdersDetail', { transactionId: item.id })}
     >
       <Image
         style={styles.modalItemImage}
-        source={{ uri: `http://192.168.92.23:8000/storage/${item.variation_image}` }}
+        source={{ uri: `http://192.168.154.23:8000/storage/${item.variation_image}` }}
         resizeMode="contain"
       />
       <View style={styles.cardContent}>
@@ -58,7 +57,7 @@ const MyOrdersScreen = ({ navigation }) => {
         <Text style={styles.cardPrice}>Harga Total: Rp{formatPrice(item.total_price)}</Text>
         <Text>Status: {item.status}</Text>
         <TouchableOpacity style={styles.detailButton}>
-          <Text style={styles.detailButtonText}>Detail</Text>
+          <Text style={styles.detailButtonText} onPress={() => navigation.navigate('MyOrdersDetail', { transactionId: item.id })}>Detail</Text>
         </TouchableOpacity>
       </View>
     </TouchableOpacity>

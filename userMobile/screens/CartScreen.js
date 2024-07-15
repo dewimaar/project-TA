@@ -28,7 +28,7 @@ const CartScreen = ({ navigation }) => {
     const fetchUserId = async () => {
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.get('http://192.168.92.23:8000/api/user', {
+            const response = await axios.get('http://192.168.154.23:8000/api/user', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -51,7 +51,7 @@ const CartScreen = ({ navigation }) => {
         if (userId) {
             try {
                 const token = await AsyncStorage.getItem('auth_token');
-                const response = await axios.get(`http://192.168.92.23:8000/api/cart?user_id=${userId}`, {
+                const response = await axios.get(`http://192.168.154.23:8000/api/cart?user_id=${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -68,7 +68,7 @@ const CartScreen = ({ navigation }) => {
         const fetchStore = async () => {
             if (userId) {
                 try {
-                    const response = await fetch(`http://192.168.92.23:8000/api/stores/${userId}`);
+                    const response = await fetch(`http://192.168.154.23:8000/api/stores/${userId}`);
                     if (response.ok) {
                         const data = await response.json();
                         setStore(data);
@@ -130,6 +130,23 @@ const CartScreen = ({ navigation }) => {
         }
     };
 
+    const handleDeleteCartItem = async (itemId) => {
+        try {
+            const token = await AsyncStorage.getItem('auth_token');
+            await axios.delete(`http://192.168.154.23:8000/api/cart/${itemId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            // Update cartData by removing the deleted item
+            setCartData(prevCartData => prevCartData.filter(item => item.id !== itemId));
+            Alert.alert('Success', 'Item deleted successfully');
+        } catch (error) {
+            console.error('Error deleting item:', error);
+            Alert.alert('Error', 'Failed to delete item');
+        }
+    };
+
     const closeModal = () => {
         setModalVisible(false);
     };
@@ -165,7 +182,7 @@ const CartScreen = ({ navigation }) => {
                                 />
                                 <Image
                                     style={styles.itemImage}
-                                    source={{ uri: `http://192.168.92.23:8000/storage/${item.variation_image}` }}
+                                    source={{ uri: `http://192.168.154.23:8000/storage/${item.variation_image}` }}
                                     resizeMode="contain"
                                 />
                                 <View style={styles.itemDetails}>
@@ -173,6 +190,9 @@ const CartScreen = ({ navigation }) => {
                                     <Text style={styles.itemTitle}>{item.store.name}</Text>
                                     <Text style={styles.itemPrice}>{formatPrice(item.total_price)}</Text>
                                 </View>
+                                <TouchableOpacity onPress={() => handleDeleteCartItem(item.id)} style={styles.deleteButton}>
+                                    <Text style={styles.deleteButtonText}>Delete</Text>
+                                </TouchableOpacity>
                             </View>
                         )}
                         refreshControl={
@@ -194,7 +214,7 @@ const CartScreen = ({ navigation }) => {
                             <View key={item.id} style={styles.modalItem}>
                                 <Image
                                     style={styles.modalItemImage}
-                                    source={{ uri: `http://192.168.92.23:8000/storage/${item.variation_image}` }}
+                                    source={{ uri: `http://192.168.154.23:8000/storage/${item.variation_image}` }}
                                     resizeMode="contain"
                                 />
                                 <View style={styles.modalItemDetails}>
@@ -224,7 +244,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        paddingBottom: 80, 
+        paddingBottom: 80,
     },
     emptyCartText: {
         fontSize: 18,
@@ -272,7 +292,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         borderRadius: 8,
         alignItems: 'center',
-        marginBottom: -10, 
+        marginBottom: -10,
     },
     checkoutButtonText: {
         color: '#fff',
@@ -343,6 +363,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginRight: 15,
+    },
+    deleteButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 'auto',
+    },
+    deleteButtonText: {
+        color: '#dc3545', 
+        fontWeight: 'bold',
     },
 });
 

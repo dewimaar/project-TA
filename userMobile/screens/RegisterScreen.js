@@ -21,7 +21,7 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post('http://192.168.92.23:8000/api/register', {
+            const response = await axios.post('http://192.168.154.23:8000/api/register', {
                 name,
                 email,
                 noTelp,

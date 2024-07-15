@@ -12,7 +12,7 @@ const TransactionsScreen = ({ navigation }) => {
   const fetchUserData = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get('http://192.168.92.23:8000/api/user', {
+      const response = await axios.get('http://192.168.154.23:8000/api/user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -23,46 +23,45 @@ const TransactionsScreen = ({ navigation }) => {
     }
   };
 
-
-    const fetchTransactions = async () => {
-      try {
-        const token = await AsyncStorage.getItem('auth_token');
-        if (!token) {
-          console.error('No token found in AsyncStorage');
-          return;
-        }
-
-        const response = await axios.get(`http://192.168.92.23:8000/api/transaction/${store.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setTransactions(response.data);
-      } catch (error) {
-        console.error('Error fetching transactions:', error);
-        if (error.response && error.response.status === 401) {
-          console.error('Unauthorized access - logging out user');
-        } else {
-          console.error('Error message:', error.message);
-          Alert.alert('Error', 'Error fetching transactions.');
-        }
+  const fetchTransactions = async () => {
+    try {
+      const token = await AsyncStorage.getItem('auth_token');
+      if (!token) {
+        console.error('No token found in AsyncStorage');
+        return;
       }
-    };
 
-    const fetchStore = async () => {
-      try {
-        const response = await fetch(`http://192.168.92.23:8000/api/stores/${userData.id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setStore(data);
-        } else {
-          // Alert.alert('Error', 'Failed to fetch store data');
-        }
-      } catch (error) {
+      const response = await axios.get(`http://192.168.154.23:8000/api/transaction/${store.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setTransactions(response.data);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      if (error.response && error.response.status === 401) {
+        console.error('Unauthorized access - logging out user');
+      } else {
+        console.error('Error message:', error.message);
+        Alert.alert('Error', 'Error fetching transactions.');
+      }
+    }
+  };
+
+  const fetchStore = async () => {
+    try {
+      const response = await fetch(`http://192.168.154.23:8000/api/stores/${userData.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setStore(data);
+      } else {
         // Alert.alert('Error', 'Failed to fetch store data');
       }
-    };
-  
+    } catch (error) {
+      // Alert.alert('Error', 'Failed to fetch store data');
+    }
+  };
+
   useEffect(() => {
     fetchUserData();
   }, []);
@@ -83,16 +82,24 @@ const TransactionsScreen = ({ navigation }) => {
     navigation.navigate('TransactionMethods');
   };
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <Image
         style={styles.itemImage}
-        source={{ uri: `http://192.168.92.23:8000/storage/${item.variation_image}` }}
+        source={{ uri: `http://192.168.154.23:8000/storage/${item.variation_image}` }}
         resizeMode="contain"
       />
       <View style={styles.itemDetails}>
         <Text style={styles.itemName}>{item.variation_name}</Text>
-        <Text style={styles.itemPrice}>${item.total_price}</Text>
+        <Text style={styles.itemPrice}>{formatCurrency(item.total_price)}</Text>
         <Text style={styles.itemStatus}>Status: {item.status}</Text>
         <TouchableOpacity
           style={styles.detailButton}

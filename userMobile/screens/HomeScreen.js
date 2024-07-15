@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
     const fetchUserData = async () => {
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.get('http://192.168.92.23:8000/api/user', {
+            const response = await axios.get('http://192.168.154.23:8000/api/user', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -58,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
         try {
             if (userData) {
                 const token = await AsyncStorage.getItem('auth_token');
-                const response = await axios.get(`http://192.168.92.23:8000/api/product/${userData.id}`);
+                const response = await axios.get(`http://192.168.154.23:8000/api/product/${userData.id}`);
                 const updatedProducts = response.data.map(product => {
                     const price = product.variations && product.variations.length > 0 
                         ? product.variations[0].price 
@@ -131,7 +131,7 @@ const HomeScreen = ({ navigation }) => {
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
             <View style={styles.productContainer}>
-                <Image source={{ uri: `http://192.168.92.23:8000/storage/${item.image}` }} style={styles.productImage} />
+                <Image source={{ uri: `http://192.168.154.23:8000/storage/${item.image}` }} style={styles.productImage} />
                 <Text style={styles.productTitle}>{item.name}</Text>
                 <Text style={styles.productPrice}>Rp{formatPrice(item.price)}</Text>
                 <Text style={styles.storeName}>{item.store.name}</Text>
@@ -149,7 +149,7 @@ const HomeScreen = ({ navigation }) => {
                     <Icon name="search-outline" size={24} color="#888" style={styles.searchIcon} />
                     <TextInput
                         style={styles.searchInput}
-                        placeholder="Search..."
+                        placeholder="Cari..."
                         placeholderTextColor="#888"
                         value={searchQuery}
                         onChangeText={handleSearchInputChange}
@@ -173,10 +173,10 @@ const HomeScreen = ({ navigation }) => {
                 onValueChange={(itemValue, itemIndex) => setSelectedStore(itemValue)}
                 style={styles.picker}
             >
-                <Picker.Item label="Clothing Store" value="clothing" />
-                <Picker.Item label="Electronic Store" value="electronics" />
-                <Picker.Item label="Hardware Store" value="hardware" />
-                <Picker.Item label="Building Materials Store" value="materials" /> 
+                <Picker.Item label="Toko Pakaian" value="clothing" />
+                <Picker.Item label="Toko Elektronik" value="electronics" />
+                <Picker.Item label="Toko Roti" value="bakery" />
+                <Picker.Item label="Toko Bangunan" value="materials" /> 
             </Picker>
 
             <FlatList

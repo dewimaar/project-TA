@@ -51,7 +51,7 @@
     .form-select-custom {
         border-radius: 20px;
         padding: 10px 20px;
-        background-color: darkgreen;
+        background-color: #00796B;
         color: white;
         border: none;
     }
@@ -113,8 +113,8 @@
                             <thead>
                                 <tr>
                                     <th scope="col" class="col-1">ID</th>
-                                    <th scope="col" class="col-4">Nama</th>
-                                    <th scope="col" class="col-3">No Telp</th>
+                                    <th scope="col" class="col-4">Nama Pengguna</th>
+                                    <th scope="col" class="col-3">Nomor Telepon</th>
                                     <th scope="col" class="col-4">Email</th>
                                     <th scope="col" class="col-1">Aksi</th>
                                 </tr>
@@ -124,7 +124,7 @@
                                 <tr>
                                     <td>{{ $user->id }}</td>
                                     <td>{{ $user->name }}</td>
-                                    <td>{{ $user->noTelp }}</td> <!-- Asumsikan ada kolom no telp di tabel user -->
+                                    <td>{{ $user->noTelp }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center align-items-center gap-2">

@@ -51,7 +51,7 @@
     .form-select-custom {
         border-radius: 20px;
         padding: 10px 20px;
-        background-color: darkgreen;
+        background-color: #00796B;
         color: white;
         border: none;
     }
@@ -115,7 +115,7 @@
                                 <tr>
                                     <th scope="col" class="col-1">ID</th>
                                     <th scope="col" class="col-2">Nama Pembeli</th>
-                                    <th scope="col" class="col-2">Jumlah Barang</th>
+                                    <th scope="col" class="col-2">Jumlah Produk</th>
                                     <th scope="col" class="col-3">Total Harga</th>
                                     <th scope="col" class="col-2">Nama Toko</th>
                                     <th scope="col" class="col-2">Tanggal Transaksi</th>

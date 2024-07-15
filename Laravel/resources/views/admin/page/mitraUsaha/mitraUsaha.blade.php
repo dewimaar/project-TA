@@ -51,7 +51,7 @@
     .form-select-custom {
         border-radius: 20px;
         padding: 10px 20px;
-        background-color: darkgreen;
+        background-color: #00796B;
         color: white;
         border: none;
     }
@@ -113,7 +113,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col" class="col-1">ID</th>
-                                    <th scope="col" class="col-4">Nama</th>
+                                    <th scope="col" class="col-4">Nama Toko</th>
                                     <th scope="col" class="col-3">Kategori</th>
                                     <th scope="col" class="col-3">Nama Bank</th>
                                     <th scope="col" class="col-3">Username Bank</th>

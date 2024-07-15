@@ -13,12 +13,12 @@ const StoreFinanceScreen = () => {
   const fetchUserData = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get('http://192.168.92.23:8000/api/user', {
+      const response = await axios.get('http://192.168.154.23:8000/api/user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      const storeResponse = await axios.get(`http://192.168.92.23:8000/api/stores/${response.data.id}`);
+      const storeResponse = await axios.get(`http://192.168.154.23:8000/api/stores/${response.data.id}`);
       setStoreId(storeResponse.data.id);
     } catch (error) {
       console.error('Failed to fetch user or store data:', error);
@@ -28,7 +28,7 @@ const StoreFinanceScreen = () => {
   const fetchFinancialData = async (storeId) => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get(`http://192.168.92.23:8000/api/bank-transfers/${storeId}`, {
+      const response = await axios.get(`http://192.168.154.23:8000/api/bank-transfers/${storeId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -73,9 +73,9 @@ const StoreFinanceScreen = () => {
       <Text style={styles.title}>Keuangan Toko Saya</Text>
       <View style={styles.table}>
         <View style={[styles.tableRow, styles.tableHeader]}>
-          <Text style={styles.headerCell}>Bank Name</Text>
-          <Text style={styles.headerCell}>Bank Username</Text>
-          <Text style={styles.headerCell}>Bank Account Number</Text>
+          <Text style={styles.headerCell}>Nama Bank</Text>
+          <Text style={styles.headerCell}>Username Bank</Text>
+          <Text style={styles.headerCell}>Nomor Rekening Bank</Text>
           <Text style={styles.headerCell}>Bukti Transaksi</Text>
         </View>
         {financialData.map((item, index) => (
@@ -103,7 +103,7 @@ const StoreFinanceScreen = () => {
               <Text style={styles.closeText}>Close</Text>
             </TouchableOpacity>
             <Image
-              source={{ uri: `http://192.168.92.23:8000/storage/${selectedImage}` }}
+              source={{ uri: `http://192.168.154.23:8000/storage/${selectedImage}` }}
               style={styles.modalImage}
             />
           </View>

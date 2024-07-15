@@ -18,21 +18,21 @@
             <input type="text" class="form-control" id="username_pengguna" name="username_pengguna" required>
         </div>
         <div class="form-group">
-            <label for="no_rekening">No Rekening</label>
+            <label for="no_rekening">Nomor Rekening</label>
             <input type="text" class="form-control" id="no_rekening" name="no_rekening" required>
         </div>
-        <button type="submit" class="btn btn-success mt-3">Submit</button>
+        <button type="submit" class="btn btn-success mt-3">Kirim</button>
     </form>
 
     <div class="mt-5">
-        <h2>Daftar Metode Transaksi</h2>
+        <h5>Daftar Metode Transaksi Admin</h5>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nama Bank</th>
                     <th>Username Pengguna</th>
-                    <th>No Rekening</th>
+                    <th>Nomor Rekening</th>
                     <th>Tanggal Dibuat</th>
                 </tr>
             </thead>

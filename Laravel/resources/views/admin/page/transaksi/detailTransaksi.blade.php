@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container">
-    <h1 class="my-4">Detail Transaksi</h1>
+    <div class="d-flex justify-content-between align-items-center my-4">
+        <h1>Detail Transaksi</h1>
+        <i class="bi bi-arrow-left-circle-fill" style="font-size: 24px; cursor: pointer;" onclick="window.location='{{ route('transaksi') }}';"></i>
+    </div>
     
     @if (session('success'))
         <div class="alert alert-success">
@@ -18,28 +21,28 @@
 
     <div class="card mb-4">
         <div class="card-header">
-            <h2>{{ $transactions->variation_name }}</h2>
+            <h5>{{ $transactions->variation_name }}</h5>
         </div>
         <div class="card-body">
             <table class="table table-striped">
                 <tr>
-                    <th>Gambar</th>
+                    <th>Gambar Produk</th>
                     <td><img src="{{ asset('storage/'.$transactions->variation_image) }}" alt="Image" width="100"></td>
                 </tr>
                 <tr>
-                    <th>Quantity</th>
+                    <th>Jumlah</th>
                     <td>{{ $transactions->quantity }}</td>
                 </tr>
                 <tr>
-                    <th>Unit Price</th>
-                    <td>{{ $transactions->unit_price }}</td>
+                    <th>Harga Satuan</th>
+                    <td>Rp {{ number_format($transactions->unit_price, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
-                    <th>Total Price</th>
-                    <td>{{ $transactions->total_price }}</td>
+                    <th>Total Harga</th>
+                    <td>Rp {{ number_format($transactions->total_price, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
-                    <th>Store Name</th>
+                    <th>Nama Toko</th>
                     <td>{{ $transactions->store->name }}</td>
                 </tr>
                 <tr>
@@ -47,12 +50,12 @@
                     <td>{{ $transactions->user->name }}</td>
                 </tr>
                 <tr>
-                    <th>Payment Method</th>
+                    <th>Metode Pembayaran</th>
                     <td>{{ $transactions->payment_method }}</td>
                 </tr>
                 <tr>
-                    <th>Payment Proof</th>
-                    <td><a href="{{ asset('storage/'.$transactions->payment_proof) }}" target="_blank">View Proof</a></td>
+                    <th>Bukti Pembayaran</th>
+                    <td><a href="{{ asset('storage/'.$transactions->payment_proof) }}" target="_blank">Lihat Bukti</a></td>
                 </tr>
                 <tr>
                     <th>Username Pengguna Bank</th>
@@ -72,7 +75,7 @@
     
     <div class="card mb-4">
         <div class="card-header">
-            <h2>Update Status Admin</h2>
+            <h5>Update Status Admin</h5>
         </div>
         <div class="card-body">
             <form action="{{ route('updateAdminStatus', ['id' => $transactions->id]) }}" method="POST">
@@ -92,7 +95,39 @@
 
     <div class="d-flex justify-content-between">
         <a href="{{ route('transferDanaTransaksi', ['id' => $transactions->id]) }}" class="btn btn-success">Keuangan Seller</a>
-        <a href="{{ route('transaksi') }}" class="btn btn-danger">Kembali</a>
     </div>
 </div>
+
+<style>
+    .container {
+        max-width: 800px;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .form-group label {
+        font-weight: 500;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .bi-arrow-left-circle-fill {
+        color: #00796B;
+    }
+
+    .bi-arrow-left-circle-fill:hover {
+        color: #034f46;
+    }
+</style>
 @endsection
