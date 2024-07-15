@@ -89,6 +89,10 @@ const MarketScreen = ({ navigation }) => {
     navigation.navigate("StoreFinance");
   };
 
+  const handleShippingMethods = () => {
+    navigation.navigate("ShippingMethods");
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -130,6 +134,12 @@ const MarketScreen = ({ navigation }) => {
               <TouchableOpacity style={styles.button} onPress={handleStoreFinance}>
                 <Icon name="wallet-outline" size={20} color="#fff" />
                 <Text style={styles.buttonText}>Keuangan Toko Saya</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={handleShippingMethods}>
+                <Icon name="bicycle-outline" size={20} color="#fff" />
+                <Text style={styles.buttonText}>Metode Pengiriman</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\metodeTransaksiController;
 use App\Http\Controllers\mitraController;
+use App\Http\Controllers\rekapPenghasilanController;
 use App\Http\Controllers\transaksiAdminController;
 use App\Http\Controllers\transactionController;
 
@@ -36,7 +37,7 @@ Route::middleware('admin.auth')->prefix('admin')->group(function() {
     Route::get('/pengguna/detail/{id}', [PenggunaController::class, 'detailPengguna'])->name('detailPengguna');
     Route::get('/mitraUsaha', [mitraController::class, 'mitraUsaha'])->name('mitraUsaha');
     Route::get('/detailMitra/{id}', [mitraController::class, 'detailMitra'])->name('detailMitra');
-    Route::get('/rekapPenghasilan', [Controller::class, 'rekapPenghasilan'])->name('rekapPenghasilan');
+    Route::get('/rekapPenghasilan', [rekapPenghasilanController::class, 'rekapPenghasilan'])->name('rekapPenghasilan');
     Route::get('/notifikasi', [Controller::class, 'notifikasi'])->name('notifikasi');
     Route::get('/riwayatTransaksi', [transaksiAdminController::class, 'riwayatTransaksi'])->name('riwayatTransaksi');
     Route::get('/detailRiwayatTransaksi/{id}', [transaksiAdminController::class, 'detailRiwayatTransaksi'])->name('detailRiwayatTransaksi');

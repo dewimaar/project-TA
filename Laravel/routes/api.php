@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\metodeTransaksiController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\transaksiAdminController;
+use App\Http\Controllers\ShippingInfoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,3 +57,5 @@ Route::middleware('auth:sanctum')->get('/transactions/{id}', [TransactionControl
 Route::get('/transaction/{id}', [TransactionController::class, 'indexUser']);
 Route::put('/transactions/{id}/status', [TransactionController::class, 'updateStatus']);
 Route::get('/bank-transfers/{storeId}', [transaksiAdminController::class, 'getBankTransferByStore']);
+Route::post('/shipping-infos', [ShippingInfoController::class, 'store']);
+Route::get('/shipping-infos/{store_id}/{user_id}', [ShippingInfoController::class, 'getByStoreAndUser']);

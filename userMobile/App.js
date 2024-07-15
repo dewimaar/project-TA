@@ -28,6 +28,7 @@ import AboutAppScreen from './screens/AboutAppScreen';
 import MyOrdersScreen from './screens/MyOrdersScreen';
 import MyOrdersDetailScreen from './screens/MyOrdersDetailScreen';
 import StoreFinanceScreen from './screens/StoreFinanceScreen';
+import ShippingMethodsScreen from './screens/ShippingMethodsScreen';
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,7 @@ const App = () => {
         <Stack.Screen name="MyOrders" component={MyOrdersScreen} options={{ title: 'Pesanan Saya' }} />
         <Stack.Screen name="MyOrdersDetail" component={MyOrdersDetailScreen} options={{ title: 'Detail Pesanan Saya' }} />
         <Stack.Screen name="StoreFinance" component={StoreFinanceScreen} options={{ title: 'Keuangan Toko Saya' }} />
+        <Stack.Screen name="ShippingMethods" component={ShippingMethodsScreen} options={{ title: 'Metode Pengiriman' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

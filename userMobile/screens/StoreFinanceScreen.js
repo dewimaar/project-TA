@@ -71,24 +71,33 @@ const StoreFinanceScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Keuangan Toko Saya</Text>
-      <View style={styles.table}>
-        <View style={[styles.tableRow, styles.tableHeader]}>
-          <Text style={styles.headerCell}>Nama Bank</Text>
-          <Text style={styles.headerCell}>Username Bank</Text>
-          <Text style={styles.headerCell}>Nomor Rekening Bank</Text>
-          <Text style={styles.headerCell}>Bukti Transaksi</Text>
-        </View>
-        {financialData.map((item, index) => (
-          <TouchableOpacity key={index} onPress={() => handleImageClick(item.payment_image)}>
-            <View style={styles.tableRow}>
-              <Text style={styles.cell}>{item.bank_name}</Text>
-              <Text style={styles.cell}>{item.bank_username}</Text>
-              <Text style={styles.cell}>{item.bank_account_number}</Text>
-              <Text style={styles.cellLink}>Lihat Bukti Transaksi</Text>
-            </View>
+      {financialData.map((item, index) => (
+        <View key={index} style={styles.itemContainer}>
+          <View style={styles.itemRow}>
+            <Text style={styles.itemLabel}>Nama Produk:</Text>
+            <Text style={styles.itemValue}>{item.product_name}</Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.itemLabel}>Nama Bank:</Text>
+            <Text style={styles.itemValue}>{item.bank_name}</Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.itemLabel}>Username Bank:</Text>
+            <Text style={styles.itemValue}>{item.bank_username}</Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.itemLabel}>Nomor Rekening Bank:</Text>
+            <Text style={styles.itemValue}>{item.bank_account_number}</Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.itemLabel}>Dana Diterima:</Text>
+            <Text style={styles.itemValue}>{item.payment_seller}</Text>
+          </View>
+          <TouchableOpacity onPress={() => handleImageClick(item.payment_image)}>
+            <Text style={styles.itemLink}>Lihat Bukti Transaksi</Text>
           </TouchableOpacity>
-        ))}
-      </View>
+        </View>
+      ))}
       
       {/* Modal for displaying payment image */}
       <Modal
@@ -125,33 +134,27 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  table: {
+  itemContainer: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 5,
     marginBottom: 20,
-    overflow: 'hidden',
+    padding: 10,
+    backgroundColor: '#f9f9f9',
   },
-  tableRow: {
+  itemRow: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
   },
-  tableHeader: {
-    backgroundColor: '#f2f2f2',
-  },
-  headerCell: {
-    flex: 1,
+  itemLabel: {
     fontWeight: 'bold',
+    fontSize: 16,
   },
-  cell: {
-    flex: 1,
+  itemValue: {
+    fontSize: 16,
   },
-  cellLink: {
-    flex: 1,
+  itemLink: {
     color: 'blue',
     textDecorationLine: 'underline',
     textAlign: 'center',

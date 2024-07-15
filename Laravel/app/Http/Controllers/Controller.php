@@ -48,13 +48,13 @@ class Controller extends BaseController
     //         'title' => 'Detail Mitra',
     //     ]);
     // }
-    public function rekapPenghasilan ()
-    {
-        return view('admin.page.rekapPenghasilan',[
-            'name' => 'Rekap Penghasilan Mitra Usaha',
-            'title' => 'Rekap Penghasilan',
-        ]);
-    }
+    // public function rekapPenghasilan ()
+    // {
+    //     return view('admin.page.rekapPenghasilan',[
+    //         'name' => 'Rekap Penghasilan Mitra Usaha',
+    //         'title' => 'Rekap Penghasilan',
+    //     ]);
+    // }
     public function notifikasi ()
     {
         return view('admin.page.Notifikasi',[

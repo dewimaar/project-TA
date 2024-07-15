@@ -23,6 +23,8 @@
                 @csrf
                 <input type="hidden" name="transaction_id" value="{{ $transactions->id }}">
                 <input type="hidden" name="store_id" value="{{ $transfer->id }}">
+                <input type="hidden" name="payment_seller" value="{{ $payment_seller }}">
+                <input type="hidden" name="product_name" value="{{ $product_name }}">
                 <div class="form-group">
                     <label for="bank_names" class="font-weight-bold">Nama Bank:</label>
                     <input type="text" id="bank_names" name="bank_name" class="form-control" readonly>
@@ -38,6 +40,14 @@
                 <div class="form-group">
                     <label for="payment_image" class="font-weight-bold">Unggah Bukti Pembayaran</label>
                     <input type="file" accept="image/*" id="payment_image" name="payment_image" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="payment_seller_display" class="font-weight-bold">Jumlah Pembayaran:</label>
+                    <input type="text" id="payment_seller_display" class="form-control" value="{{ $payment_seller }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="product_name_display" class="font-weight-bold">Nama Produk:</label>
+                    <input type="text" id="product_name_display" class="form-control" value="{{ $product_name }}" readonly>
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">Simpan</button>
             </form>

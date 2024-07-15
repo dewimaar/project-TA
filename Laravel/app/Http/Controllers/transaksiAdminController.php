@@ -55,11 +55,15 @@ class transaksiAdminController extends Controller
     {
         $transactions = Transaction::with('store','user')->findOrFail($id);
         $transfer = Store::with('banks')->find($transactions->store->id);
+        $payment_seller = $transactions->total_price * 0.95;
+        $product_name = $transactions->variation_name;
         return view('admin.page.transaksi.transferDanaTransaksi',[
             'name' => 'Transfer Transaksi',
             'title' => 'Transfer Transaksi',
             'transfer' => $transfer,
             'transactions' => $transactions,
+            'payment_seller' => $payment_seller,
+            'product_name' => $product_name,
         ]);
     }
 
@@ -94,6 +98,8 @@ class transaksiAdminController extends Controller
                 'bank_username' => 'required|string|max:255',
                 'bank_account_number' => 'required|string|max:255',
                 'payment_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'payment_seller' => 'required|string|max:255',
+                'product_name' => 'required|string|max:255',
             ]);
 
             if ($validator->fails()) {
@@ -111,6 +117,8 @@ class transaksiAdminController extends Controller
                 'bank_username' => $request->bank_username,
                 'bank_account_number' => $request->bank_account_number,
                 'payment_image' => $path,
+                'payment_seller' => $request->payment_seller,
+                'product_name' => $request->product_name,
             ]);
 
             return redirect()->back()->with('success', 'Bank details saved successfully.');

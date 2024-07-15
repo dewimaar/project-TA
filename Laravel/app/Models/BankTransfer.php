@@ -15,7 +15,9 @@ class BankTransfer extends Model
         'bank_name',
         'bank_username',
         'bank_account_number',
-        'payment_image'
+        'payment_image',
+        'payment_seller',
+        'product_name',
     ];
 
     // Relationships
