@@ -18,7 +18,10 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
     const [userId, setUserId] = useState(null);
     const [banks, setBanks] = useState([]);
     const [store, setStore] = useState(null);
+    const [shippingInfos, setShippingInfos] = useState([]);
     const [selectedBank, setSelectedBank] = useState(null);
+    const [selectedShipping, setSelectedShipping] = useState(null);
+    const [totalCost, setTotalCost] = useState(0);
     const selectedItems = route.params.selectedItems || [];
     const setResetCartItems = route.params.setResetCartItems || [];
 console.log('id',selectedItems);
@@ -52,9 +55,19 @@ console.log('id',selectedItems);
                 Alert.alert('Error', 'Failed to fetch bank data.');
             }
         };
+        const fetchShippingInfos = async () => {
+            try {
+                const response = await axios.get('http://192.168.154.23:8000/api/shipping-infos');
+                setShippingInfos(response.data);
+            } catch (error) {
+                console.error('Failed to fetch shipping info data:', error);
+                Alert.alert('Error', 'Failed to fetch shipping info data.');
+            }
+        };
 
         fetchUserId();
         fetchBankData();
+        fetchShippingInfos();
     }, []);
 
     const renderBankOptions = () => {
@@ -63,9 +76,22 @@ console.log('id',selectedItems);
         ));
     };
 
+    const renderShippingOptions = () => {
+        return shippingInfos.map((shipping) => (
+            <Picker.Item key={shipping.id} label={shipping.shipping_name} value={shipping} />
+        ));
+    };
+
     const onBankChange = (itemValue) => {
         setSelectedBank(itemValue);
         setValue('paymentMethod', itemValue.bank_name); 
+    };
+
+    const onShippingChange = (itemValue) => {
+        setSelectedShipping(itemValue);
+        const itemTotalCost = selectedItems.reduce((total, item) => total + item.total_price, 0);
+        const shippingCost = itemValue ? itemValue.shipping_cost : 0;
+        setTotalCost(itemTotalCost + shippingCost);
     };
 
     const confirmCheckout = async (data) => {
@@ -78,12 +104,20 @@ console.log('id',selectedItems);
             Alert.alert('Error', 'Please select a bank.');
             return;
         }
+
+        // if (!selectedShipping) {
+        //     Alert.alert('Error', 'Please select a shipping method.');
+        //     return;
+        // }
     
         const formData = new FormData();
         formData.append('user_id', userId);
         formData.append('full_address', data.fullAddress);
         formData.append('google_maps_link', data.googleMapsLink);
         formData.append('payment_method', selectedBank.bank_name); 
+        // formData.append('ekspedisi_name', selectedShipping.shipping_name);
+        // formData.append('ekspedisi_cost', selectedShipping.shipping_cost);
+        formData.append('total_cost', totalCost);
     
         // Append username_pengguna and no_rekening to formData
         formData.append('username_pengguna', selectedBank.username_pengguna);
@@ -218,6 +252,21 @@ console.log('id',selectedItems);
                     <Text style={styles.value}>{selectedBank.no_rekening}</Text>
                 </View>
             )}
+            {/* <Text style={styles.label}>Metode Pengiriman:</Text>
+            <Picker
+                selectedValue={selectedShipping}
+                onValueChange={(itemValue) => onShippingChange(itemValue)}
+                style={styles.input}
+            >
+                <Picker.Item label="Pilih Ekspedisi" value={null} />
+                {renderShippingOptions()}
+            </Picker>
+            {selectedShipping && (
+                <View>
+                    <Text style={styles.label}>Biaya Pengiriman:</Text>
+                    <Text style={styles.value}>{formatRupiah(selectedShipping.shipping_cost)}</Text>
+                </View>
+            )} */}
             <UploadImages
                 name="images"
                 control={control}
@@ -225,6 +274,10 @@ console.log('id',selectedItems);
                 reqText="Required"
                 error={watch("images") && watch("images").length === 0}
             />
+            <View style={styles.totalCostContainer}>
+                <Text style={styles.totalCostLabel}>Total Dibayar:</Text>
+                <Text style={styles.totalCostValue}>{formatRupiah(totalCost)}</Text>
+            </View>
             <TouchableOpacity style={styles.confirmButton} onPress={handleSubmit(confirmCheckout)}>
                 <Text style={styles.confirmButtonText}>Konfirmasi Pembayaran</Text>
             </TouchableOpacity>

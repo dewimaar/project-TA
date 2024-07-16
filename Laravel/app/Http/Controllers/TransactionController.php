@@ -26,6 +26,9 @@ class TransactionController extends Controller
             'payment_proof.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'username_pengguna' => 'nullable|string', 
             'no_rekening' => 'nullable|string',
+            'ekspedisi_name' => 'nullable|string',
+            'ekspedisi_cost' => 'nullable|numeric',
+            'total_cost' => 'nullable|numeric',
         ]);
 
         $productImagePaths = '';
@@ -56,6 +59,9 @@ class TransactionController extends Controller
                 'payment_proof' => $productImagePaths,
                 'username_pengguna' => $request->username_pengguna,
                 'no_rekening' => $request->no_rekening,
+                'ekspedisi_name' => $request->ekspedisi_name,
+                'ekspedisi_cost' => $request->ekspedisi_cost,
+                'total_cost' => $request->total_cost,
             ]);
         }
         

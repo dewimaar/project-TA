@@ -59,3 +59,7 @@ Route::put('/transactions/{id}/status', [TransactionController::class, 'updateSt
 Route::get('/bank-transfers/{storeId}', [transaksiAdminController::class, 'getBankTransferByStore']);
 Route::post('/shipping-infos', [ShippingInfoController::class, 'store']);
 Route::get('/shipping-infos/{store_id}/{user_id}', [ShippingInfoController::class, 'getByStoreAndUser']);
+Route::get('shipping-infos', [ShippingInfoController::class, 'getShippingInfos']);
+Route::middleware('auth:sanctum')->put('/variations/{id}', [ProductController::class, 'updateVariation']);
+
+

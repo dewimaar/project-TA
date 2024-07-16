@@ -24,7 +24,10 @@ class Transaction extends Model
         'username_pengguna',
         'no_rekening',
         'status',
-        'statusAdmin'
+        'statusAdmin',
+        'ekspedisi_name',
+        'ekspedisi_cost',
+        'total_cost',
     ];
 
     const STATUS_PENDING = 'Pending';

@@ -30,4 +30,10 @@ class ShippingInfoController extends Controller
 
         return response()->json($shippingInfo);
     }
+
+    public function getShippingInfos()
+    {
+        $shippingInfos = ShippingInfo::all();
+        return response()->json($shippingInfos);
+    }
 }

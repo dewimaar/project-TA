@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, TextInput, Button, StyleSheet, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProductDetailScreen = ({ route }) => {
   const { productId } = route.params;
   const [product, setProduct] = useState(null);
+  const [editingVariation, setEditingVariation] = useState({});
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -19,12 +22,75 @@ const ProductDetailScreen = ({ route }) => {
     fetchProductDetails();
   }, [productId]);
 
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('auth_token');
+        if (token) {
+          setToken(token);
+        } else {
+          console.error('No authentication token found');
+          Alert.alert('Error', 'No authentication token found');
+        }
+      } catch (error) {
+        console.error('Failed to fetch authentication token:', error);
+        Alert.alert('Error', 'Failed to fetch authentication token');
+      }
+    };
+
+    fetchToken();
+  }, []);
+
   const formatPrice = (price) => {
     if (price === undefined || price === null || isNaN(Number(price))) {
       return 'Price not available';
     }
     const numberPrice = Number(price);
     return numberPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+  const handleInputChange = (variationId, field, value) => {
+    setEditingVariation((prev) => ({
+      ...prev,
+      [variationId]: {
+        ...prev[variationId],
+        [field]: value,
+      },
+    }));
+  };
+
+  const updateVariation = async (variationId) => {
+    try {
+      const { price, stock } = editingVariation[variationId];
+      const response = await axios.put(
+        `http://192.168.154.23:8000/api/variations/${variationId}`,
+        { price: parseFloat(price), stock: parseInt(stock) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log(response.data.message);
+
+      setProduct((prev) => {
+        const updatedVariations = prev.variations.map((variation) => {
+          if (variation.id === variationId) {
+            return { ...variation, price, stock };
+          }
+          return variation;
+        });
+        return { ...prev, variations: updatedVariations };
+      });
+
+      setEditingVariation((prev) => {
+        const updatedEditing = { ...prev };
+        delete updatedEditing[variationId];
+        return updatedEditing;
+      });
+
+      Alert.alert('Success', 'Variation updated successfully');
+    } catch (error) {
+      console.error('Failed to update variation:', error);
+      Alert.alert('Error', 'Failed to update variation');
+    }
   };
 
   if (!product) {
@@ -50,13 +116,19 @@ const ProductDetailScreen = ({ route }) => {
           <Text style={styles.variationName}>{variation.name}</Text>
           <Text style={styles.variationPrice}>Harga: Rp{formatPrice(variation.price)}</Text>
           <Text style={styles.variationStock}>Stok: {variation.stock}</Text>
-          {variation.image && (
-            <Image
-              style={styles.variationImage}
-              source={{ uri: `http://192.168.154.23:8000/storage/${variation.image}` }}
-              resizeMode="contain"
-            />
-          )}
+          <TextInput
+            placeholder="Update Price"
+            value={editingVariation[variation.id]?.price || ''}
+            onChangeText={(text) => handleInputChange(variation.id, 'price', text)}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Update Stock"
+            value={editingVariation[variation.id]?.stock || ''}
+            onChangeText={(text) => handleInputChange(variation.id, 'stock', text)}
+            style={styles.input}
+          />
+          <Button title="Update" onPress={() => updateVariation(variation.id)} />
         </View>
       ))}
     </ScrollView>
@@ -107,10 +179,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
   },
-  variationImage: {
-    width: '100%',
-    height: 150,
-    borderRadius: 8,
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    borderRadius: 4,
   },
 });
 

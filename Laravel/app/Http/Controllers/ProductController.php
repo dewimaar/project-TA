@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\Variation;
+use App\Models\variations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -86,5 +86,30 @@ class ProductController extends Controller
     {
         $products = Product::with('variations', 'store')->where('user_id','!=', $userId)->get();
         return response()->json($products, 200);
+    }
+
+    public function updateVariation(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $variation = variations::find($id);
+
+        if (!$variation) {
+            return response()->json(['message' => 'Variation not found'], 404);
+        }
+
+        $variation->update([
+            'price' => $request->price,
+            'stock' => $request->stock,
+        ]);
+
+        return response()->json(['message' => 'Variation updated successfully'], 200);
     }
 }
