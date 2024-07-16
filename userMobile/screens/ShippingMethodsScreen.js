@@ -40,8 +40,8 @@ const ShippingMethodsScreen = () => {
 
       setUserData(response.data);
     } catch (error) {
-      console.error("Failed to fetch user data:", error);
-      Alert.alert("Error", "Failed to fetch user data.");
+      console.error("Gagal mengambil data pengguna:", error);
+      Alert.alert("Error", "Gagal mengambil data pengguna.");
     }
   };
 
@@ -52,10 +52,10 @@ const ShippingMethodsScreen = () => {
         const data = await response.json();
         setStore(data);
       } else {
-        Alert.alert('Error', 'Failed to fetch store data');
+        Alert.alert('Error', 'Gagal mengambil data toko');
       }
     } catch (error) {
-      Alert.alert('Error', 'Failed to fetch store data');
+      Alert.alert('Error', 'Gagal mengambil data toko');
     }
   };
 
@@ -71,10 +71,10 @@ const ShippingMethodsScreen = () => {
       if (response.status === 200) {
         setShippingInfos(response.data);
       } else {
-        console.error("Failed to fetch shipping infos");
+        console.error("Gagal mengambil informasi pengiriman");
       }
     } catch (error) {
-      console.error("Failed to fetch shipping infos:", error);
+      console.error("Gagal mengambil informasi pengiriman:", error);
     }
   };
 
@@ -99,16 +99,28 @@ const ShippingMethodsScreen = () => {
       );
 
       if (response.status === 201) {
-        Alert.alert("Success", "Shipping information saved successfully.");
-        // Refetch shipping infos after successful save
+        Alert.alert("Sukses", "Informasi pengiriman berhasil disimpan.");
+        // Reset input fields
+        setShippingName('');
+        setShippingCost('');
+        setShippingContact('');
+        // Fetch updated shipping info
         fetchShippingInfos();
       } else {
-        Alert.alert("Error", "Failed to save shipping information.");
+        Alert.alert("Error", "Gagal menyimpan informasi pengiriman.");
       }
     } catch (error) {
-      console.error("Failed to save shipping information:", error);
-      Alert.alert("Error", "Failed to save shipping information.");
+      console.error("Gagal menyimpan informasi pengiriman:", error);
+      Alert.alert("Error", "Gagal menyimpan informasi pengiriman.");
     }
+  };
+
+  const formatPrice = (price) => {
+    if (price === undefined || price === null || isNaN(Number(price))) {
+      return 'Price not available';
+    }
+    const numberPrice = Math.round(Number(price));
+    return `Rp ${numberPrice.toLocaleString('id-ID', { minimumFractionDigits: 0 })}`;
   };
 
   return (
@@ -116,34 +128,34 @@ const ShippingMethodsScreen = () => {
       <Text style={styles.title}>Metode Pengiriman</Text>
       <TextInput
         style={styles.input}
-        placeholder="Shipping Name"
+        placeholder="Nama Pengiriman"
         value={shippingName}
         onChangeText={setShippingName}
       />
       <TextInput
         style={styles.input}
-        placeholder="Shipping Cost"
+        placeholder="Biaya Pengiriman"
         value={shippingCost}
         onChangeText={setShippingCost}
         keyboardType="numeric"
       />
       <TextInput
         style={styles.input}
-        placeholder="Shipping Contact"
+        placeholder="Kontak Pengiriman"
         value={shippingContact}
         onChangeText={setShippingContact}
       />
-      <Button title="Save Shipping Info" onPress={saveShippingInfo} />
+      <Button title="Simpan Informasi Pengiriman" onPress={saveShippingInfo} />
 
-      <Text style={[styles.title, { marginTop: 20 }]}>Shipping Information List</Text>
+      <Text style={[styles.title, { marginTop: 20 }]}>Daftar Informasi Pengiriman</Text>
       <FlatList
         data={shippingInfos}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Text>Shipping Name: {item.shipping_name}</Text>
-            <Text>Shipping Cost: ${item.shipping_cost}</Text>
-            <Text>Contact: {item.shipping_contact}</Text>
+            <Text>Nama Pengiriman: {item.shipping_name}</Text>
+            <Text>Biaya Pengiriman: {formatPrice(item.shipping_cost)}</Text>
+            <Text>Kontak: {item.shipping_contact}</Text>
           </View>
         )}
       />

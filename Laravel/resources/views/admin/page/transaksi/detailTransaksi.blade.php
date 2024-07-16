@@ -1,6 +1,10 @@
 @extends('Admin.Layout.index')
 
 @section('content')
+<div class="d-flex justify-content-between">
+    <a href="{{ route('transferDanaTransaksi', ['id' => $transactions->id]) }}" class="btn btn-success">Keuangan Seller</a>
+</div>
+
 <div class="container">
     <div class="d-flex justify-content-between align-items-center my-4">
         <h1>Detail Transaksi</h1>
@@ -91,10 +95,6 @@
                 <button type="submit" class="btn btn-primary mt-2">Update Status</button>
             </form>
         </div>
-    </div>
-
-    <div class="d-flex justify-content-between">
-        <a href="{{ route('transferDanaTransaksi', ['id' => $transactions->id]) }}" class="btn btn-success">Keuangan Seller</a>
     </div>
 </div>
 
