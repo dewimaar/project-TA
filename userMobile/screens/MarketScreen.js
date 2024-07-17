@@ -138,7 +138,7 @@ const MarketScreen = ({ navigation }) => {
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.button} onPress={handleShippingMethods}>
-                <Icon name="bicycle-outline" size={20} color="#fff" />
+                <Icon name="cube-outline" size={20} color="#fff" />
                 <Text style={styles.buttonText}>Metode Pengiriman</Text>
               </TouchableOpacity>
             </View>

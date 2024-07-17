@@ -166,7 +166,7 @@ const ProductDetailHomeScreen = ({ route }) => {
           style={styles.addToCartButton}
           onPress={() => setModalVisible(true)}
         >
-          <Text style={styles.addToCartButtonText}>Masukkan Keranjang</Text>
+          <Text style={styles.addToCartButtonText}>Masukkan ke Keranjang</Text>
         </TouchableOpacity>
       )}
 
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   addToCartButton: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#00796B", 
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: "center",
@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   confirmButton: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#00796B",
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: "center",

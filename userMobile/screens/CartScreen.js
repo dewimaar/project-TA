@@ -191,7 +191,7 @@ const CartScreen = ({ navigation }) => {
                                         <Text style={styles.itemPrice}>{formatPrice(item.total_price)}</Text>
                                     </View>
                                     <TouchableOpacity onPress={() => handleDeleteCartItem(item.id)} style={styles.deleteButton}>
-                                        <Text style={styles.deleteButtonText}>Delete</Text>
+                                        <Text style={styles.deleteButtonText}>Hapus</Text>
                                     </TouchableOpacity>
                                 </View>
                             )}

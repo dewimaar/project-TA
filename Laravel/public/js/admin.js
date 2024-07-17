@@ -6,7 +6,7 @@ document.getElementById("logoutButton").addEventListener("click", function(event
     event.preventDefault();
 
     Swal.fire({
-        title: 'Apakah Anda yakin ingin logout?',
+        title: 'Apakah Anda yakin ingin keluar?',
         text: "Anda akan keluar dari sesi saat ini.",
         icon: 'warning',
         showCancelButton: true,
