@@ -32,4 +32,15 @@ class Cart extends Model
     {
         return $this->belongsTo(Store::class);
     }
+    public function shipping()
+    {
+        return $this->hasMany(ShippingInfo::class);
+    }
+    public static function getProductsGroupedByStore($userId)
+    {
+        return self::where('user_id', $userId)
+            ->with(['product', 'store'])
+            ->get()
+            ->groupBy('store_id');
+    }
 }

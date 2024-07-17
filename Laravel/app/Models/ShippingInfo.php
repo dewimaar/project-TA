@@ -25,4 +25,8 @@ class ShippingInfo extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public static function getShippingInfoByStore($storeId)
+    {
+        return self::where('store_id', $storeId)->get();
+    }
 }

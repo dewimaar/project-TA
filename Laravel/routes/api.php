@@ -46,7 +46,8 @@ Route::get('/products/detail/{id}', [ProductController::class, 'show']);
 Route::get('/product/{userId}', [ProductController::class, 'getAllProducts']);
 
 Route::post('/cart', [CartController::class, 'store']);
-Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'index']);
+// Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/cart/products-by-store', [CartController::class, 'getProductsGroupedByStore']);
 Route::middleware('auth:sanctum')->post('/payment-methods', [BankDetailController::class, 'store']);
 Route::get('/payment-methods/{storeId}', [BankDetailController::class, 'getPaymentMethodsByStore']);
 Route::get('/metodeTransaksi', [metodeTransaksiController::class, 'metodeTransaksi']);
@@ -59,7 +60,7 @@ Route::put('/transactions/{id}/status', [TransactionController::class, 'updateSt
 Route::get('/bank-transfers/{storeId}', [transaksiAdminController::class, 'getBankTransferByStore']);
 Route::post('/shipping-infos', [ShippingInfoController::class, 'store']);
 Route::get('/shipping-infos/{store_id}/{user_id}', [ShippingInfoController::class, 'getByStoreAndUser']);
-Route::get('shipping-infos', [ShippingInfoController::class, 'getShippingInfos']);
+Route::get('shipping-infos/{store_id}', [ShippingInfoController::class, 'getShippingInfos']);
 Route::middleware('auth:sanctum')->put('/variations/{id}', [ProductController::class, 'updateVariation']);
 
 
