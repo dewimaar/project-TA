@@ -31,9 +31,9 @@ class ShippingInfoController extends Controller
         return response()->json($shippingInfo);
     }
 
-    public function getShippingInfos()
+    public function getShippingInfos($store_id)
     {
-        $shippingInfos = ShippingInfo::all();
+        $shippingInfos = ShippingInfo::where('store_id', $store_id)->get();
         return response()->json($shippingInfos);
     }
 }

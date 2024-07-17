@@ -17,26 +17,25 @@ class TransactionController extends Controller
             'items.*.variation_id' => 'required',
             'items.*.store_id' => 'required',
             'items.*.variation_name' => 'required',
+            // 'items.*.variation_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.unit_price' => 'required|numeric|min:0',
             'items.*.total_price' => 'required|numeric|min:0',
+            'items.*.ekspedisi_name' => 'required|string',
+            'items.*.ekspedisi_cost' => 'required|numeric|min:1',
+            'total_cost' => 'required|numeric|min:0',
             'full_address' => 'nullable|string',
             'google_maps_link' => 'nullable|string',
             'payment_method' => 'nullable|string',
-            'payment_proof.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'payment_proof' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'username_pengguna' => 'nullable|string', 
             'no_rekening' => 'nullable|string',
-            'ekspedisi_name' => 'nullable|string',
-            'ekspedisi_cost' => 'nullable|numeric',
-            'total_cost' => 'nullable|numeric',
         ]);
 
         $productImagePaths = '';
         if ($request->hasFile('payment_proof')) {
-            foreach ($request->file('payment_proof') as $image) {
-                $path = $image->store('images/payments', 'public');
+                $path = $request->file('payment_proof')->store('images/payments', 'public');
                 $productImagePaths = $path;
-            }
         }
 
 
@@ -47,20 +46,20 @@ class TransactionController extends Controller
             Transaction::create([
                 'user_id' => $request->user_id,
                 'store_id' => $item['store_id'],
-                'variation_id' => $item['variation_id'],
-                'variation_name' => $item['variation_name'],
-                'variation_image' => $item['variation_image'] ?? null,
+                'variation_id' =>  $variation->id,
+                'variation_name' =>  $variation->name,
+                'variation_image' =>  $variation->image ?? null,
                 'quantity' => $item['quantity'],
                 'unit_price' => $item['unit_price'],
                 'total_price' => $item['total_price'],
+                'ekspedisi_name' => $item['ekspedisi_name'],
+                'ekspedisi_cost' => $item['ekspedisi_cost'],
                 'full_address' => $request->full_address,
                 'google_maps_link' => $request->google_maps_link,
                 'payment_method' => $request->payment_method,
                 'payment_proof' => $productImagePaths,
                 'username_pengguna' => $request->username_pengguna,
                 'no_rekening' => $request->no_rekening,
-                'ekspedisi_name' => $request->ekspedisi_name,
-                'ekspedisi_cost' => $request->ekspedisi_cost,
                 'total_cost' => $request->total_cost,
             ]);
         }
@@ -68,7 +67,7 @@ class TransactionController extends Controller
 
         return response()->json(['message' => 'Transactions saved successfully'], 201);
     } catch (\Exception $e) {
-        return response()->json(['error' => 'Internal Server Error'], 500);
+        return response()->json(['error' => $request->items], 500);
     }
 }
 public function index(Request $request)

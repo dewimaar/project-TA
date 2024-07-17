@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Store;
 use App\Models\variations;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ShippingInfo;
 
 
 class CartController extends Controller
@@ -38,15 +39,38 @@ class CartController extends Controller
 
         return response()->json($cartItem, 201);
     }
-    public function index(Request $request)
+    // public function index(Request $request)
+    // {
+    //     // Mengambil user_id dari pengguna yang terautentikasi
+    //     $user_id = Auth::id();
+
+    //     // Mengambil data cart berdasarkan user_id
+    //     $cartItems = Cart::with('store')->where('user_id', $user_id)->get();
+
+    //     return response()->json($cartItems);
+    // }
+    public function getProductsGroupedByStore(Request $request)
     {
-        // Mengambil user_id dari pengguna yang terautentikasi
-        $user_id = Auth::id();
+        // Ambil user_id dari request atau session (tergantung bagaimana Anda mengelola user)
+        $userId = $request->user()->id;
 
-        // Mengambil data cart berdasarkan user_id
-        $cartItems = Cart::with('store')->where('user_id', $user_id)->get();
+        // Panggil fungsi dari model untuk mendapatkan produk yang dikelompokkan berdasarkan store
+        $productsGroupedByStore = Cart::getProductsGroupedByStore($userId);
 
-        return response()->json($cartItems);
+        // Loop melalui setiap store_id untuk mendapatkan informasi pengiriman dan nama toko
+        $productsWithShippingInfo = $productsGroupedByStore->map(function ($products, $storeId) {
+            $store = Store::find($storeId);
+            $shippingInfo = ShippingInfo::getShippingInfoByStore($storeId);
+
+            return [
+                'idToko' => $store->id,
+                'nama' => $store->name,
+                'produk' => $products,
+                'shipping_info' => $shippingInfo
+            ];
+        })->values(); // Menggunakan values() untuk menghilangkan key store_id dari hasil
+
+        return response()->json($productsWithShippingInfo);
     }
     public function deleteCartItem($id)
 {
