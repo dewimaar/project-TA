@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Image, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiUrl} from "../constant/common";
 
 const MyOrdersScreen = ({ navigation }) => {
   const [transactions, setTransactions] = useState([]);
@@ -16,7 +17,7 @@ const MyOrdersScreen = ({ navigation }) => {
           return;
         }
 
-        const response = await axios.get('http://192.168.154.23:8000/api/transactions', {
+        const response = await axios.get(`${apiUrl}api/transactions`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -48,7 +49,7 @@ const MyOrdersScreen = ({ navigation }) => {
     >
       <Image
         style={styles.modalItemImage}
-        source={{ uri: `http://192.168.154.23:8000/storage/${item.variation_image}` }}
+        source={{ uri: `${apiUrl}storage/${item.variation_image}` }}
         resizeMode="contain"
       />
       <View style={styles.cardContent}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, ActivityIndicator, Alert, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiUrl} from "../constant/common";
 
 const StoreFinanceScreen = () => {
   const [financialData, setFinancialData] = useState([]);
@@ -13,12 +14,12 @@ const StoreFinanceScreen = () => {
   const fetchUserData = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get('http://192.168.154.23:8000/api/user', {
+      const response = await axios.get(`${apiUrl}api/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      const storeResponse = await axios.get(`http://192.168.154.23:8000/api/stores/${response.data.id}`);
+      const storeResponse = await axios.get(`${apiUrl}api/stores/${response.data.id}`);
       setStoreId(storeResponse.data.id);
     } catch (error) {
       console.error('Failed to fetch user or store data:', error);
@@ -28,7 +29,7 @@ const StoreFinanceScreen = () => {
   const fetchFinancialData = async (storeId) => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get(`http://192.168.154.23:8000/api/bank-transfers/${storeId}`, {
+      const response = await axios.get(`${apiUrl}api/bank-transfers/${storeId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -70,7 +71,7 @@ const StoreFinanceScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Keuangan Toko Saya</Text>
+      {/* <Text style={styles.title}>Keuangan Toko Saya</Text> */}
       {financialData.map((item, index) => (
         <View key={index} style={styles.itemContainer}>
           <View style={styles.itemRow}>
@@ -112,7 +113,7 @@ const StoreFinanceScreen = () => {
               <Text style={styles.closeText}>Close</Text>
             </TouchableOpacity>
             <Image
-              source={{ uri: `http://192.168.154.23:8000/storage/${selectedImage}` }}
+              source={{ uri: `${apiUrl}api/storage/${selectedImage}` }}
               style={styles.modalImage}
             />
           </View>

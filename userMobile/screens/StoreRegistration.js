@@ -7,6 +7,7 @@ import axios from 'axios';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
+import {apiUrl} from "../constant/common";
 
 const StoreRegistration = ({ navigation }) => {
     const [storeName, setStoreName] = useState('');
@@ -49,7 +50,7 @@ const StoreRegistration = ({ navigation }) => {
                 const token = await AsyncStorage.getItem('auth_token');
                 console.log('Retrieved Token:', token);
 
-                const response = await axios.get('http://192.168.154.23:8000/api/user', {
+                const response = await axios.get(`${apiUrl}api/user`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -77,7 +78,7 @@ const StoreRegistration = ({ navigation }) => {
             formData.append("image", gambar);
             console.log('g', gambar);
           });
-        const { data } = await axios.post('http://192.168.154.23:8000/api/stores', formData, {
+        const { data } = await axios.post(`${apiUrl}api/stores`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },

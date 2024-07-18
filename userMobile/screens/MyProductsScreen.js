@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {apiUrl} from "../constant/common";
 
 const MyProductsScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
@@ -11,7 +12,7 @@ const MyProductsScreen = ({ navigation }) => {
   const fetchUserData = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get('http://192.168.154.23:8000/api/user', {
+      const response = await axios.get(`${apiUrl}api/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -25,7 +26,7 @@ const MyProductsScreen = ({ navigation }) => {
   const fetchProducts = async () => {
     if (!userData) return;
     try {
-      const response = await axios.get(`http://192.168.154.23:8000/api/products/${userData.id}`);
+      const response = await axios.get(`${apiUrl}api/products/${userData.id}`);
       const updatedProducts = response.data.map(product => ({
         ...product,
         images: Array.isArray(product.image) ? product.image : [product.image]
@@ -55,7 +56,7 @@ const MyProductsScreen = ({ navigation }) => {
         <Image
           key={index}
           style={styles.productImage}
-          source={{ uri: `http://192.168.154.23:8000/storage/${image}` }}
+          source={{ uri: `${apiUrl}storage/${image}` }}
           resizeMode="contain"
         />
       ))}

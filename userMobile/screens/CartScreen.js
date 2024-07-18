@@ -15,6 +15,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CheckBox from "expo-checkbox";
 import Modal from "react-native-modal";
+import {apiUrl} from "../constant/common";
 
 const CartScreen = ({ navigation }) => {
   const [userId, setUserId] = useState(null);
@@ -38,7 +39,7 @@ const CartScreen = ({ navigation }) => {
   const fetchUserId = async () => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
-      const response = await axios.get("http://192.168.154.23:8000/api/user", {
+      const response = await axios.get(`${apiUrl}api/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -62,7 +63,7 @@ const CartScreen = ({ navigation }) => {
       try {
         const token = await AsyncStorage.getItem("auth_token");
         const response = await axios.get(
-          `http://192.168.154.23:8000/api/cart/products-by-store`,
+          `${apiUrl}api/cart/products-by-store`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -82,7 +83,7 @@ const CartScreen = ({ navigation }) => {
       if (userId) {
         try {
           const response = await fetch(
-            `http://192.168.154.23:8000/api/stores/${userId}`
+            `${apiUrl}api/stores/${userId}`
           );
           if (response.ok) {
             const data = await response.json();
@@ -125,8 +126,8 @@ const CartScreen = ({ navigation }) => {
       navigation.navigate("Profile");
     } else if (itemName === "market") {
       navigation.navigate("Market");
-    } else if (itemName === "settings") {
-      navigation.navigate("Settings");
+    } else if (itemName === "notification") {
+      navigation.navigate("Notification");
     } else if (itemName === "cart") {
       navigation.navigate("Cart");
     }
@@ -156,7 +157,7 @@ const CartScreen = ({ navigation }) => {
   const handleDeleteCartItem = async (itemId) => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
-      await axios.delete(`http://192.168.154.23:8000/api/cart/${itemId}`, {
+      await axios.delete(`${apiUrl}api/cart/${itemId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -211,7 +212,7 @@ const CartScreen = ({ navigation }) => {
                       <Image
                         style={styles.itemImage}
                         source={{
-                          uri: `http://192.168.154.23:8000/storage/${i.variation_image}`,
+                          uri: `${apiUrl}storage/${i.variation_image}`,
                         }}
                         resizeMode="contain"
                       />
@@ -251,10 +252,9 @@ const CartScreen = ({ navigation }) => {
 
       <Modal isVisible={isModalVisible}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Selected Products</Text>
-
+          {/* <Text style={styles.modalTitle}>Produk yang dipilih</Text> */}
           <Text style={styles.emptyCartText}>
-            Apakah anda yakin ingin checkout
+            Apakah anda yakin ingin checkout?
           </Text>
           <TouchableOpacity
             style={styles.modalConfirmButton}
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   emptyCartText: {
     fontSize: 18,
     textAlign: "center",
-    marginTop: 20,
+    marginTop: 8,
   },
   cartItem: {
     flexDirection: "row",

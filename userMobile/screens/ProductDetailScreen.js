@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TextInput, Button, StyleSheet, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiUrl} from "../constant/common";
 
 const ProductDetailScreen = ({ route }) => {
   const { productId } = route.params;
@@ -12,7 +13,7 @@ const ProductDetailScreen = ({ route }) => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`http://192.168.154.23:8000/api/products/detail/${productId}`);
+        const response = await axios.get(`${apiUrl}api/products/detail/${productId}`);
         setProduct(response.data);
       } catch (error) {
         console.error('Failed to fetch product details:', error);
@@ -63,7 +64,7 @@ const ProductDetailScreen = ({ route }) => {
     try {
       const { price, stock } = editingVariation[variationId];
       const response = await axios.put(
-        `http://192.168.154.23:8000/api/variations/${variationId}`,
+        `${apiUrl}api/variations/${variationId}`,
         { price: parseFloat(price), stock: parseInt(stock) },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -105,7 +106,7 @@ const ProductDetailScreen = ({ route }) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Image
         style={styles.productImage}
-        source={{ uri: `http://192.168.154.23:8000/storage/${product.image}` }}
+        source={{ uri: `${apiUrl}storage/${product.image}` }}
         resizeMode="contain"
       />
       <Text style={styles.productName}>{product.name}</Text>
@@ -113,6 +114,15 @@ const ProductDetailScreen = ({ route }) => {
 
       {product.variations.map((variation) => (
         <View key={variation.id} style={styles.variationContainer}>
+        {variation.image && (
+            <Image
+              style={styles.variationImage}
+              source={{
+                uri: `${apiUrl}storage/${variation.image}`,
+              }}
+              resizeMode="contain"
+            />
+          )}
           <Text style={styles.variationName}>{variation.name}</Text>
           <Text style={styles.variationPrice}>Harga: Rp{formatPrice(variation.price)}</Text>
           <Text style={styles.variationStock}>Stok: {variation.stock}</Text>
@@ -165,6 +175,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
+  },
+  variationImage: {
+    width: "100%",
+    height: 150,
+    borderRadius: 8,
   },
   variationName: {
     fontSize: 18,

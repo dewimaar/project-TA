@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import UploadImages from '../components/UploadImages';
 import { Picker } from '@react-native-picker/picker';
+import {apiUrl} from "../constant/common";
 
 const EditProfileScreen = ({ navigation, route }) => {
     const { userData } = route.params;
@@ -20,7 +21,7 @@ const EditProfileScreen = ({ navigation, route }) => {
             setValue('google_maps_link', userData.google_maps_link);
             setValue('birthdate', userData.birthdate);
             setValue('gender', userData.gender);
-            setValue('profile_photo', userData.profile_photo ? [{ uri: `http://192.168.154.23:8000/storage/${userData.profile_photo}` }] : []);
+            setValue('profile_photo', userData.profile_photo ? [{ uri: `${apiUrl}storage/${userData.profile_photo}` }] : []);
         }
     }, [userData]);
 
@@ -52,7 +53,7 @@ const EditProfileScreen = ({ navigation, route }) => {
 
             console.log('Sending request to server with formData:', formData);
 
-            const response = await axios.post('http://192.168.154.23:8000/api/user/update', formData, {
+            const response = await axios.post(`${apiUrl}api/user/update`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
@@ -86,7 +87,7 @@ const EditProfileScreen = ({ navigation, route }) => {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.form}>
-                <Text style={styles.label}>Name</Text>
+                <Text style={styles.label}>Nama</Text>
                 <Controller
                     control={control}
                     name="name"
@@ -115,7 +116,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                     )}
                 />
 
-                <Text style={styles.label}>No. Telp</Text>
+                <Text style={styles.label}>Nomor Telepon</Text>
                 <Controller
                     control={control}
                     name="noTelp"
@@ -129,7 +130,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                     )}
                 />
 
-                <Text style={styles.label}>Address</Text>
+                <Text style={styles.label}>Alamat Lengkap</Text>
                 <Controller
                     control={control}
                     name="address"
@@ -143,7 +144,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                     )}
                 />
 
-                <Text style={styles.label}>Google Maps Link</Text>
+                <Text style={styles.label}>Tautan Google Maps</Text>
                 <Controller
                     control={control}
                     name="google_maps_link"
@@ -157,7 +158,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                     )}
                 />
 
-                <Text style={styles.label}>Date of Birth</Text>
+                <Text style={styles.label}>Tanggal Lahir</Text>
                 <Controller
                     control={control}
                     name="birthdate"
@@ -174,7 +175,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                     )}
                 />
 
-                <Text style={styles.label}>Gender</Text>
+                <Text style={styles.label}>Jenis Kelamin</Text>
                 <Controller
                     control={control}
                     name="gender"
@@ -185,13 +186,13 @@ const EditProfileScreen = ({ navigation, route }) => {
                             onValueChange={onChange}
                             style={styles.picker}
                         >
-                            <Picker.Item label="Male" value="male" />
-                            <Picker.Item label="Female" value="female" />
+                            <Picker.Item label="Laki-laki" value="male" />
+                            <Picker.Item label="Perempuan" value="female" />
                         </Picker>
                     )}
                 />
 
-                <Text style={styles.label}>Profile Photo</Text>
+                <Text style={styles.label}>Foto Profil</Text>
                 <Controller
                     control={control}
                     name="profile_photo"
@@ -207,7 +208,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                 />
 
                 <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)} disabled={loading}>
-                    <Text style={styles.buttonText}>{loading ? 'Updating...' : 'Update Profile'}</Text>
+                    <Text style={styles.buttonText}>{loading ? 'Updating...' : 'Perbarui Foto Profil'}</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>

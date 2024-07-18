@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import BottomNavbar from './BottomNavbar';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {apiUrl} from "../constant/common";
 
 const ProfileScreen = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
@@ -14,7 +15,7 @@ const ProfileScreen = ({ navigation }) => {
             const token = await AsyncStorage.getItem('auth_token');
             console.log('Retrieved Token:', token);
 
-            const response = await axios.get('http://192.168.154.23:8000/api/user', {
+            const response = await axios.get(`${apiUrl}api/user`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -53,8 +54,8 @@ const ProfileScreen = ({ navigation }) => {
             navigation.navigate('Profile');
         } else if (itemName === 'market') {
             navigation.navigate('Market');
-        } else if (itemName === 'settings') {
-            navigation.navigate('Settings');
+        } else if (itemName === 'notification') {
+            navigation.navigate('Notification');
         } else if (itemName === 'cart') {
             navigation.navigate('Cart');
         }
@@ -85,7 +86,7 @@ const ProfileScreen = ({ navigation }) => {
                     <View style={styles.imageContainer}>
                         <Image
                             style={styles.image}
-                            source={{ uri: userData.profile_photo ? `http://192.168.154.23:8000/storage/${userData.profile_photo}` : 'https://via.placeholder.com/150' }}
+                            source={{ uri: userData.profile_photo ? `${apiUrl}storage/${userData.profile_photo}` : 'https://via.placeholder.com/150' }}
                             resizeMode="cover"
                         />
                     </View>
@@ -136,7 +137,7 @@ const ProfileScreen = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.editProfileButton} onPress={navigateToEditProfile}>
                         <Icon name="create-outline" size={20} color="#fff" />
-                        <Text style={styles.buttonText}>Edit Profil</Text>
+                        <Text style={styles.buttonText}>Ubah Profil</Text>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity style={[styles.editProfileButton, styles.logoutButton]} onPress={handleLogout}>

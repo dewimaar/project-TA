@@ -35,4 +35,15 @@ class StoreController extends Controller
 
         return response()->json($store);
     }
+    public function getAllStores()
+    {
+        $stores = Store::all(['id', 'name']); // Retrieve only the id and name fields
+        return response()->json($stores);
+    }
+    public function index()
+    {
+        // Assuming you have a 'stores' table with 'id' and 'name' columns
+        $stores = Store::select('id', 'name')->get();
+        return response()->json($stores);
+    }
 }

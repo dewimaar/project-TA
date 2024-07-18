@@ -5,7 +5,7 @@ const MainScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Image source={require('../assets/mainpict.png')} style={styles.logo} />
-            <Text style={styles.title}>Welcome!</Text>
+            <Text style={styles.title}>Selamat Datang!</Text>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
                 <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>

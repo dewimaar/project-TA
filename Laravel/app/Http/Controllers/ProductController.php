@@ -112,4 +112,16 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'Variation updated successfully'], 200);
     }
+    public function getProductsByStore($storeId)
+{
+    $products = Product::where('store_id', $storeId)->with('store')->get();
+    return response()->json($products);
+}
+    public function getAllProductsExceptOwn()
+{
+    // Assuming you have a 'products' table with 'user_id' column
+    $userId = Auth::id();
+    $products = Product::where('user_id', '!=', $userId)->with('store')->get();
+    return response()->json($products);
+}
 }

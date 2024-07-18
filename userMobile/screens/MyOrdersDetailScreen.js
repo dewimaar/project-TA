@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiUrl} from "../constant/common";
 
 const MyOrdersDetailScreen = ({ route }) => {
   const { transactionId } = route.params;
@@ -16,7 +17,7 @@ const MyOrdersDetailScreen = ({ route }) => {
           return;
         }
 
-        const response = await axios.get(`http://192.168.154.23:8000/api/transactions/${transactionId}`, {
+        const response = await axios.get(`${apiUrl}api/transactions/${transactionId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -41,11 +42,11 @@ const MyOrdersDetailScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Detail Transaksi</Text>
+      {/* <Text style={styles.title}>Detail Transaksi</Text> */}
       <View style={styles.detailContainer}>
         <Image
           style={styles.itemImage}
-          source={{ uri: `http://192.168.154.23:8000/storage/${transaction.variation_image}` }}
+          source={{ uri: `${apiUrl}storage/${transaction.variation_image}` }}
           resizeMode="contain"
         />
         <View style={styles.row}>

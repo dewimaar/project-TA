@@ -28,10 +28,10 @@ const BottomNavbar = ({ navigation, selectedNavItem, handleNavItemClick }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
-        onPress={() => handleNavItemClick('settings')}
+        onPress={() => handleNavItemClick('notification')}
       >
-        <Icon name="settings-outline" size={20} color={selectedNavItem === 'settings' ? '#098C1C' : '#333'} />
-        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'settings' ? '#098C1C' : '#333' }]}>Pengaturan</Text>
+        <Icon name="notifications-outline" size={20} color={selectedNavItem === 'notification' ? '#098C1C' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'notification' ? '#098C1C' : '#333' }]}>Notifikasi</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}

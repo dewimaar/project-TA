@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, TouchableOpacity, StyleSheet, Alert, ToastAndroid, Image } from 'react-native';
 import axios from 'axios';
+import {apiUrl} from "../constant/common";
 
 const RegisterScreen = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -21,7 +22,7 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post('http://192.168.154.23:8000/api/register', {
+            const response = await axios.post(`${apiUrl}api/register`, {
                 name,
                 email,
                 noTelp,

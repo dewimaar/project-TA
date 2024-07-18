@@ -13,6 +13,7 @@ import { useForm, Controller, useFieldArray } from "react-hook-form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import UploadImages from "../components/UploadImages";
+import {apiUrl} from "../constant/common";
 
 const AddProductScreen = ({ navigation }) => {
   const { control, handleSubmit, watch } = useForm({
@@ -32,7 +33,7 @@ const AddProductScreen = ({ navigation }) => {
         const token = await AsyncStorage.getItem('auth_token');
         console.log('Retrieved Token:', token);
 
-        const response = await axios.get('http://192.168.154.23:8000/api/user', {
+        const response = await axios.get(`${apiUrl}api/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -52,7 +53,7 @@ const AddProductScreen = ({ navigation }) => {
     const fetchStore = async () => {
       if (userData) {
         try {
-          const response = await fetch(`http://192.168.154.23:8000/api/stores/${userData.id}`);
+          const response = await fetch(`${apiUrl}api/stores/${userData.id}`);
           if (response.ok) {
             const data = await response.json();
             setStore(data);
@@ -114,7 +115,7 @@ const AddProductScreen = ({ navigation }) => {
       });
 
       const response = await axios.post(
-        "http://192.168.154.23:8000/api/products",
+        "${apiUrl}/api/products",
         formData,
         {
           headers: {
@@ -141,7 +142,7 @@ const AddProductScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Tambah Produk</Text>
+      {/* <Text style={styles.title}>Tambah Produk</Text> */}
       <Controller
         control={control}
         name="name"

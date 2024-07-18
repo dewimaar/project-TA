@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Text, TouchableOpacity, StyleSheet, Alert, ToastAndroid, Image } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiUrl} from "../constant/common";
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -13,9 +14,9 @@ const LoginScreen = ({ navigation }) => {
             Alert.alert('Validation Error', 'All fields are required.');
             return;
         }
-
+console.log(apiUrl)
         try {
-            const response = await axios.post('http://192.168.154.23:8000/api/login', {
+            const response = await axios.post(`${apiUrl}api/login`, {
                 email,
                 password,
             });

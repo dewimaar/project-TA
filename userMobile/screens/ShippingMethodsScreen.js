@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, FlatList } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiUrl} from "../constant/common";
 
 const ShippingMethodsScreen = () => {
   const [userData, setUserData] = useState(null);
@@ -32,7 +33,7 @@ const ShippingMethodsScreen = () => {
       const token = await AsyncStorage.getItem("auth_token");
       console.log("Retrieved Token:", token);
 
-      const response = await axios.get("http://192.168.154.23:8000/api/user", {
+      const response = await axios.get(`${apiUrl}api/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -47,7 +48,7 @@ const ShippingMethodsScreen = () => {
 
   const fetchStore = async () => {
     try {
-      const response = await fetch(`http://192.168.154.23:8000/api/stores/${userData.id}`);
+      const response = await fetch(`${apiUrl}api/stores/${userData.id}`);
       if (response.ok) {
         const data = await response.json();
         setStore(data);
@@ -62,7 +63,7 @@ const ShippingMethodsScreen = () => {
   const fetchShippingInfos = async () => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
-      const response = await axios.get(`http://192.168.154.23:8000/api/shipping-infos/${store.id}/${userData.id}`, {
+      const response = await axios.get(`${apiUrl}api/shipping-infos/${store.id}/${userData.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -83,7 +84,7 @@ const ShippingMethodsScreen = () => {
       const token = await AsyncStorage.getItem("auth_token");
 
       const response = await axios.post(
-        "http://192.168.154.23:8000/api/shipping-infos",
+        `${apiUrl}api/shipping-infos`,
         {
           user_id: userData.id,
           store_id: store.id,

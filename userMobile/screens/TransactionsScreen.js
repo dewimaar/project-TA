@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Alert } from
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiUrl} from "../constant/common";
 
 const TransactionsScreen = ({ navigation }) => {
   const [transactions, setTransactions] = useState([]);
@@ -12,7 +13,7 @@ const TransactionsScreen = ({ navigation }) => {
   const fetchUserData = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get('http://192.168.154.23:8000/api/user', {
+      const response = await axios.get(`${apiUrl}api/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -31,7 +32,7 @@ const TransactionsScreen = ({ navigation }) => {
         return;
       }
 
-      const response = await axios.get(`http://192.168.154.23:8000/api/transaction/${store.id}`, {
+      const response = await axios.get(`${apiUrl}api/transaction/${store.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -50,7 +51,7 @@ const TransactionsScreen = ({ navigation }) => {
 
   const fetchStore = async () => {
     try {
-      const response = await fetch(`http://192.168.154.23:8000/api/stores/${userData.id}`);
+      const response = await fetch(`${apiUrl}api/stores/${userData.id}`);
       if (response.ok) {
         const data = await response.json();
         setStore(data);
@@ -94,7 +95,7 @@ const TransactionsScreen = ({ navigation }) => {
     <View style={styles.itemContainer}>
       <Image
         style={styles.itemImage}
-        source={{ uri: `http://192.168.154.23:8000/storage/${item.variation_image}` }}
+        source={{ uri: `${apiUrl}storage/${item.variation_image}` }}
         resizeMode="contain"
       />
       <View style={styles.itemDetails}>
@@ -113,7 +114,7 @@ const TransactionsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Transaksi Toko Saya</Text>
+      {/* <Text style={styles.title}>Transaksi Toko Saya</Text> */}
       <FlatList
         data={transactions}
         keyExtractor={(item) => item.id.toString()}

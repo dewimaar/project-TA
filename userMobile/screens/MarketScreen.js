@@ -5,6 +5,7 @@ import BottomNavbar from "./BottomNavbar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Icon from "react-native-vector-icons/Ionicons";
+import {apiUrl} from "../constant/common";
 
 const MarketScreen = ({ navigation }) => {
   const [store, setStore] = useState(null);
@@ -15,7 +16,7 @@ const MarketScreen = ({ navigation }) => {
       const token = await AsyncStorage.getItem("auth_token");
       console.log("Retrieved Token:", token);
 
-      const response = await axios.get("http://192.168.154.23:8000/api/user", {
+      const response = await axios.get(`${apiUrl}api/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -30,7 +31,7 @@ const MarketScreen = ({ navigation }) => {
 
   const fetchStore = async () => {
     try {
-      const response = await fetch(`http://192.168.154.23:8000/api/stores/${userData.id}`);
+      const response = await fetch(`${apiUrl}api/stores/${userData.id}`);
       if (response.ok) {
         const data = await response.json();
         setStore(data);
@@ -62,8 +63,8 @@ const MarketScreen = ({ navigation }) => {
       navigation.navigate("Profile");
     } else if (itemName === "market") {
       navigation.navigate("Market");
-    } else if (itemName === "settings") {
-      navigation.navigate("Settings");
+    } else if (itemName === "notification") {
+      navigation.navigate("Notification");
     } else if (itemName === "cart") {
       navigation.navigate("Cart");
     }
@@ -96,14 +97,14 @@ const MarketScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Text style={styles.title}>Toko Saya</Text>
+        {/* <Text style={styles.title}>Toko Saya</Text> */}
         {store ? (
           <View style={styles.storeContainer}>
             <View style={styles.imageContainer}>
               <Image
                 style={styles.image}
                 source={{
-                  uri: `http://192.168.154.23:8000/storage/${store.image}`,
+                  uri: `${apiUrl}storage/${store.image}`,
                 }}
                 resizeMode="contain"
               />

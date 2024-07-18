@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, Alert, TouchableOpacity } from 'react-na
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNPickerSelect from 'react-native-picker-select';
+import {apiUrl} from "../constant/common";
 
 const TransactionDetailScreen = ({ route }) => {
   const { transactionId } = route.params;
@@ -18,7 +19,7 @@ const TransactionDetailScreen = ({ route }) => {
           return;
         }
 
-        const response = await axios.get(`http://192.168.154.23:8000/api/transactions/${transactionId}`, {
+        const response = await axios.get(`${apiUrl}api/transactions/${transactionId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -43,7 +44,7 @@ const TransactionDetailScreen = ({ route }) => {
       }
 
       await axios.put(
-        `http://192.168.154.23:8000/api/transactions/${transactionId}/status`,
+        `${apiUrl}api/transactions/${transactionId}/status`,
         { status },
         {
           headers: {
@@ -77,10 +78,10 @@ const TransactionDetailScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Detail Transaksi</Text>
+      {/* <Text style={styles.title}>Detail Transaksi</Text> */}
       <Image
         style={styles.itemImage}
-        source={{ uri: `http://192.168.154.23:8000/storage/${transaction.variation_image}` }}
+        source={{ uri: `${apiUrl}storage/${transaction.variation_image}` }}
         resizeMode="contain"
       />
       <Text style={styles.itemText}>Nama Produk: {transaction.variation_name}</Text>
@@ -95,7 +96,7 @@ const TransactionDetailScreen = ({ route }) => {
       <RNPickerSelect
         onValueChange={(value) => setStatus(value)}
         items={[
-          { label: 'Pending', value: 'Pending' },
+          { label: 'Tertunda', value: 'Pending' },
           { label: 'Diproses', value: 'Diproses' },
           { label: 'Dikirim', value: 'Dikirim' },
           { label: 'Selesai', value: 'Selesai' },

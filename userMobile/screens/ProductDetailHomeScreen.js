@@ -14,6 +14,7 @@ import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import {apiUrl} from "../constant/common";
 
 const ProductDetailHomeScreen = ({ route }) => {
   const { productId } = route.params;
@@ -30,7 +31,7 @@ const ProductDetailHomeScreen = ({ route }) => {
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.154.23:8000/api/products/detail/${productId}`
+          `${apiUrl}api/products/detail/${productId}`
         );
         setProduct(response.data);
         setStoreId(response.data.store.id); // Set store ID from product details
@@ -47,7 +48,7 @@ const ProductDetailHomeScreen = ({ route }) => {
       try {
         const token = await AsyncStorage.getItem("auth_token");
         const response = await axios.get(
-          "http://192.168.154.23:8000/api/user",
+          `${apiUrl}api/user`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -67,7 +68,7 @@ const ProductDetailHomeScreen = ({ route }) => {
   const fetchStore = async () => {
     try {
       const response = await fetch(
-        `http://192.168.154.23:8000/api/stores/${userId}`
+        `${apiUrl}api/stores/${userId}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -96,7 +97,7 @@ const ProductDetailHomeScreen = ({ route }) => {
 
   const handleAddToCart = async () => {
     try {
-      const response = await axios.post("http://192.168.154.23:8000/api/cart", {
+      const response = await axios.post(`${apiUrl}api/cart`, {
         user_id: userId,
         store_id: product.store.id,
         variation_id: selectedVariation.id,
@@ -136,7 +137,7 @@ const ProductDetailHomeScreen = ({ route }) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Image
         style={styles.productImage}
-        source={{ uri: `http://192.168.154.23:8000/storage/${product.image}` }}
+        source={{ uri: `${apiUrl}storage/${product.image}` }}
         resizeMode="contain"
       />
       <Text style={styles.productName}>{product.name}</Text>
@@ -153,7 +154,7 @@ const ProductDetailHomeScreen = ({ route }) => {
             <Image
               style={styles.variationImage}
               source={{
-                uri: `http://192.168.154.23:8000/storage/${variation.image}`,
+                uri: `${apiUrl}storage/${variation.image}`,
               }}
               resizeMode="contain"
             />

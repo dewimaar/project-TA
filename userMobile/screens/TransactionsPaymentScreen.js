@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useForm, Controller } from "react-hook-form";
 import UploadImages from "../components/UploadImages";
 import { Picker } from "@react-native-picker/picker";
+import { apiUrl } from "../constant/common";
 
 const TransactionsPaymentScreen = ({ navigation, route }) => {
   const { control, handleSubmit, setValue, watch } = useForm({
@@ -37,64 +38,48 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
     route.params.selectedItems || []
   );
   const setResetCartItems = route.params.setResetCartItems || [];
+  const fetchUserId = async () => {
+    try {
+      const token = await AsyncStorage.getItem("auth_token");
+      const response = await axios.get(`${apiUrl}api/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const userData = response.data;
+      setUserId(userData.id);
+      // Set the default values for the form fields
+      setValue("fullAddress", userData.address || "");
+      setValue("googleMapsLink", userData.google_maps_link || "");
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+      Alert.alert("Error", "Failed to fetch user data.");
+    }
+  };
+  const fetchBankData = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}api/metodeTransaksi`);
+      setBanks(response.data);
+    } catch (error) {
+      console.error("Failed to fetch bank data:", error);
+      Alert.alert("Error", "Failed to fetch bank data.");
+    }
+  };
   useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const token = await AsyncStorage.getItem("auth_token");
-        const response = await axios.get(
-          "http://192.168.154.23:8000/api/user",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const userData = response.data;
-        setUserId(userData.id);
-
-        // Set the default values for the form fields
-        setValue("fullAddress", userData.address || "");
-        setValue("googleMapsLink", userData.google_maps_link || "");
-      } catch (error) {
-        console.error("Failed to fetch user data:", error);
-        Alert.alert("Error", "Failed to fetch user data.");
-      }
-    };
-
-    const fetchBankData = async () => {
-      try {
-        const response = await axios.get(
-          "http://192.168.154.23:8000/api/metodeTransaksi"
-        );
-        setBanks(response.data);
-      } catch (error) {
-        console.error("Failed to fetch bank data:", error);
-        Alert.alert("Error", "Failed to fetch bank data.");
-      }
-    };
-    // const fetchShippingInfos = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       "http://192.168.154.23:8000/api/shipping-infos"
-    //     );
-    //     setShippingInfos(response.data);
-    //   } catch (error) {
-    //     console.error("Failed to fetch shipping info data:", error);
-    //     Alert.alert("Error", "Failed to fetch shipping info data.");
-    //   }
-    // };
-
-    fetchUserId();
-    fetchBankData();
-    // fetchShippingInfos();
+      fetchUserId();
   }, []);
-
+  useEffect(() => {
+    const Refresh = navigation.addListener("focus", () => {
+      fetchUserId();
+      fetchBankData();
+    });
+    return Refresh;
+  }, [navigation]);
   const renderBankOptions = () => {
     return banks.map((bank) => (
       <Picker.Item key={bank.id} label={bank.bank_name} value={bank} />
     ));
   };
-
   const renderShippingOptions = (shippingInfos) => {
     return shippingInfos.map((shipping) => (
       <Picker.Item
@@ -104,12 +89,10 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
       />
     ));
   };
-
   const onBankChange = (itemValue) => {
     setSelectedBank(itemValue);
     setValue("paymentMethod", itemValue.bank_name);
   };
-
   const onShippingChange = (itemValue, itemIndex) => {
     const updatedItems = [...selectedItems];
     updatedItems[itemIndex] = {
@@ -130,7 +113,6 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
       )
     );
   };
-
   const confirmCheckout = async (data) => {
     if (!userId) {
       Alert.alert("Error", "User ID not available.");
@@ -191,24 +173,19 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
 
     try {
       const token = await AsyncStorage.getItem("auth_token");
-      const response = await axios.post(
-        "http://192.168.154.23:8000/api/transactions",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
+      const response = await axios.post(`${apiUrl}api/transactions`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log("Transaction saved:", response.data);
 
       // Delete items from the cart
       const deletePromises = selectedItems.forEach((item, indexs) => {
         item.produk.forEach((itemp, index) => {
           return axios
-            .delete(`http://192.168.154.23:8000/api/cart/${itemp.id}`, {
+            .delete(`${apiUrl}api/cart/${itemp.id}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -341,7 +318,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
                     <Image
                       style={styles.itemImage}
                       source={{
-                        uri: `http://192.168.154.23:8000/storage/${i.variation_image}`,
+                        uri: `${apiUrl}storage/${i.variation_image}`,
                       }}
                       resizeMode="contain"
                     />

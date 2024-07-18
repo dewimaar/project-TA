@@ -62,5 +62,8 @@ Route::post('/shipping-infos', [ShippingInfoController::class, 'store']);
 Route::get('/shipping-infos/{store_id}/{user_id}', [ShippingInfoController::class, 'getByStoreAndUser']);
 Route::get('shipping-infos/{store_id}', [ShippingInfoController::class, 'getShippingInfos']);
 Route::middleware('auth:sanctum')->put('/variations/{id}', [ProductController::class, 'updateVariation']);
-
+Route::get('/products/store/{storeId}', [ProductController::class, 'getProductsByStore']);
+Route::get('/stores', [StoreController::class, 'getAllStores']);
+Route::get('/stores', [StoreController::class, 'index']);
+Route::get('products', [ProductController::class, 'getAllProductsExceptOwn']);
 

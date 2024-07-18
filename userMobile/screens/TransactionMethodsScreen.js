@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiUrl} from "../constant/common";
 
 const TransactionMethodsScreen = () => {
   const [bankName, setBankName] = useState('');
@@ -18,14 +19,14 @@ const TransactionMethodsScreen = () => {
         const token = await AsyncStorage.getItem('auth_token');
         console.log('Retrieved Token:', token);
 
-        const userResponse = await axios.get('http://192.168.154.23:8000/api/user', {
+        const userResponse = await axios.get(`${apiUrl}api/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setUserId(userResponse.data.id);
 
-        const storeResponse = await axios.get(`http://192.168.154.23:8000/api/stores/${userResponse.data.id}`, {
+        const storeResponse = await axios.get(`${apiUrl}api/stores/${userResponse.data.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -50,7 +51,7 @@ const TransactionMethodsScreen = () => {
   const fetchPaymentMethods = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
-      const response = await axios.get(`http://192.168.154.23:8000/api/payment-methods/${storeId}`, {
+      const response = await axios.get(`${apiUrl}api/payment-methods/${storeId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,7 +65,7 @@ const TransactionMethodsScreen = () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
 
-      const response = await axios.post('http://192.168.154.23:8000/api/payment-methods', {
+      const response = await axios.post(`${apiUrl}api/payment-methods`, {
         user_id: userId,
         store_id: storeId,
         bank_name: bankName,

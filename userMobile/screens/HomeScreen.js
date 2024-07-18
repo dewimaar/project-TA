@@ -10,6 +10,7 @@ import BottomNavbar from './BottomNavbar';
 import place1 from '../assets/place1.jpg';
 import place2 from '../assets/place2.jpg';
 import place3 from '../assets/place3.jpg';
+import {apiUrl} from "../constant/common";
 
 const HomeScreen = ({ navigation }) => {
     const [selectedNavItem, setSelectedNavItem] = useState('home');
@@ -43,7 +44,7 @@ const HomeScreen = ({ navigation }) => {
     const fetchUserData = async () => {
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            const response = await axios.get('http://192.168.154.23:8000/api/user', {
+            const response = await axios.get(`${apiUrl}api/user`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -58,7 +59,7 @@ const HomeScreen = ({ navigation }) => {
         try {
             if (userData) {
                 const token = await AsyncStorage.getItem('auth_token');
-                const response = await axios.get(`http://192.168.154.23:8000/api/product/${userData.id}`);
+                const response = await axios.get(`${apiUrl}api/product/${userData.id}`);
                 const updatedProducts = response.data.map(product => {
                     const price = product.variations && product.variations.length > 0 
                         ? product.variations[0].price 
@@ -131,14 +132,14 @@ const HomeScreen = ({ navigation }) => {
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
             <View style={styles.productContainer}>
-                <Image source={{ uri: `http://192.168.154.23:8000/storage/${item.image}` }} style={styles.productImage} />
+                <Image source={{ uri: `${apiUrl}storage/${item.image}` }} style={styles.productImage} />
                 <Text style={styles.productTitle}>{item.name}</Text>
                 <Text style={styles.productPrice}>Rp{formatPrice(item.price)}</Text>
                 <Text style={styles.storeName}>{item.store.name}</Text>
                 <TouchableOpacity style={styles.productButton} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
                     <Text style={styles.productButtonText}>Detail</Text>
                 </TouchableOpacity>
-            </View>
+            </View> 
         </TouchableOpacity>
     );
 
@@ -155,9 +156,9 @@ const HomeScreen = ({ navigation }) => {
                         onChangeText={handleSearchInputChange}
                     />
                 </View>
-                <TouchableOpacity onPress={() => console.log('Notification icon pressed')}>
+                {/* <TouchableOpacity onPress={() => console.log('Notification icon pressed')}>
                     <Icon name="notifications-outline" size={30} color="#333" onPress={() => navigation.navigate('Notification')} style={styles.notificationIcon} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
 
             <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={styles.carouselContainer}>
