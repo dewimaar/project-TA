@@ -1,20 +1,15 @@
-import React, { useState,useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TextInput, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Input from '../components/Input';
 import UploadImages from '../components/UploadImages';
 import axios from 'axios';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { FieldError, SubmitHandler, useForm } from "react-hook-form";
-import {apiUrl} from "../constant/common";
+import { useForm } from "react-hook-form";
+import { apiUrl } from "../constant/common";
 
 const StoreRegistration = ({ navigation }) => {
-    const [storeName, setStoreName] = useState('');
-    const [category, setCategory] = useState('');
-    const [address, setAddress] = useState('');
-    const [description, setDescription] = useState('');
-
     const [userData, setUserData] = useState(null);
     const StoreSchema = Yup.object({
         name: Yup.string().required("Kolom wajib diisi"),
@@ -22,16 +17,16 @@ const StoreRegistration = ({ navigation }) => {
         address: Yup.string().required("Kolom wajib diisi"),
         description: Yup.string().required("Kolom wajib diisi"),
         images: Yup.array().required("Wajib upload foto!"),
-      });
-      const initialValues = {
+    });
+    const initialValues = {
         name: "",
         category: "",
         address: "",
         description: "",
         images: [],
-      };
-    
-      const {
+    };
+
+    const {
         control,
         handleSubmit,
         getValues,
@@ -39,12 +34,13 @@ const StoreRegistration = ({ navigation }) => {
         watch,
         setError,
         formState: { errors },
-      } = useForm({
+    } = useForm({
         mode: "onChange",
         resolver: yupResolver(StoreSchema),
         defaultValues: initialValues,
-      });
-      useEffect(() => {
+    });
+
+    useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const token = await AsyncStorage.getItem('auth_token');
@@ -65,31 +61,30 @@ const StoreRegistration = ({ navigation }) => {
 
         fetchUserData();
     }, []);
+
     const handleRegister = async (values) => {
         console.log(values);
         try {
-        const formData = new FormData();
-        formData.append('user_id', String(userData.id));
-        formData.append('name', String(values.name));
-        formData.append('category', String(values.category));
-        formData.append('address', String(values.address));
-        formData.append('description', String(values.description));
-        values.images.forEach((gambar) => {
-            formData.append("image", gambar);
-            console.log('g', gambar);
-          });
-        const { data } = await axios.post(`${apiUrl}api/stores`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
+            const formData = new FormData();
+            formData.append('user_id', String(userData.id));
+            formData.append('name', String(values.name));
+            formData.append('category', String(values.category));
+            formData.append('address', String(values.address));
+            formData.append('description', String(values.description));
+            values.images.forEach((gambar) => {
+                formData.append("image", gambar);
+                console.log('g', gambar);
+            });
+            const { data } = await axios.post(`${apiUrl}api/stores`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             if (data) {
-                // const data = await response.json();
                 Alert.alert('Success', 'Store registered successfully');
                 navigation.navigate('Market');
             } else {
-                // const errorData = await response.json();
-                Alert.alert('Error',  'Something went wrong');
+                Alert.alert('Error', 'Something went wrong');
             }
         } catch (error) {
             console.log(error.message);
@@ -101,46 +96,46 @@ const StoreRegistration = ({ navigation }) => {
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Pendaftaran Toko</Text>
             <UploadImages
-              name="images"
-              control={control}
-            //   imagesCount={() => setImagesC(getValues('images').length ?? 0)}
-              error={errors.images}
-              helperText="Pilih foto (jpg, png)"
-              reqText="Input foto garansi & foto barang"
+                name="images"
+                control={control}
+                error={errors.images}
+                helperText="Pilih foto (jpg, png)"
+                reqText="Input foto garansi & foto barang"
             />
             <Input
-            name={"name"}
-            control={control}
-            errors={errors.name}
+                name={"name"}
+                control={control}
+                errors={errors.name}
                 placeholder="Nama Toko"
             />
             <Input
-            name={"category"}
-            errors={errors.category}
-            control={control}
+                name={"category"}
+                errors={errors.category}
+                control={control}
                 placeholder="Kategori"
             />
             <Input
-            name={"address"}
-            errors={errors.address}
-            control={control}
+                name={"address"}
+                errors={errors.address}
+                control={control}
                 placeholder="Alamat Lengkap Toko"
             />
             <Input
-            name={"description"}
-            errors={errors.description}
-            control={control}
+                name={"description"}
+                errors={errors.description}
+                control={control}
                 placeholder="Deskripsi"
             />
-            {/* Tambahkan bidang lain yang diperlukan */}
-            <Button title="Daftarkan Toko" onPress={handleSubmit(handleRegister)} />
+            <TouchableOpacity style={styles.button} onPress={handleSubmit(handleRegister)}>
+                <Text style={styles.buttonText}>Daftarkan Toko</Text>
+            </TouchableOpacity>
         </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        gap:20,
+        gap: 20,
         flexGrow: 1,
         padding: 20,
         backgroundColor: '#f8f9fa',
@@ -159,6 +154,18 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 10,
         paddingHorizontal: 10,
+    },
+    button: {
+        backgroundColor: '#00796B',
+        padding: 15,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 

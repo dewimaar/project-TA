@@ -79,13 +79,13 @@ const App = () => {
           component={NotificationScreen}
           options={{ headerLeft: () => null, title: "Notifikasi" }}
         />
-        <Stack.Screen name="StoreRegistration" component={StoreRegistration} />
+        <Stack.Screen name="StoreRegistration" component={StoreRegistration} options={{ title: "Pendaftaran Toko" }} />
         <Stack.Screen name="AddProduct" component={AddProductScreen} options={{ title: "Tambah Produk" }} />
         <Stack.Screen name="MyProducts" component={MyProductsScreen} options={{ title: "Produk Saya" }} />
-        <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ title: "Detail Produk" }}/>
+        <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ title: "Detail Produk Saya" }}/>
         <Stack.Screen
           name="ProductDetailHome"
-          component={ProductDetailHomeScreen}
+          component={ProductDetailHomeScreen} options={{ title: "Detail Produk" }}
         />
         <Stack.Screen name="Transactions" component={TransactionsScreen} options={{ title: "Transaksi Toko Saya" }} />
         <Stack.Screen
@@ -98,7 +98,7 @@ const App = () => {
         />
         <Stack.Screen
           name="TransactionsPayment"
-          component={TransactionsPaymentScreen}options={{ title: "Checkout" }}
+          component={TransactionsPaymentScreen} options={{ title: "Checkout" }}
         />
         <Stack.Screen
           name="HelpSupport"

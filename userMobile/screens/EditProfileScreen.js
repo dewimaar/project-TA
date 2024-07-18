@@ -130,7 +130,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                     )}
                 />
 
-                <Text style={styles.label}>Alamat Lengkap</Text>
+                <Text style={styles.label}>Alamat</Text>
                 <Controller
                     control={control}
                     name="address"
@@ -144,7 +144,7 @@ const EditProfileScreen = ({ navigation, route }) => {
                     )}
                 />
 
-                <Text style={styles.label}>Tautan Google Maps</Text>
+                <Text style={styles.label}>Link Alamat</Text>
                 <Controller
                     control={control}
                     name="google_maps_link"
