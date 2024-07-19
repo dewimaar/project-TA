@@ -3,6 +3,7 @@
     "name": "userMobile",
     "slug": "userMobile",
     "version": "1.0.0",
+    "scheme": "my-app",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

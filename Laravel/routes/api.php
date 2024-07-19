@@ -12,6 +12,7 @@ use App\Http\Controllers\metodeTransaksiController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\transaksiAdminController;
 use App\Http\Controllers\ShippingInfoController;
+use App\Http\Controllers\PasswordResetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,4 +65,8 @@ Route::get('shipping-infos/{store_id}', [ShippingInfoController::class, 'getShip
 Route::middleware('auth:sanctum')->put('/variations/{id}', [ProductController::class, 'updateVariation']);
 Route::middleware('auth:sanctum')->get('/stores', [StoreController::class, 'getAllStores']);
 Route::get('products', [ProductController::class, 'getProductsByStore']);
+
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
+Route::post('/reset-password', [PasswordResetController::class, 'reset']);
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 

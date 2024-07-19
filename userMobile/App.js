@@ -29,6 +29,8 @@ import MyOrdersScreen from "./screens/MyOrdersScreen";
 import MyOrdersDetailScreen from "./screens/MyOrdersDetailScreen";
 import StoreFinanceScreen from "./screens/StoreFinanceScreen";
 import ShippingMethodsScreen from "./screens/ShippingMethodsScreen";
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
+import ResetPasswordScreen from './screens/ResetPasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -130,6 +132,12 @@ const App = () => {
           component={ShippingMethodsScreen}
           options={{ title: "Metode Pengiriman" }}
         />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPasswordScreen}
+          options={{ title: 'Forgot Password' }}
+        />
+        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -53,6 +53,11 @@ console.log(apiUrl)
                 secureTextEntry
             />
             {error ? <Text style={styles.error}>{error}</Text> : null}
+            <View style={styles.footer}>
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                    <Text style={styles.linkText}>Forgot Password?</Text>
+                </TouchableOpacity>
+            </View>
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
@@ -111,6 +116,15 @@ const styles = StyleSheet.create({
     error: {
         color: 'red',
         marginBottom: 12,
+    },
+    footer: {
+        marginBottom: 20,
+        alignItems: 'flex-end',
+        width: '90%',
+    },
+    linkText: {
+        color: '#00796B',
+        fontSize: 16,
     },
 });
 

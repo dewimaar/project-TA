@@ -9,6 +9,7 @@ use App\Http\Controllers\mitraController;
 use App\Http\Controllers\rekapPenghasilanController;
 use App\Http\Controllers\transaksiAdminController;
 use App\Http\Controllers\transactionController;
+use App\Http\Controllers\PasswordResetController;
 
 
 /*
@@ -25,10 +26,16 @@ use App\Http\Controllers\transactionController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/reset-password-success', function () {return view('auth.passwords.password_reset_success');})->name('password.reset.success');
+
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
 Route::prefix('login')->group(function() {
     Route::get('admin', [AdminController::class, 'login'])->name('admin.login');
     Route::post('admin', [AdminController::class, 'login']);
+    
 });
 
 Route::middleware('admin.auth')->prefix('admin')->group(function() {
