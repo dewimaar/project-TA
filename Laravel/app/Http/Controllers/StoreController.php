@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Store;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class StoreController extends Controller
 {
@@ -37,13 +39,16 @@ class StoreController extends Controller
     }
     public function getAllStores()
     {
-        $stores = Store::all(['id', 'name']); // Retrieve only the id and name fields
-        return response()->json($stores);
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+            $stores = Store::where('user_id', '!=', $user->id)->get();
+            return response()->json($stores, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch stores'], 500);
+        }
     }
-    public function index()
-    {
-        // Assuming you have a 'stores' table with 'id' and 'name' columns
-        $stores = Store::select('id', 'name')->get();
-        return response()->json($stores);
-    }
+
 }

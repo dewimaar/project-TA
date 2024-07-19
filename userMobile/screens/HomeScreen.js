@@ -10,13 +10,14 @@ import BottomNavbar from './BottomNavbar';
 import place1 from '../assets/place1.jpg';
 import place2 from '../assets/place2.jpg';
 import place3 from '../assets/place3.jpg';
-import {apiUrl} from "../constant/common";
+import { apiUrl } from "../constant/common";
 
 const HomeScreen = ({ navigation }) => {
     const [selectedNavItem, setSelectedNavItem] = useState('home');
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedStore, setSelectedStore] = useState('clothing');
+    const [selectedStore, setSelectedStore] = useState('all');
     const [products, setProducts] = useState([]);
+    const [stores, setStores] = useState([]);
     const [userData, setUserData] = useState(null);
     const [isRefetching, setIsRefetching] = useState(false);
 
@@ -55,27 +56,41 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
-    const fetchProducts = async () => {
+    const fetchProducts = async (storeId = 'all') => {
         try {
-            if (userData) {
-                const token = await AsyncStorage.getItem('auth_token');
-                const response = await axios.get(`${apiUrl}api/product/${userData.id}`);
-                const updatedProducts = response.data.map(product => {
-                    const price = product.variations && product.variations.length > 0 
-                        ? product.variations[0].price 
-                        : 'N/A';
-                    return {
-                        ...product,
-                        price,
-                        images: Array.isArray(product.image) ? product.image : [product.image]
-                    };
-                });
-                setProducts(updatedProducts);
-            }
+            const response = await axios.get(`${apiUrl}api/products`, {
+                params: { store_id: storeId === 'all' ? null : storeId }
+            });
+            const updatedProducts = response.data.map(product => {
+                const price = product.variations && product.variations.length > 0 
+                    ? product.variations[0].price 
+                    : 'N/A';
+                return {
+                    ...product,
+                    price,
+                    images: Array.isArray(product.image) ? product.image : [product.image]
+                };
+            });
+            setProducts(updatedProducts);
         } catch (error) {
             console.error('Failed to fetch products:', error);
         }
     };
+
+    const fetchStores = async () => {
+        try {
+            const token = await AsyncStorage.getItem('auth_token');
+            const response = await axios.get(`${apiUrl}api/stores`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setStores(response.data);
+        } catch (error) {
+            console.error('Failed to fetch stores:', error);
+        }
+    };
+    
 
     const formatPrice = (price) => {
         if (price === undefined || price === null || isNaN(Number(price))) {
@@ -89,12 +104,13 @@ const HomeScreen = ({ navigation }) => {
         setIsRefetching(true);
         try {
             await fetchUserData();
+            await fetchStores();
             await fetchProducts();
             setIsRefetching(false);
         } catch (error) {
             setIsRefetching(false);
         }
-    }, [isRefetching, fetchProducts, fetchUserData]);
+    }, [isRefetching, fetchProducts, fetchUserData, fetchStores]);
 
     const RefreshControlComponent = useMemo(() => {
         return (
@@ -109,25 +125,23 @@ const HomeScreen = ({ navigation }) => {
         setProducts(prevProducts => [...prevProducts, newProduct]);
     };
 
-    useEffect(
-        React.useCallback(() => {
-            const Refresh = navigation.addListener("focus", () => {
-                fetchUserData();
-                fetchProducts();
-            });
-            return Refresh;
-        }, [navigation])
-    );
+    useEffect(() => {
+        const refresh = navigation.addListener("focus", () => {
+            fetchUserData();
+            fetchStores();
+            fetchProducts();
+        });
+        return refresh;
+    }, [navigation]);
 
     useEffect(() => {
         fetchUserData();
+        fetchStores();
     }, []);
 
     useEffect(() => {
-        if (userData) {
-            fetchProducts();
-        }
-    }, [userData]);
+        fetchProducts(selectedStore);
+    }, [selectedStore]);
 
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.productItem} onPress={() => navigation.navigate('ProductDetailHome', { productId: item.id })}>
@@ -171,13 +185,13 @@ const HomeScreen = ({ navigation }) => {
 
             <Picker
                 selectedValue={selectedStore}
-                onValueChange={(itemValue, itemIndex) => setSelectedStore(itemValue)}
+                onValueChange={(itemValue) => setSelectedStore(itemValue)}
                 style={styles.picker}
             >
-                <Picker.Item label="Toko Pakaian" value="clothing" />
-                <Picker.Item label="Toko Elektronik" value="electronics" />
-                <Picker.Item label="Toko Roti" value="bakery" />
-                <Picker.Item label="Toko Bangunan" value="materials" /> 
+                <Picker.Item label="Semua Toko" value="all" />
+                {stores.map(store => (
+                    <Picker.Item key={store.id} label={store.name} value={store.id} />
+                ))}
             </Picker>
 
             <FlatList
@@ -291,9 +305,9 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         textAlign: 'center',
     },
-    storeName: { // Added this style
+    storeName: {
         fontSize: 16,
-        color: '#00796B', // Set the desired color here
+        color: '#00796B',
         marginBottom: 4,
         textAlign: 'center',
     },
