@@ -25,7 +25,7 @@ class Controller extends BaseController
         });
 
         $totalMitra = Store::count();
-        return view('admin.page.Dashboard',[
+        return view('admin.page.dashboard',[
             'name' => 'Dashboard',
             'title' => 'Dashboard',
             'totalPengguna' => $totalPengguna,

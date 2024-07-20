@@ -17,7 +17,7 @@ class transaksiAdminController extends Controller
     $transactions = Transaction::with('store','user')
                                 ->where('statusAdmin', 'Pesanan belum disetujui')
                                 ->get();
-    return view('admin.page.transaksi.Transaksi', [
+    return view('admin.page.transaksi.transaksi', [
         'name' => 'Transaksi',
         'title' => 'Transaksi',
         'transactions' => $transactions,
