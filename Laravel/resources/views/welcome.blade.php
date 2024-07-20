@@ -19,11 +19,11 @@
             position: fixed; /* Fix the header at the top */
             top: 0;
             width: 100%;
-            padding: 15px 50px;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.5); /* Optional: Add a semi-transparent background */
+            background: #dcd9cd9d; /* Optional: Add a semi-transparent background */
             z-index: 1000; /* Ensure the header stays on top */
         }
 
@@ -59,17 +59,16 @@
             text-align: left; /* Align left for Home section */
         }
 
-        header .logo {
-            color: #ffffff;
-            font-size: 30px;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-weight: 800;
-            letter-spacing: 1px;  
+        
+
+        .logo-img {
+            width: 50px; /* Sesuaikan lebar logo */
+            height: auto; /* Menjaga rasio aspek gambar */
         }
 
+
         header .navigation a {
-            color: #ffffff;
+            color: #3c6a3f;
             text-decoration: none;
             font-weight: 500;
             letter-spacing: 1px;
@@ -98,7 +97,6 @@
             font-weight: 800;
             letter-spacing: 2px;
             line-height: 60px;
-            margin-bottom: 30px;
         }
 
         .content .info h2 span {
@@ -116,8 +114,8 @@
         }
 
         .content .info-btn {
-            color: #000000;
-            background: #ffffff;
+            color: #b0ffb0;
+            background: #3c6a3f;
             text-decoration: none;
             text-transform: uppercase;
             font-weight: 700;
@@ -143,11 +141,11 @@
 
         .media-icons a {
             position: relative;
-            color: #ffffff;
+            color: #3c6a3f;
             font-size: 25px;
             transition: 0.3s;
             transition-property: transform;
-            top: -80px; /* Ubah angka sesuai dengan seberapa jauh ke atas yang kamu inginkan */
+            top: -80px; 
         }
 
         .media-icons a:not(:last-child) {
@@ -268,13 +266,22 @@
             transition-property: background;
         }
 
+        .feature-img {
+            width: 150px;
+            height: 150px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-img:hover {
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body>
     <section id="home" class="main-section">
         <input type="checkbox" id="check">
         <header>
-            <h2><a href="#" class="logo">Logo</a></h2>
+            <h2><a href="#" class="logo"><img src="/img/logos.png" alt="Logo" class="logo-img"></a></h2>
             <div class="navigation">
                 <a href="#">Home</a>
                 <a href="#about">About</a>
@@ -288,8 +295,8 @@
         </header>
         <div class="content">
             <div class="info">
-                <h2>Mobile App <br><span>Market Place</span></h2>
-                <p>Market Place</p>
+                <h2>MARKETPLACE<br><span>TOKOKU</span></h2>
+                <p>TOKOKU adalah sebuah platform marketplace yang hanya difokuskan di daerah Semarang. Anda bisa berbelanja dan membuka toko online melalui aplikasi ini. Selain kegiatan jual beli Tokoku juga membantu anda dalam mengatur stok barang di toko anda.</p>
                 <a href="{{ url('login/admin') }}" class="info-btn">Get Started</a>
             </div>
         </div>
@@ -303,24 +310,39 @@
     <section id="about" style="padding: 40px 0; background-image: url('/img/bg1.png'); background-size: cover; background-position: center;">
         <div style="max-width: 800px; margin-left: 0; text-align: left; color: rgb(0, 0, 0); padding-left: 150px;">
             <h2 style="font-size: 4em;">About Us</h2>
-            <p style="font-size: 1.2em;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis<br>
-                libero et ante fermentum, eget lacinia ligula convallis.</p>
+            <p style="font-size: 1.2em;">Selamat datang di Tokoku, destinasi utama Anda untuk belanja dan jualan online yang mudah. Di Tokoku, kami berkomitmen untuk menjembatani kesenjangan antara pembeli dan penjual dengan menyediakan pengalaman marketplace yang mulus, aman, dan menyenangkan.</p>
         </div>
     </section>    
 
-    <section id="info" style="display: flex; justify-content: center; align-items: center;  padding: 40px 0; background-image: url('/img/bg2.png'); background-size: cover; background-position: center;">
-        <div style="max-width: 800px; text-align: center; color: rgb(255, 255, 255); padding-bottom: 300px;">
+    <section id="info" style="display: flex; justify-content: center; align-items: center; padding: 40px 0; background-image: url('/img/bg2.png'); background-size: cover; background-position: center;">
+        <div style="max-width: 800px; text-align: center; color: rgb(0, 0, 0);">
             <h2 style="font-size: 4em;">Fitur</h2>
-            <p style="font-size: 1.2em;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis<br>
-                libero et ante fermentum, eget lacinia ligula convallis.</p>
+            <p style="font-size: 1.2em;">TOKOKU memiliki beberapa fitur utama yang memudahkan anda berbelanja atau mengelola toko anda secara online.</p>
+            <div style="display: flex; justify-content: center; margin-top: 40px;">
+                <div style="text-align: center; margin: 0 20px;">
+                    <img class="feature-img" src="/img/store.png" alt="Store">
+                    <p>Toko</p>
+                </div>
+                <div style="text-align: center; margin: 0 20px;">
+                    <img class="feature-img" src="/img/cart.png" alt="Cart">
+                    <p>Belanja</p>
+                </div>
+                <div style="text-align: center; margin: 0 20px;">
+                    <img class="feature-img" src="/img/list.png" alt="List">
+                    <p>Inventory</p>
+                </div>
+                <div style="text-align: center; margin: 0 20px;">
+                    <img class="feature-img" src="/img/notif.png" alt="Notif">
+                    <p>Notifikasi</p>
+                </div>
+            </div>
         </div>
-    </section> 
+    </section>
+     
 
     <section id="contact" style="padding: 40px 0; background-image: url('/img/bg3.png'); background-size: cover; background-position: center;">
         <div style="max-width: 800px; margin-left: auto; text-align: right; color: rgb(0, 0, 0); padding-right: 150px;">
             <h2 style="font-size: 4em;">DOWNLOAD</h2>
-            <p style="font-size: 1.2em;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis<br>
-                libero et ante fermentum, eget lacinia ligula convallis.</p>
         </div>
     </section>      
     
