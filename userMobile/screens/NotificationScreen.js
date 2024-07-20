@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Pressable, Alert } from 'react-native';
 import BottomNavbar from './BottomNavbar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiUrl} from "../constant/common";
+import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
 
 const notifications = [
@@ -19,13 +22,62 @@ const notifications = [
 ];
 
 const NotificationScreen = ({ navigation }) => {
-    const [selectedRole, setSelectedRole] = useState('buyer');
+    // const [selectedRole, setSelectedRole] = useState('buyer');
+  const [products, setProducts] = useState([]);
+    
+
+  const fetchProducts = async () => {
+    try {
+        const token = await AsyncStorage.getItem('auth_token');
+        const response = await axios.get(`${apiUrl}api/notifications`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Failed to fetch products:', error);
+      if (error.response && error.response.status === 404) {
+        setProducts([]); 
+      }
+    }
+  };
+
+  const handleDeleteCartItem = async (itemId) => {
+    try {
+      const token = await AsyncStorage.getItem("auth_token");
+      await axios.delete(`${apiUrl}api/notifications/${itemId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+     
+      Alert.alert("Success", "Item deleted successfully");
+      fetchProducts();
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      Alert.alert("Error", "Failed to delete item");
+    }
+  };
+
+  useEffect(() => {
+      fetchProducts();
+  }, []);
+
+  useEffect(() => {     
+    if (products) {
+        console.log(products); 
+    } 
+  }, [products]);
 
     const renderItem = ({ item }) => (
-        <View style={styles.notificationItem}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.description}>{item.description}</Text>
-        </View>
+        <TouchableOpacity onPress={() => item.transaction_id? item.customer === 1 ?navigation.navigate('MyOrdersDetail', { transactionId: item.transaction_id }):navigation.navigate('TransactionDetail', { transactionId: item.transaction_id }):navigation.navigate('ProductDetail', { productId: item.variation.product_id })} style={styles.notificationItem}>
+            <Text style={styles.title}>{item.pesan}</Text>
+            <Text style={styles.description}>{item.sub_pesan}</Text>
+            <Pressable onPress={()=>handleDeleteCartItem(item.id)}>
+            <Text style={{color:'red'}}>Hapus</Text>
+            </Pressable>
+        </TouchableOpacity>
     );
 
     const handleNavItemClick = (itemName) => {
@@ -42,21 +94,22 @@ const NotificationScreen = ({ navigation }) => {
         }
     };
 
-    const filteredNotifications = notifications.filter(notification => notification.role === selectedRole);
+    // const filteredNotifications = notifications.filter(notification => notification.role === selectedRole);
 
     return (
         <View style={styles.container}>
-            <View style={styles.roleSelector}>
+            {/* <View style={styles.roleSelector}>
                 <TouchableOpacity onPress={() => setSelectedRole('buyer')} style={[styles.roleButton, selectedRole === 'buyer' && styles.selectedRoleButton]}>
                     <Text style={styles.roleButtonText}>User Pembeli</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setSelectedRole('seller')} style={[styles.roleButton, selectedRole === 'seller' && styles.selectedRoleButton]}>
                     <Text style={styles.roleButtonText}>Penjual</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
             <FlatList
-                data={filteredNotifications}
+                data={products}
                 renderItem={renderItem}
+                component
                 keyExtractor={item => item.id}
             />
             <BottomNavbar
@@ -72,6 +125,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        paddingBottom:100,
     },
     roleSelector: {
         flexDirection: 'row',

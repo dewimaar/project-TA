@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Store;
+use App\Models\Transaction;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -12,9 +14,24 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     public function dashboard ()
     {
+        $totalPengguna = User::count();
+        $totalTransaksi = Transaction::count();
+        $transactions = Transaction::with('store', 'bankTransfer')->get();
+
+        $totalPendapatan = $transactions->sum(function ($transaction) {
+            return $transaction->bankTransfer 
+                ? $transaction->total_price - $transaction->bankTransfer->payment_seller 
+                : 0;
+        });
+
+        $totalMitra = Store::count();
         return view('admin.page.Dashboard',[
             'name' => 'Dashboard',
             'title' => 'Dashboard',
+            'totalPengguna' => $totalPengguna,
+            'totalMitra' => $totalMitra,
+            'totalPendapatan' => $totalPendapatan,
+            'totalTransaksi' => $totalTransaksi,
         ]);
     }
     // public function pengguna ()

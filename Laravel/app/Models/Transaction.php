@@ -28,6 +28,7 @@ class Transaction extends Model
         'ekspedisi_name',
         'ekspedisi_cost',
         'total_cost',
+        'shipping_confirm',
     ];
 
     const STATUS_PENDING = 'Pending';

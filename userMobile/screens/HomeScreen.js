@@ -58,7 +58,11 @@ const HomeScreen = ({ navigation }) => {
 
     const fetchProducts = async (storeId = 'all') => {
         try {
+            const token = await AsyncStorage.getItem('auth_token');
             const response = await axios.get(`${apiUrl}api/products`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 params: { store_id: storeId === 'all' ? null : storeId }
             });
             const updatedProducts = response.data.map(product => {

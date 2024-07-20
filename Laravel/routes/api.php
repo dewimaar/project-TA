@@ -13,6 +13,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\transaksiAdminController;
 use App\Http\Controllers\ShippingInfoController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,9 +65,14 @@ Route::get('/shipping-infos/{store_id}/{user_id}', [ShippingInfoController::clas
 Route::get('shipping-infos/{store_id}', [ShippingInfoController::class, 'getShippingInfos']);
 Route::middleware('auth:sanctum')->put('/variations/{id}', [ProductController::class, 'updateVariation']);
 Route::middleware('auth:sanctum')->get('/stores', [StoreController::class, 'getAllStores']);
-Route::get('products', [ProductController::class, 'getProductsByStore']);
+Route::middleware('auth:sanctum')->get('products', [ProductController::class, 'getProductsByStore']);
 
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
 Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
-
+Route::middleware('auth:sanctum')->put('/transactions/{id}/shipping-confirm', [TransactionController::class, 'updateShippingConfirm']);
+Route::middleware('auth:sanctum')->get('notifications', [NotificationController::class, 'index']);
+Route::post('notifications', [NotificationController::class, 'store']);
+Route::get('notifications/{id}', [NotificationController::class, 'show']);
+Route::put('notifications/{id}', [NotificationController::class, 'update']);
+Route::delete('notifications/{id}', [NotificationController::class, 'destroy']);

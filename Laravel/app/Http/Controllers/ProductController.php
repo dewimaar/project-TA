@@ -115,11 +115,13 @@ class ProductController extends Controller
     public function getProductsByStore(Request $request)
     {
         $storeId = $request->query('store_id');
+        $user = Auth::user();
 
         if ($storeId) {
             $products = Product::where('store_id', $storeId)->with('variations', 'store')->get();
         } else {
-            $products = Product::with('variations', 'store')->get();
+            // $products = Product::with('variations', 'store')->get();
+            $products = Product::with('variations', 'store')->where('user_id','!=',  $user->id)->get();
         }
 
         return response()->json($products, 200);

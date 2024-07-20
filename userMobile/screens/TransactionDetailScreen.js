@@ -92,6 +92,7 @@ const TransactionDetailScreen = ({ route }) => {
       <Text style={styles.itemText}>Alamat: {transaction.full_address}</Text>
       <Text style={styles.itemText}>Link Google Maps: {transaction.google_maps_link}</Text>
       <Text style={styles.itemText}>Metode Pembayaran: {transaction.payment_method}</Text>
+      <Text style={styles.itemText}>Status Pengiriman: {transaction.shipping_confirm}</Text>
       <Text style={styles.itemText}>Status:</Text>
       <RNPickerSelect
         onValueChange={(value) => setStatus(value)}

@@ -128,6 +128,7 @@ const TransactionsPaymentScreen = ({ navigation, route }) => {
     formData.append("user_id", userId);
     selectedItems.forEach((item, indexs) => {
       item.produk.forEach((itemp, index) => {
+        console.log(`${indexs}${index}`)
         formData.append(
           `items[${indexs}${index}][variation_id]`,
           itemp.variation_id

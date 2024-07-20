@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {apiUrl} from "../constant/common";
+import RNPickerSelect from 'react-native-picker-select';
 
 const MyOrdersDetailScreen = ({ route }) => {
   const { transactionId } = route.params;
   const [transaction, setTransaction] = useState(null);
+  const [status, setStatus] = useState('Pesanan Belum Diterima');
 
   useEffect(() => {
     const fetchTransactionDetails = async () => {
@@ -23,6 +25,7 @@ const MyOrdersDetailScreen = ({ route }) => {
           },
         });
         setTransaction(response.data);
+        setStatus(response.data.shipping_confirm)
       } catch (error) {
         console.error('Error fetching transaction details:', error);
         Alert.alert('Error', 'Error fetching transaction details.');
@@ -31,6 +34,31 @@ const MyOrdersDetailScreen = ({ route }) => {
 
     fetchTransactionDetails();
   }, [transactionId]);
+
+  const handleUpdateStatus = async () => {
+    try {
+      const token = await AsyncStorage.getItem('auth_token');
+      if (!token) {
+        console.error('No token found in AsyncStorage');
+        return;
+      }
+
+      await axios.put(
+        `${apiUrl}api/transactions/${transactionId}/shipping-confirm`,
+        { shipping_confirm:status },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      Alert.alert('Success', 'Status updated successfully.');
+    } catch (error) {
+      console.error('Error updating status:', error);
+      Alert.alert('Error', 'Error updating status.');
+    }
+  };
 
   if (!transaction) {
     return (
@@ -83,6 +111,20 @@ const MyOrdersDetailScreen = ({ route }) => {
         </View>
         {/* Add other transaction details as needed */}
       </View>
+      {transaction.status==="Dikirim"&&
+      <>
+      <RNPickerSelect
+        onValueChange={(value) => setStatus(value)}
+        items={[
+          { label: 'Pesanan Belum Diterima', value: 'Pesanan Belum Diterima' },
+          { label: 'Pesanan Diterima', value: 'Pesanan Diterima' },
+        ]}
+        value={status}
+      />
+      <TouchableOpacity style={styles.updateButton} onPress={handleUpdateStatus}>
+        <Text style={styles.updateButtonText}>Update Status Pengiriman</Text>
+      </TouchableOpacity>
+      </>}
     </View>
   );
 };
@@ -134,6 +176,19 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     marginBottom: 10,
+  },
+  updateButton: {
+    backgroundColor: '#007bff',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  updateButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

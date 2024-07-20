@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\variations;
+use App\Models\Notification;
+use App\Models\Store;
 
 class TransactionController extends Controller
 {
@@ -43,7 +45,7 @@ class TransactionController extends Controller
             $variation = variations::findOrFail($item['variation_id']);
             $newStock = $variation->stock - $item['quantity'];
             $variation->update(['stock' => $newStock]);
-            Transaction::create([
+            $transaction = Transaction::create([
                 'user_id' => $request->user_id,
                 'store_id' => $item['store_id'],
                 'variation_id' =>  $variation->id,
@@ -62,12 +64,33 @@ class TransactionController extends Controller
                 'no_rekening' => $request->no_rekening,
                 'total_cost' => $request->total_cost,
             ]);
+            $store = Store::where('id',  $item['store_id'])->first();
+            Notification::create([
+                'user_id' => $store->user_id,
+                'variation_id' => $item['variation_id'],
+                'transaction_id' => $transaction->id,
+                'pesan' => 'Transaksi baru untuk produk ' . $variation->name,
+                'sub_pesan' => 'Jumlah: ' . $item['quantity'] . ', Total Harga: ' . $item['total_price'],
+            ]);
+            if ($newStock < 5 && $newStock > 0) {
+                    Notification::create([
+                        'user_id' => $store->user_id,
+                        'variation_id' => $item['variation_id'],
+                        'pesan' => 'Stok hampir habis untuk produk ' . $variation->name,
+                        'sub_pesan' => 'Sisa stok: ' . $newStock,
+                    ]);
+                } elseif ($newStock <= 0) {
+                    Notification::create([
+                        'user_id' => $store->user_id,
+                        'variation_id' => $item['variation_id'],
+                        'pesan' => 'Stok habis untuk produk ' . $variation->name,
+                        'sub_pesan' => 'Stok saat ini: 0',
+                    ]);
+                }
         }
-        
-
-        return response()->json(['message' => 'Transactions saved successfully'], 201);
+        return response()->json(['message' => 'Transaction Success'], 201);
     } catch (\Exception $e) {
-        return response()->json(['error' => $request->items], 500);
+        return response()->json(['error' => $e], 500);
     }
 }
 public function index(Request $request)
@@ -111,10 +134,33 @@ public function updateStatus(Request $request, $id)
     $transaction = Transaction::findOrFail($id);
     $transaction->status = $request->status;
     $transaction->save();
+            Notification::create([
+                'user_id' => $transaction->user_id,
+                'variation_id' => $transaction->variation_id,
+                'transaction_id' => $transaction->id,
+                'pesan' => 'Transaksi baru untuk produk ' . $transaction->variation_name,
+                'sub_pesan' => 'Status transaksi telah diperbarui menjadi: ' . $request->status,
+                'customer' => 1,
+            ]);
 
     return response()->json([
         'message' => 'Status updated successfully.',
         'transaction' => $transaction,
     ]);
+}
+public function updateShippingConfirm(Request $request, $id)
+{
+    $request->validate([
+        'shipping_confirm' => 'required|string|in:Pesanan Belum Diterima,Pesanan Diterima',
+    ]);
+
+    $transaction = Transaction::findOrFail($id);
+    $transaction->shipping_confirm = $request->shipping_confirm;
+    $transaction->save();
+
+    return response()->json([
+        'message' => 'Shipping confirmation updated successfully.',
+        'transaction' => $transaction,
+    ], 200);
 }
 }

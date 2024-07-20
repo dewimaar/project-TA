@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import SplashScreen from "./screens/SplashScreen";
 import MainScreen from "./screens/MainScreen";
@@ -31,6 +31,7 @@ import StoreFinanceScreen from "./screens/StoreFinanceScreen";
 import ShippingMethodsScreen from "./screens/ShippingMethodsScreen";
 import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack = createStackNavigator();
 
@@ -115,7 +116,18 @@ const App = () => {
         <Stack.Screen
           name="MyOrders"
           component={MyOrdersScreen}
-          options={{ title: "Pesanan Saya" }}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <Icon
+              style={{marginLeft:10}}
+                onPress={() => navigation.navigate("Cart")}
+                name="arrow-back-outline" size={24} color={'#333'} />
+            ),
+            headerShown: true,
+            headerTitleAlign: 'center',
+            title: 'Pesanan Saya',
+          })}
+
         />
         <Stack.Screen
           name="MyOrdersDetail"
