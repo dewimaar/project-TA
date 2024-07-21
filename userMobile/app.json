@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "userMobile",
-    "slug": "userMobile",
+    "name": "Tokoku",
+    "slug": "Tokoku",
     "version": "1.0.0",
     "scheme": "my-app",
     "orientation": "portrait",
@@ -23,6 +23,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": ["android.permission.INTERNET"],
       "package": "com.dewimaar.userMobile"
     },
     "web": {
