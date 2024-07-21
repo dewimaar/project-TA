@@ -114,8 +114,7 @@ const AddProductScreen = ({ navigation }) => {
         });
       });
 
-      const response = await axios.post(
-        "${apiUrl}/api/products",
+      const response = await axios.post(`${apiUrl}/api/products`,
         formData,
         {
           headers: {
