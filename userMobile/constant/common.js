@@ -1,1 +1,1 @@
-export const apiUrl = "http://dew-van.baguswinaksono.my.id/";
+export const apiUrl = "http://192.168.105.23:8000/";
