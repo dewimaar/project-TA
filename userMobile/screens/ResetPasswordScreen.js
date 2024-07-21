@@ -21,7 +21,7 @@ const ResetPasswordScreen = ({ route, navigation }) => {
         }
 
         try {
-            const response = await axios.post(`${apiUrl}/api/reset-password`, { 
+            const response = await axios.post(`${apiUrl}api/reset-password`, { 
                 token,
                 email, 
                 password,
