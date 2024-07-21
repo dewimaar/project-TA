@@ -12,6 +12,20 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "manifest": {
+              "application": {
+                "usesCleartextTraffic": true
+              }
+            }
+          }
+        }
+      ]
+      ],
     "assetBundlePatterns": [
       "**/*"
     ],
