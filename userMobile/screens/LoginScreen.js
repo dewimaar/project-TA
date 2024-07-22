@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { View, TextInput, Text, TouchableOpacity, StyleSheet, Alert, ToastAndroid, Image } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {apiUrl} from "../constant/common";
+import Icon from 'react-native-vector-icons/Ionicons';
+import { apiUrl } from "../constant/common";
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
 
     const handleLogin = async () => {
         if (!email || !password) {
-            Alert.alert('Validation Error', 'All fields are required.');
+            Alert.alert('Kesalahan Validasi', 'Semua bidang diperlukan.');
             return;
         }
-console.log(apiUrl)
+        console.log(apiUrl)
         try {
             const response = await axios.post(`${apiUrl}api/login`, {
                 email,
@@ -24,20 +26,21 @@ console.log(apiUrl)
 
             if (response.data.access_token) {
                 await AsyncStorage.setItem('auth_token', response.data.access_token);
-                ToastAndroid.show('Berhasil Login', ToastAndroid.LONG);
+                ToastAndroid.show('Berhasil Masuk', ToastAndroid.LONG);
                 navigation.navigate('Home');
             } else {
-                ToastAndroid.show('Salah username atau password', ToastAndroid.LONG);
+                ToastAndroid.show('Salah username atau kata sandi', ToastAndroid.LONG);
             }
         } catch (error) {
             console.error(error);
-            setError('Login failed. Please check your credentials.');
+            setError('Login gagal. Silakan periksa kredensial Anda.');
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Welcome Back!</Text>
+            <Text style={styles.title}>Masuk</Text>
+            <Text style={styles.subtitle}>Silakan Masuk Dengan Akun Anda</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email"
@@ -45,25 +48,37 @@ console.log(apiUrl)
                 onChangeText={setEmail}
                 keyboardType="email-address"
             />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
+            <View style={styles.passwordContainer}>
+                <TextInput
+                    style={styles.passwordInput}
+                    placeholder="Kata Sandi"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={!showPassword}
+                />
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                    <Icon
+                        name={showPassword ? 'eye-off' : 'eye'}
+                        size={24}
+                        color="grey"
+                    />
+                </TouchableOpacity>
+            </View>
             {error ? <Text style={styles.error}>{error}</Text> : null}
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-                    <Text style={styles.linkText}>Forgot Password?</Text>
+                    <Text style={styles.linkText}>Lupa kata sandi?</Text>
                 </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Login</Text>
+                <Text style={styles.buttonText}>Masuk</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Register')}>
-                <Text style={styles.linkText}>Back to Register</Text>
-            </TouchableOpacity>
+            <View style={styles.linkContainer}>
+                <Text style={styles.text}>Belum punya akun? </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                    <Text style={styles.linkText}>Daftar</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
@@ -82,6 +97,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: '#00796B',
     },
+    subtitle: {
+        fontSize: 16,
+        marginBottom: 20,
+        color: '#000000',
+    },
     input: {
         height: 50,
         width: '90%',
@@ -91,6 +111,22 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         paddingHorizontal: 15,
         backgroundColor: '#FFFFFF',
+    },
+    passwordContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 50,
+        width: '90%',
+        borderColor: '#D6E0D7',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginBottom: 20,
+        paddingHorizontal: 15,
+        backgroundColor: '#FFFFFF',
+    },
+    passwordInput: {
+        flex: 1,
+        height: '100%',
     },
     button: {
         height: 50,
@@ -105,6 +141,14 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    linkContainer: {
+        flexDirection: 'row',
+        marginTop: 10,
+    },
+    text: {
+        color: '#000000',
+        fontSize: 16,
     },
     link: {
         marginTop: 20,

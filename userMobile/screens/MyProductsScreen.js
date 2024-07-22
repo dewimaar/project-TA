@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   button: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#00796B',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

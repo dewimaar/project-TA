@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TextInput, Button, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {apiUrl} from "../constant/common";
@@ -127,18 +127,23 @@ const ProductDetailScreen = ({ route }) => {
           <Text style={styles.variationPrice}>Harga: Rp{formatPrice(variation.price)}</Text>
           <Text style={styles.variationStock}>Stok: {variation.stock}</Text>
           <TextInput
-            placeholder="Update Price"
+            placeholder="Perbarui Harga"
             value={editingVariation[variation.id]?.price || ''}
             onChangeText={(text) => handleInputChange(variation.id, 'price', text)}
             style={styles.input}
           />
           <TextInput
-            placeholder="Update Stock"
+            placeholder="Perbarui Stok"
             value={editingVariation[variation.id]?.stock || ''}
             onChangeText={(text) => handleInputChange(variation.id, 'stock', text)}
             style={styles.input}
           />
-          <Button title="Update" onPress={() => updateVariation(variation.id)} />
+          <TouchableOpacity 
+            style={styles.updateButton} 
+            onPress={() => updateVariation(variation.id)}
+          >
+            <Text style={styles.updateButtonText}>Perbarui</Text>
+          </TouchableOpacity>
         </View>
       ))}
     </ScrollView>
@@ -201,6 +206,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
     borderRadius: 4,
+  },
+  updateButton: {
+    backgroundColor: '#00796B',
+    padding: 10,
+    borderRadius: 4,
+    alignItems: 'center',
+  },
+  updateButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
 

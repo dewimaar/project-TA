@@ -283,9 +283,9 @@
         <header>
             <h2><a href="#" class="logo"><img src="/img/logos.png" alt="Logo" class="logo-img"></a></h2>
             <div class="navigation">
-                <a href="#">Home</a>
-                <a href="#about">About</a>
-                <a href="#info">Fitur</a>
+                <a href="#">Beranda</a>
+                <a href="#about">Tentang Kami</a>
+                <a href="#info">Fitur Aplikasi</a>
                 <a href="#contact" class="gradient-link">DOWNLOAD</a>
             </div>
             <label for="check">
@@ -297,7 +297,7 @@
             <div class="info">
                 <h2>MARKETPLACE<br><span>TOKOKU</span></h2>
                 <p>TOKOKU adalah sebuah platform marketplace yang hanya difokuskan di daerah Semarang. Anda bisa berbelanja dan membuka toko online melalui aplikasi ini. Selain kegiatan jual beli Tokoku juga membantu anda dalam mengatur stok barang di toko anda.</p>
-                <a href="{{ url('login/admin') }}" class="info-btn">Get Started</a>
+                <a href="{{ url('login/admin') }}" class="info-btn">Mulai Sekarang</a>
             </div>
         </div>
         <div class="media-icons">

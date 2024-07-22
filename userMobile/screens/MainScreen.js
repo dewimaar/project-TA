@@ -6,11 +6,12 @@ const MainScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Image source={require('../assets/mainpict.png')} style={styles.logo} />
             <Text style={styles.title}>Selamat Datang!</Text>
+            <Text style={styles.subtitle}>Nikmati pengalaman belanja dan jualan online yang mudah di Tokoku</Text>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
-                <Text style={styles.buttonText}>Sign Up</Text>
+                <Text style={styles.buttonText}>Daftar Sekarang</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.buttonText}>Login</Text>
+                <Text style={styles.buttonText}>Masuk</Text>
             </TouchableOpacity>
         </View>
     );
@@ -32,8 +33,15 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 40,
+        marginBottom: 10,
         color: '#00796B',
+    },
+    subtitle: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 40,
+        color: '#000000',
+        paddingHorizontal: 20,
     },
     button: {
         height: 50,

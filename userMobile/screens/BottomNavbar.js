@@ -9,36 +9,36 @@ const BottomNavbar = ({ navigation, selectedNavItem, handleNavItemClick }) => {
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('home')}
       >
-        <Icon name="home-outline" size={20} color={selectedNavItem === 'home' ? '#098C1C' : '#333'} />
-        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'home' ? '#098C1C' : '#333' }]}>Beranda</Text>
+        <Icon name="home-outline" size={20} color={selectedNavItem === 'home' ? '#00796B' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'home' ? '#00796B' : '#333' }]}>Beranda</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('cart')}
       >
-        <Icon name="cart-outline" size={20} color={selectedNavItem === 'cart' ? '#098C1C' : '#333'} />
-        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'cart' ? '#098C1C' : '#333' }]}>Keranjang</Text>
+        <Icon name="cart-outline" size={20} color={selectedNavItem === 'cart' ? '#00796B' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'cart' ? '#00796B' : '#333' }]}>Keranjang</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('market')}
       >
-        <Icon name="storefront-outline" size={20} color={selectedNavItem === 'market' ? '#098C1C' : '#333'} />
-        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'market' ? '#098C1C' : '#333' }]}>Toko</Text>
+        <Icon name="storefront-outline" size={20} color={selectedNavItem === 'market' ? '#00796B' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'market' ? '#00796B' : '#333' }]}>Toko</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('notification')}
       >
-        <Icon name="notifications-outline" size={20} color={selectedNavItem === 'notification' ? '#098C1C' : '#333'} />
-        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'notification' ? '#098C1C' : '#333' }]}>Notifikasi</Text>
+        <Icon name="notifications-outline" size={20} color={selectedNavItem === 'notification' ? '#00796B' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'notification' ? '#00796B' : '#333' }]}>Notifikasi</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.bottomBarItem}
         onPress={() => handleNavItemClick('profile')}
       >
-        <Icon name="person-outline" size={20} color={selectedNavItem === 'profile' ? '#098C1C' : '#333'} />
-        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'profile' ? '#098C1C' : '#333' }]}>Profil</Text>
+        <Icon name="person-outline" size={20} color={selectedNavItem === 'profile' ? '#00796B' : '#333'} />
+        <Text style={[styles.bottomBarText, { color: selectedNavItem === 'profile' ? '#00796B' : '#333' }]}>Profil</Text>
       </TouchableOpacity>
     </View>
   );

@@ -142,7 +142,7 @@ const ProfileScreen = ({ navigation }) => {
                 </View>
                 <TouchableOpacity style={[styles.editProfileButton, styles.logoutButton]} onPress={handleLogout}>
                     <Icon name="log-out-outline" size={20} color="#fff" />
-                    <Text style={styles.buttonText}>Logout</Text>
+                    <Text style={styles.buttonText}>Keluar</Text>
                 </TouchableOpacity>
             </ScrollView>
             <BottomNavbar navigation={navigation} selectedNavItem={'profile'} handleNavItemClick={handleNavItemClick} />

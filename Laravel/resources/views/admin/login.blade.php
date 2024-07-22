@@ -136,8 +136,8 @@
     <div class="container">
         <div class="left-section"></div>
         <div class="right-section">
-            <h3>Welcome, Admin!</h3>
-            <p>Please sign in to get access.</p>
+            <h3>Selamat datang, Admin!</h3>
+            <p>Silahkan masuk untuk mendapatkan akses.</p>
             @if (session('error'))
                 <div class="alert alert-danger" role="alert">
                     {{ session('error') }}
@@ -158,13 +158,15 @@
                 </div>
                 <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                    <label class="form-check-label" for="remember">Remember Me</label>
+                    <label class="form-check-label" for="remember">Ingatkan Saya</label>
                 </div>
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
                 <div class="mb-3">
-                    <a href="/" class="btn btn-secondary">Back</a>
+                    <a href="/" class="back-link">
+                        <i class="fas fa-arrow-left"></i> Landing Page
+                    </a>
                 </div>
             </form>
         </div>

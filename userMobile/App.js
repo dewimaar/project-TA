@@ -49,8 +49,8 @@ const App = () => {
           component={MainScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen
           name="Home"
           component={HomeScreen}
@@ -147,7 +147,7 @@ const App = () => {
         <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
-          options={{ title: 'Forgot Password' }}
+          options={{ headerLeft: () => null, title: "Lupa Kata Sandi" }}
         />
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
       </Stack.Navigator>

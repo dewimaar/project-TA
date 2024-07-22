@@ -168,7 +168,7 @@ const HomeScreen = ({ navigation }) => {
                     <Icon name="search-outline" size={24} color="#888" style={styles.searchIcon} />
                     <TextInput
                         style={styles.searchInput}
-                        placeholder="Cari..."
+                        placeholder="Cari Produk..."
                         placeholderTextColor="#888"
                         value={searchQuery}
                         onChangeText={handleSearchInputChange}

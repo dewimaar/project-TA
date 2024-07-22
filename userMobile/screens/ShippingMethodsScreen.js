@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, FlatList } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {apiUrl} from "../constant/common";
@@ -146,7 +146,12 @@ const ShippingMethodsScreen = () => {
         value={shippingContact}
         onChangeText={setShippingContact}
       />
-      <Button title="Simpan Informasi Pengiriman" onPress={saveShippingInfo} />
+      <TouchableOpacity 
+        style={styles.saveButton} 
+        onPress={saveShippingInfo}
+      >
+        <Text style={styles.saveButtonText}>Simpan Informasi Pengiriman</Text>
+      </TouchableOpacity>
 
       <Text style={[styles.title, { marginTop: 20 }]}>Daftar Informasi Pengiriman</Text>
       <FlatList
@@ -184,6 +189,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 15,
     paddingHorizontal: 10,
+  },
+  saveButton: {
+    backgroundColor: '#00796B',
+    padding: 10,
+    borderRadius: 4,
+    alignItems: 'center',
+    width: '80%',
+    marginBottom: 20,
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   item: {
     backgroundColor: '#fff',

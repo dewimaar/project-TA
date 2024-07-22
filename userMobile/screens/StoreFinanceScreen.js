@@ -110,7 +110,7 @@ const StoreFinanceScreen = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.closeText}>Close</Text>
+              <Text style={styles.closeText}>Tutup</Text>
             </TouchableOpacity>
             <Image
               source={{ uri: `${apiUrl}api/storage/${selectedImage}` }}

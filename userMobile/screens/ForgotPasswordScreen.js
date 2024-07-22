@@ -8,23 +8,24 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
     const handleForgotPassword = async () => {
         if (!email) {
-            Alert.alert('Validation Error', 'Email is required.');
+            Alert.alert('Kesalahan Validasi', 'Email diperlukan.');
             return;
         }
 
         try {
             const response = await axios.post(`${apiUrl}api/forgot-password`, { email });
-            Alert.alert('Success', response.data.message || 'Check your email for reset instructions.');
+            Alert.alert('Sukses', response.data.message || 'Periksa email Anda untuk instruksi pengaturan ulang.');
             navigation.goBack();
         } catch (error) {
             console.error('Error response:', error.response);
-            Alert.alert('Error', error.response?.data?.message || 'Failed to send reset instructions.');
+            Alert.alert('Error', error.response?.data?.message || 'Gagal mengirim instruksi pengaturan ulang.');
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Forgot Password</Text>
+            <Text style={styles.title}>Lupa Kata Sandi?</Text>
+            <Text style={styles.subtitle}>Masukkan Email anda untuk reset kata sandi</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email"
@@ -33,10 +34,10 @@ const ForgotPasswordScreen = ({ navigation }) => {
                 keyboardType="email-address"
             />
             <TouchableOpacity style={styles.button} onPress={handleForgotPassword}>
-                <Text style={styles.buttonText}>Send Reset Instructions</Text>
+                <Text style={styles.buttonText}>Reset Kata Sandi</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.link} onPress={() => navigation.goBack()}>
-                <Text style={styles.linkText}>Back to Login</Text>
+                <Text style={styles.linkText}>Kembali</Text>
             </TouchableOpacity>
         </View>
     );
@@ -53,8 +54,13 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: 10,
         color: '#00796B',
+    },
+    subtitle: {
+        fontSize: 16,
+        marginBottom: 20,
+        color: '#000000',
     },
     input: {
         height: 50,
