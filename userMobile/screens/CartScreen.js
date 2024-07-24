@@ -89,10 +89,10 @@ const CartScreen = ({ navigation }) => {
             const data = await response.json();
             setStore(data);
           } else {
-            Alert.alert("Error", "Failed to fetch store data");
+            // Alert.alert("Error", "Failed to fetch store data");
           }
         } catch (error) {
-          Alert.alert("Error", "Failed to fetch store data");
+          // Alert.alert("Error", "Failed to fetch store data");
         }
       }
     };

@@ -51,7 +51,7 @@ const LoginScreen = ({ navigation }) => {
             <View style={styles.passwordContainer}>
                 <TextInput
                     style={styles.passwordInput}
-                    placeholder="Kata Sandi"
+                    placeholder="Kata Sandi Min 8 Karakter"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry={!showPassword}
