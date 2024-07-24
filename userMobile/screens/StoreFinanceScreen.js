@@ -113,7 +113,7 @@ const StoreFinanceScreen = () => {
               <Text style={styles.closeText}>Tutup</Text>
             </TouchableOpacity>
             <Image
-              source={{ uri: `${apiUrl}api/storage/${selectedImage}` }}
+              source={{ uri: `${apiUrl}storage/${selectedImage}` }}
               style={styles.modalImage}
             />
           </View>

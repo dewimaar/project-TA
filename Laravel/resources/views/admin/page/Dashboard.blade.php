@@ -1,4 +1,4 @@
-@extends('Admin.Layout.index')
+@extends('admin.layout.index')
 
 @section('content')
 <style>
@@ -41,18 +41,56 @@
         font-weight: bold;
     }
 
-    .chart-container {
-        width: 100%;
-        margin-top: 20px;
+    .welcome-card {
+        background: linear-gradient(45deg, #ffffff, #089451);
+        color: #000000;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        margin: 20px 0;
+        position: relative;
     }
 
-    .chart {
-        width: 100%;
-        height: 400px !important;
+    .welcome-text {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .marquee-wrapper {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .marquee-text {
+        display: inline-block;
+        color: #006141;
+        white-space: nowrap;
+        animation: marquee 10s linear infinite;
+        font-size: 18px; 
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+    .stats-section {
+        margin-top: 40px;
     }
 </style>
 <div class="container">
-    <div class="row justify-content-between">
+    <div class="welcome-card">
+        <div class="welcome-text">Selamat datang Admin</div>
+        <div class="marquee-wrapper">
+            <div class="marquee-text">Selamat datang di Dashboard Tokoku</div>
+        </div>
+    </div>
+
+    <div class="stats-section row justify-content-between">
         <div class="col-md-3">
             <div class="card" style="background-color: cadetblue; color: #fff;">
                 <i class="bi bi-person icon"></i>
@@ -94,103 +132,5 @@
             </div>
         </div>
     </div>
-    <div class="row chart-container">
-        <div class="col-md-6">
-            <canvas id="salesChart" class="chart"></canvas>
-        </div>
-        <div class="col-md-6">
-            <canvas id="registrationChart" class="chart"></canvas>
-        </div>
-    </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    var salesChart, registrationChart;
-
-    // Sample data for 2024
-    var salesData = {
-        2024: [250, 350, 300, 450, 350, 550, 400, 650, 450, 500, 550, 600]
-    };
-
-    var registrationData = {
-        pengguna: [60, 70, 65, 80, 75, 90, 85, 100, 95, 110, 105, 120],
-        mitra: [30, 40, 35, 50, 45, 60, 55, 70, 65, 80, 75, 90]
-    };
-
-    function mergeData(data) {
-        var mergedData = {};
-        Object.keys(data).forEach(year => {
-            data[year].forEach((value, index) => {
-                mergedData[index] = (mergedData[index] || 0) + value;
-            });
-        });
-        return Object.values(mergedData);
-    }
-
-    function updateCharts() {
-        var salesCtx = document.getElementById('salesChart').getContext('2d');
-        var registrationCtx = document.getElementById('registrationChart').getContext('2d');
-
-        if (salesChart) salesChart.destroy();
-        if (registrationChart) registrationChart.destroy();
-
-        salesChart = new Chart(salesCtx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                datasets: [{
-                    label: 'Penjualan',
-                    data: mergeData(salesData),
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        registrationChart = new Chart(registrationCtx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                datasets: [
-                    {
-                        label: 'Pengguna Baru',
-                        data: registrationData.pengguna,
-                        borderColor: 'rgba(153, 102, 255, 1)',
-                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Mitra Baru',
-                        data: registrationData.mitra,
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        updateCharts();
-    });
-</script>
 @endsection
